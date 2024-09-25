@@ -1,38 +1,116 @@
+:root {
+  --bg-color: #f0f0f0;
+  --text-color: #333;
+  --primary-color: #4a90e2;
+  --secondary-color: #f39c12;
+  --accent-color: #e74c3c;
+  --card-bg: #ffffff;
+  --header-bg: #ffffff;
+  --footer-bg: #333333;
+  --footer-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #f0f0f0;
+  --primary-color: #3498db;
+  --secondary-color: #f1c40f;
+  --accent-color: #e74c3c;
+  --card-bg: #2c2c2c;
+  --header-bg: #2c2c2c;
+  --footer-bg: #1a1a1a;
+  --footer-text: #f0f0f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: var(--header-bg);
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+  background-color: var(--primary-color);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 1rem;
+  text-align: center;
+}
+
+footer a {
+  color: var(--footer-text);
+  text-decoration: none;
+  margin: 0 1rem;
+}
+
+.theme-toggle {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  nav a {
+    margin: 0.5rem 0;
+  }
+
+  main {
+    padding: 1rem;
   }
 }
