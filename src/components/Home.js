@@ -17,7 +17,6 @@ function Home() {
 
   return (
     <div className={styles.homeContainer}>
-      <img src={logoImage} alt="CYO Rugs Logo" className={styles.logo} />
       <section className={styles.featuredRugs}>
         {featuredRugs.map((rug) => (
           <div key={rug.id} className={styles.rugItem}>

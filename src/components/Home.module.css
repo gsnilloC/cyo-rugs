@@ -5,6 +5,14 @@
 .logo {
   max-width: 200px;
   margin-bottom: 2rem;
+  border-radius: 50%; /* Crop the image into a circle */
+  overflow: hidden;
+}
+
+.logo img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensure the image covers the entire area */
 }
 
 .welcomeMessage {
