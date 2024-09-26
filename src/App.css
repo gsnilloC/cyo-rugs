@@ -49,7 +49,18 @@ header {
 
 nav {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.desktop-nav {
+  flex-direction: row;
+}
+
+.mobile-nav {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -57,25 +68,30 @@ nav {
 .nav-right {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
+  width: 50px; /* Adjust as needed */
 }
 
 .nav-left .MuiIconButton-root,
 .nav-right .MuiIconButton-root {
   margin: 0 0.5rem;
-  font-size: 2rem; /* Make the icons larger */
 }
 
 .logo {
-  flex-grow: 0;
-  text-align: center;
-  margin: 0 1rem; /* Add margin to separate the logo from the icons */
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 125px; /* Width of the logo */
+  height: 125px; /* Height of the logo */
+  overflow: hidden; /* Ensures anything outside the container is cropped */
+  border-radius: 50%; /* Creates the circular shape */
 }
 
 .logo img {
-  height: 80px; /* Adjust the height as needed */
-  width: 80px; /* Ensure the width matches the height for a perfect circle */
-  border-radius: 50%; /* Crop the image into a circle */
-  object-fit: cover; /* Ensure the image covers the entire area */
+  width: 100%; /* Makes sure the image fits the container's width */
+  height: 100%; /* Makes sure the image fits the container's height */
+  object-fit: cover; /* Ensures the image maintains its aspect ratio and covers the entire container */
 }
 
 nav a {
@@ -126,16 +142,54 @@ footer a {
   z-index: 1000;
 }
 
+.cart-icon {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 768px) {
   nav {
-    flex-direction: column;
+    padding: 0.5rem;
   }
 
-  nav a {
-    margin: 0.5rem 0;
+  .logo {
+    width: 80px; /* Slightly smaller for mobile, but still larger than before */
+    height: 80px;
   }
 
-  main {
-    padding: 1rem;
+  .logo img {
+    height: 70px; /* Adjust logo size for mobile if needed */
+    width: auto;
   }
+
+  .nav-left .MuiIconButton-root,
+  .nav-right .MuiIconButton-root {
+    padding: 8px;
+  }
+
+  .nav-left,
+  .nav-right {
+    width: 70px; /* Adjust for smaller screens */
+  }
+
+  .nav-left .MuiIconButton-root,
+  .nav-right .MuiIconButton-root {
+    padding: 8px;
+  }
+
+  .mobile-nav .logo {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: bold;
 }

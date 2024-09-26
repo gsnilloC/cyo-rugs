@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
 import Cart from "./components/Cart";
@@ -11,7 +11,18 @@ import { IconButton, Menu as MuiMenu, MenuItem } from "@mui/material";
 import logoImage from "./images/logo.JPG"; // Assuming you have a logo image
 
 function App() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,46 +32,75 @@ function App() {
     setAnchorEl(null);
   };
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    handleMenuClose();
+  };
+
+  const navItems = [
+    { path: "/", label: "Home" },
+    { path: "/shop", label: "Shop" },
+    { path: "/request", label: "Request" },
+    { path: "/about", label: "About" },
+  ];
+
   return (
     <div className="App">
       <header>
-        <nav>
-          <div className="nav-left">
-            <IconButton onClick={handleMenuClick}>
-              <Menu />
-            </IconButton>
-            <MuiMenu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/">Home</Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/shop">Shop</Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/cart">Cart</Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/request">Request</Link>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <Link to="/about">About Us</Link>
-              </MenuItem>
-            </MuiMenu>
-          </div>
-          <div className="logo">
-            <Link to="/">
-              <img src={logoImage} alt="CYO Rugs Logo" />
-            </Link>
-          </div>
-          <div className="nav-right">
-            <IconButton>
-              <ShoppingCart />
-            </IconButton>
-          </div>
+        <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
+          {isMobile ? (
+            <>
+              <div className="nav-left">
+                <IconButton onClick={handleMenuClick}>
+                  <Menu />
+                </IconButton>
+              </div>
+              <div className="logo">
+                <Link to="/">
+                  <img src={logoImage} alt="CYO Rugs Logo" />
+                </Link>
+              </div>
+              <div className="nav-right">
+                <IconButton onClick={() => navigate("/cart")}>
+                  <ShoppingCart />
+                </IconButton>
+              </div>
+              <MuiMenu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                {navItems.map((item) => (
+                  <MenuItem
+                    key={item.path}
+                    onClick={() => handleNavigation(item.path)}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </MuiMenu>
+            </>
+          ) : (
+            <>
+              <div className="logo">
+                <Link to="/">
+                  <img src={logoImage} alt="CYO Rugs Logo" />
+                </Link>
+              </div>
+              <div className="nav-links">
+                {navItems.map((item) => (
+                  <Link key={item.path} to={item.path}>
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+              <div className="cart-icon">
+                <IconButton onClick={() => navigate("/cart")}>
+                  <ShoppingCart />
+                </IconButton>
+              </div>
+            </>
+          )}
         </nav>
       </header>
 
