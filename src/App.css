@@ -1,5 +1,5 @@
 :root {
-  --bg-color: #f0f0f0;
+  --bg-color: #ffffff;
   --text-color: #333;
   --primary-color: #4a90e2;
   --secondary-color: #f39c12;
@@ -26,6 +26,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  border: none;
+  outline: none;
 }
 
 body {
@@ -44,7 +46,6 @@ body {
 header {
   background-color: var(--header-bg);
   padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 nav {
@@ -192,4 +193,44 @@ footer a {
   text-decoration: none;
   color: var(--text-color);
   font-weight: bold;
+}
+
+.mobile-menu {
+  width: 250px;
+  padding: 1rem;
+}
+
+.mobile-menu .MuiMenuItem-root {
+  padding: 1rem;
+}
+
+.mobile-drawer {
+  width: 250px;
+}
+
+.mobile-drawer .MuiDrawer-paper {
+  width: 250px;
+  top: 110px;
+  height: calc(100% - 80px);
+  border-right: none;
+  background-color: var(--header-bg);
+}
+
+.mobile-menu {
+  padding: 1rem;
+}
+
+.mobile-menu .MuiMenuItem-root {
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .App {
+    padding-left: 0;
+    transition: padding-left 0.3s ease;
+  }
+
+  .App.drawer-open {
+    padding-left: 250px;
+  }
 }

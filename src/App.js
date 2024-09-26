@@ -7,11 +7,12 @@ import Request from "./components/Request";
 import About from "./components/About";
 import "./App.css";
 import { Menu, ShoppingCart } from "@mui/icons-material";
-import { IconButton, Menu as MuiMenu, MenuItem } from "@mui/material";
+import { IconButton, Drawer, Menu as MuiMenu, MenuItem } from "@mui/material";
 import logoImage from "./images/logo.JPG"; // Assuming you have a logo image
+import CloseIcon from "@mui/icons-material/Close";
 
 function App() {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const navigate = useNavigate();
 
@@ -24,17 +25,13 @@ function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleDrawerToggle = () => {
+    setIsDrawerOpen(!isDrawerOpen);
   };
 
   const handleNavigation = (path) => {
     navigate(path);
-    handleMenuClose();
+    setIsDrawerOpen(false);
   };
 
   const navItems = [
@@ -51,8 +48,8 @@ function App() {
           {isMobile ? (
             <>
               <div className="nav-left">
-                <IconButton onClick={handleMenuClick}>
-                  <Menu />
+                <IconButton onClick={handleDrawerToggle}>
+                  {isDrawerOpen ? <CloseIcon /> : <Menu />}
                 </IconButton>
               </div>
               <div className="logo">
@@ -65,20 +62,6 @@ function App() {
                   <ShoppingCart />
                 </IconButton>
               </div>
-              <MuiMenu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                {navItems.map((item) => (
-                  <MenuItem
-                    key={item.path}
-                    onClick={() => handleNavigation(item.path)}
-                  >
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </MuiMenu>
             </>
           ) : (
             <>
@@ -102,6 +85,26 @@ function App() {
             </>
           )}
         </nav>
+        {isMobile && (
+          <Drawer
+            anchor="left"
+            open={isDrawerOpen}
+            onClose={handleDrawerToggle}
+            variant="persistent"
+            className="mobile-drawer"
+          >
+            <div className="mobile-menu">
+              {navItems.map((item) => (
+                <MenuItem
+                  key={item.path}
+                  onClick={() => handleNavigation(item.path)}
+                >
+                  {item.label}
+                </MenuItem>
+              ))}
+            </div>
+          </Drawer>
+        )}
       </header>
 
       <main>
