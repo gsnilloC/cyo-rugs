@@ -1,7 +1,13 @@
 .shopContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .shopContainer {
+    padding: 2rem 1rem 2rem 1rem;
+  }
 }
 
 .rugItem {
@@ -27,7 +33,7 @@
 }
 
 .rugPrice {
-  font-weight: bold;
+  font-weight: normal;
   color: var(--accent-color);
   margin-bottom: 1rem;
 }
@@ -44,4 +50,24 @@
 
 .addToCartButton:hover {
   background-color: var(--secondary-color);
+}
+
+.shopTitle {
+  font-weight: normal;
+  margin-bottom: 2rem;
+  text-align: left;
+  margin-left: 2rem;
+}
+
+.rugGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .rugGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
 }
