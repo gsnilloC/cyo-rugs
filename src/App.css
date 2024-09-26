@@ -6,8 +6,8 @@
   --accent-color: #e74c3c;
   --card-bg: #ffffff;
   --header-bg: #ffffff;
-  --footer-bg: #333333;
-  --footer-text: #ffffff;
+  --footer-bg: #ffffff;
+  --footer-text: #333333;
 }
 
 [data-theme="dark"] {
@@ -31,7 +31,6 @@
 }
 
 body {
-  font-family: "Arial", sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: all 0.3s ease;
@@ -52,7 +51,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 4rem; /* Added horizontal padding */
 }
 
 .desktop-nav {
@@ -97,15 +96,27 @@ nav {
 nav a {
   color: var(--text-color);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: normal;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
+  transition: border-bottom 0.3s ease;
+  text-transform: uppercase;
+  position: relative;
 }
 
-nav a:hover {
+nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
   background-color: var(--primary-color);
-  color: white;
+  transition: all 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+  left: 0;
 }
 
 main {
@@ -119,8 +130,48 @@ main {
 footer {
   background-color: var(--footer-bg);
   color: var(--footer-text);
-  padding: 1rem;
+  padding: 1rem 0;
   text-align: center;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.footer-divider {
+  height: 1px;
+  background-color: var(--footer-text);
+  opacity: 0.2;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.footer-bottom {
+  font-size: 0.9rem;
+  padding: 1 0;
+}
+
+footer a {
+  color: var(--footer-text);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--primary-color);
+}
+
+.footer-top a {
+  display: flex;
+  align-items: center;
+}
+
+.footer-top svg {
+  margin-right: 0.5rem;
 }
 
 footer a {
@@ -140,10 +191,6 @@ footer a {
   top: 1rem;
   right: 1rem;
   z-index: 1000;
-}
-
-.cart-icon {
-  flex: 0 0 auto;
 }
 
 @media (max-width: 768px) {
@@ -185,13 +232,11 @@ footer a {
 
 .nav-links {
   display: flex;
-  gap: 1rem;
+  gap: 5rem;
 }
 
 .nav-links a {
-  text-decoration: none;
-  color: var(--text-color);
-  font-weight: bold;
+  font-size: 1.4rem;
 }
 
 .mobile-menu {
@@ -232,4 +277,10 @@ footer a {
   .App.drawer-open {
     padding-left: 250px;
   }
+}
+
+.mobile-menu .MuiMenuItem-root {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: normal;
 }

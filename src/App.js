@@ -6,10 +6,12 @@ import Cart from "./components/Cart";
 import Request from "./components/Request";
 import About from "./components/About";
 import "./App.css";
-import { Menu, ShoppingCart } from "@mui/icons-material";
-import { IconButton, Drawer, Menu as MuiMenu, MenuItem } from "@mui/material";
+import { Menu } from "@mui/icons-material";
+import { ShoppingCart } from "lucide-react";
+import { IconButton, Drawer, MenuItem } from "@mui/material";
 import logoImage from "./images/logo.JPG"; // Assuming you have a logo image
 import CloseIcon from "@mui/icons-material/Close";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -35,10 +37,10 @@ function App() {
   };
 
   const navItems = [
-    { path: "/", label: "Home" },
-    { path: "/shop", label: "Shop" },
-    { path: "/request", label: "Request" },
-    { path: "/about", label: "About" },
+    { path: "/", label: "HOME" },
+    { path: "/shop", label: "SHOP" },
+    { path: "/request", label: "REQUEST" },
+    { path: "/about", label: "ABOUT" },
   ];
 
   return (
@@ -59,7 +61,7 @@ function App() {
               </div>
               <div className="nav-right">
                 <IconButton onClick={() => navigate("/cart")}>
-                  <ShoppingCart />
+                  <ShoppingCart fontSize="large" />
                 </IconButton>
               </div>
             </>
@@ -118,20 +120,26 @@ function App() {
       </main>
 
       <footer>
-        <a
-          href="https://www.instagram.com/your-instagram"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Instagram
-        </a>
-        <a
-          href="https://www.linkedin.com/in/your-linkedin"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Made with Love
-        </a>
+        <div className="footer-divider"></div>
+        <div className="footer-top">
+          <a href="/about">Meet the Artist</a>
+          <a
+            href="https://www.instagram.com/cyorugs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <InstagramIcon /> Instagram
+          </a>
+        </div>
+        <div className="footer-bottom">
+          <a
+            href="https://www.linkedin.com/in/collinsgichohi/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Made with ❤️
+          </a>
+        </div>
       </footer>
     </div>
   );

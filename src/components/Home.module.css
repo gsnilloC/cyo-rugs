@@ -1,5 +1,12 @@
 .homeContainer {
   text-align: center;
+  padding: 0 1.5%; /* Default padding for mobile */
+}
+
+@media (min-width: 769px) {
+  .homeContainer {
+    padding: 0 10%; /* Increased padding for desktop */
+  }
 }
 
 .logo {
@@ -120,6 +127,7 @@
 .videoContainer {
   flex: 0 0 50%; /* Reduce the flex size to make it smaller */
   max-width: 350px; /* Set a smaller maximum width */
+  margin-top: -50px;
 }
 
 .video {
@@ -135,11 +143,26 @@
 .textContainer h1 {
   font-size: 2rem;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .textContainer p {
   font-size: 1rem;
   line-height: 1.6;
+  text-align: left;
+}
+
+@media (min-width: 769px) {
+  .textContainer {
+    max-width: 40%; /* Make it skinnier */
+    margin: 0 auto;
+  }
+
+  .textContainer p {
+    max-height: 400px; /* Make it taller */
+    overflow-y: auto;
+    padding-right: 10px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -148,7 +171,8 @@
   }
 
   .videoContainer {
-    max-width: 100%;
+    max-width: 90%;
+    margin-top: -30px;
   }
 }
 
@@ -242,5 +266,58 @@
 @media (min-width: 769px) {
   .scrollIndicator {
     display: none;
+  }
+}
+
+.seeMoreButton {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.seeMoreButton:hover {
+  background-color: var(--secondary-color);
+}
+
+.happyCustomers {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.happyCustomers h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.customerPhotos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.customerPhotos img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.customerPhotos img:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .customerPhotos img {
+    width: 150px;
+    height: 150px;
   }
 }
