@@ -83,8 +83,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 125px; /* Width of the logo */
-  height: 125px; /* Height of the logo */
+  width: 150px; /* Width of the logo */
   overflow: hidden; /* Ensures anything outside the container is cropped */
   border-radius: 50%; /* Creates the circular shape */
 }
