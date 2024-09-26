@@ -51,7 +51,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 4rem; /* Added horizontal padding */
+  padding: 1rem 4rem;
 }
 
 .desktop-nav {
@@ -69,7 +69,7 @@ nav {
   display: flex;
   align-items: center;
   flex: 0 0 auto;
-  width: 50px; /* Adjust as needed */
+  width: 50px;
 }
 
 .nav-left .MuiIconButton-root,
@@ -82,15 +82,15 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 150px; /* Width of the logo */
-  overflow: hidden; /* Ensures anything outside the container is cropped */
-  border-radius: 50%; /* Creates the circular shape */
+  width: 150px;
+  overflow: hidden;
+  border-radius: 50%;
 }
 
 .logo img {
-  width: 100%; /* Makes sure the image fits the container's width */
-  height: 100%; /* Makes sure the image fits the container's height */
-  object-fit: cover; /* Ensures the image maintains its aspect ratio and covers the entire container */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 nav a {
@@ -199,12 +199,12 @@ footer a {
   }
 
   .logo {
-    width: 80px; /* Slightly smaller for mobile, but still larger than before */
+    width: 80px;
     height: 80px;
   }
 
   .logo img {
-    height: 70px; /* Adjust logo size for mobile if needed */
+    height: 70px;
     width: auto;
   }
 
@@ -215,7 +215,7 @@ footer a {
 
   .nav-left,
   .nav-right {
-    width: 70px; /* Adjust for smaller screens */
+    width: 70px;
   }
 
   .nav-left .MuiIconButton-root,

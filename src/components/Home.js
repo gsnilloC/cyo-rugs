@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styles from "./Home.module.css";
 import videoSource from "../images/cyo-rugs-intro.mp4"; // or use a GIF: "../images/cyo-rugs-intro.gif"
 import phantomImage from "../images/phantom.JPG";
@@ -7,6 +7,13 @@ import lebronImage from "../images/lebron.JPG";
 import arkyveImage from "../images/arkyve.JPG";
 import { Link } from "react-router-dom";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import cus1Image from "../images/cus1.JPG";
+import cus2Image from "../images/cus2.JPG";
+import cus3Image from "../images/cus3.JPG";
+import cus4Image from "../images/cus4.JPG";
+import cus5Image from "../images/cus5.JPG";
+import cus6Image from "../images/cus6.JPG";
+
 function Home() {
   const featuredRugs = [
     { id: 1, name: "Phantom Troupe", image: phantomImage, price: 299.99 },
@@ -14,6 +21,58 @@ function Home() {
     { id: 3, name: "Lebron James", image: lebronImage, price: 349.99 },
     { id: 4, name: "Arkyve", image: arkyveImage, price: 200.99 },
   ];
+
+  const customerPhotos = [
+    { id: 1, image: cus1Image },
+    { id: 2, image: cus2Image },
+    { id: 3, image: cus3Image },
+    { id: 4, image: cus4Image },
+    { id: 5, image: cus5Image },
+    { id: 6, image: cus6Image },
+  ];
+
+  const scrollContainerRef = useRef(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const handleMouseDown = (e) => {
+      isDown = true;
+      startX = e.pageX - scrollContainer.offsetLeft;
+      scrollLeft = scrollContainer.scrollLeft;
+    };
+
+    const handleMouseLeave = () => {
+      isDown = false;
+    };
+
+    const handleMouseUp = () => {
+      isDown = false;
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - scrollContainer.offsetLeft;
+      const walk = (x - startX) * 2;
+      scrollContainer.scrollLeft = scrollLeft - walk;
+    };
+
+    scrollContainer.addEventListener('mousedown', handleMouseDown);
+    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
+    scrollContainer.addEventListener('mouseup', handleMouseUp);
+    scrollContainer.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      scrollContainer.removeEventListener('mousedown', handleMouseDown);
+      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
+      scrollContainer.removeEventListener('mouseup', handleMouseUp);
+      scrollContainer.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   return (
     <div className={styles.homeContainer}>
@@ -33,11 +92,14 @@ function Home() {
             populo albucius elaboraret at. Tation timeam ad duo, cu tation
             partem usu, eius ludus pro in.
           </p>
+          <Link to="/shop" className={styles.seeMoreButton}>
+            Shop Now
+          </Link>
         </div>
       </div>
       <div className={styles.featuredCollection}>
         <h2>Featured Collection</h2>
-        <div className={styles.rugScrollContainer}>
+        <div className={styles.rugScrollContainer} ref={scrollContainerRef}>
           <div className={styles.rugGrid}>
             {featuredRugs.map((rug) => (
               <div key={rug.id} className={styles.rugItem}>
@@ -60,19 +122,20 @@ function Home() {
           Transform your ideas into reality with custom orders, ranging from
           rugs and more
         </p>
-        <Link to="/request" className={styles.learnMoreButton}>
+        <Link to="/request" className={styles.seeMoreButton}>
           Learn More
         </Link>
       </div>
       <div className={styles.happyCustomers}>
         <h2>Happy Customers</h2>
-        <div className={styles.customerPhotos}>
-          {/* You can add customer photos here */}
-          <img src="/path/to/customer1.jpg" alt="Happy Customer 1" />
-          <img src="/path/to/customer2.jpg" alt="Happy Customer 2" />
-          <img src="/path/to/customer3.jpg" alt="Happy Customer 3" />
-          {/* Add more customer photos as needed */}
+        <div className={styles.customerScrollContainer}>
+          <div className={styles.customerPhotos}>
+            {customerPhotos.map((photo) => (
+              <img key={photo.id} src={photo.image} alt={`Happy Customer ${photo.id}`} />
+            ))}
+          </div>
         </div>
+        <div className={styles.scrollIndicator}></div>
       </div>
     </div>
   );

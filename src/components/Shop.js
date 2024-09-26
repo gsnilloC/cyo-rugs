@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./Shop.module.css";
 import phantomImage from "../images/phantom.JPG";
 import offWhiteImage from "../images/off-white.JPG";
-// Import other rug images as needed
 
 function Shop() {
   const rugs = [
@@ -20,11 +19,9 @@ function Shop() {
       price: 199.99,
       description: "A sleek, simple design perfect for contemporary spaces.",
     },
-    // Add more rugs as needed, importing and using their respective images
   ];
 
   const addToCart = (rugId) => {
-    // Implement add to cart functionality
     console.log(`Added rug with id ${rugId} to cart`);
   };
 

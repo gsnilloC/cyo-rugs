@@ -9,7 +9,7 @@ import "./App.css";
 import { Menu } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
 import { IconButton, Drawer, MenuItem } from "@mui/material";
-import logoImage from "./images/logo.JPG"; // Assuming you have a logo image
+import logoImage from "./images/logo.JPG";
 import CloseIcon from "@mui/icons-material/Close";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
@@ -128,7 +128,7 @@ function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <InstagramIcon /> Instagram
+            <InstagramIcon />
           </a>
         </div>
         <div className="footer-bottom">

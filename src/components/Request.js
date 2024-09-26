@@ -17,7 +17,6 @@ function Request() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Implement form submission logic here
     console.log("Form submitted");
   };
 
