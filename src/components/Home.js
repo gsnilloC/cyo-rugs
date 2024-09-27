@@ -61,16 +61,16 @@ function Home() {
       scrollContainer.scrollLeft = scrollLeft - walk;
     };
 
-    scrollContainer.addEventListener('mousedown', handleMouseDown);
-    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
-    scrollContainer.addEventListener('mouseup', handleMouseUp);
-    scrollContainer.addEventListener('mousemove', handleMouseMove);
+    scrollContainer.addEventListener("mousedown", handleMouseDown);
+    scrollContainer.addEventListener("mouseleave", handleMouseLeave);
+    scrollContainer.addEventListener("mouseup", handleMouseUp);
+    scrollContainer.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      scrollContainer.removeEventListener('mousedown', handleMouseDown);
-      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
-      scrollContainer.removeEventListener('mouseup', handleMouseUp);
-      scrollContainer.removeEventListener('mousemove', handleMouseMove);
+      scrollContainer.removeEventListener("mousedown", handleMouseDown);
+      scrollContainer.removeEventListener("mouseleave", handleMouseLeave);
+      scrollContainer.removeEventListener("mouseup", handleMouseUp);
+      scrollContainer.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -117,11 +117,8 @@ function Home() {
         <div className={styles.scrollIndicator}></div>
       </div>
       <div className={styles.customSection}>
-        <h2>Need a custom?</h2>
-        <p>
-          Transform your ideas into reality with custom orders, ranging from
-          rugs and more
-        </p>
+        <h2>Need a Custom?</h2>
+        <p>Transform your ideas into reality with custom orders</p>
         <Link to="/request" className={styles.seeMoreButton}>
           Learn More
         </Link>
@@ -131,7 +128,11 @@ function Home() {
         <div className={styles.customerScrollContainer}>
           <div className={styles.customerPhotos}>
             {customerPhotos.map((photo) => (
-              <img key={photo.id} src={photo.image} alt={`Happy Customer ${photo.id}`} />
+              <img
+                key={photo.id}
+                src={photo.image}
+                alt={`Happy Customer ${photo.id}`}
+              />
             ))}
           </div>
         </div>
