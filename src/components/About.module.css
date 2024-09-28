@@ -1,0 +1,32 @@
+.aboutContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.aboutContainer h1 {
+  font-weight: normal;
+  margin-bottom: 2rem;
+}
+
+.aboutContainer h2 {
+  font-weight: normal;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.aboutArtist,
+.instructions,
+.rugCare,
+.deliveryInfo {
+  margin-bottom: 2rem;
+}
+
+.aboutContainer ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.aboutContainer li {
+  margin-bottom: 0.5rem;
+}
