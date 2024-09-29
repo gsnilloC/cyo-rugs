@@ -7,11 +7,21 @@ import { ShoppingCart } from "lucide-react";
 import { IconButton, Drawer, MenuItem } from "@mui/material";
 import { logoImage } from "./assets/images";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import { DarkMode as DarkModeIcon } from "@mui/icons-material";
 
 function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [theme, setTheme] = useState("light");
   const navigate = useNavigate();
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    document.body.setAttribute("data-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -58,6 +68,12 @@ function App() {
                 <IconButton onClick={() => navigate("/cart")}>
                   <ShoppingCart fontSize="large" />
                 </IconButton>
+                <IconButton
+                  onClick={toggleTheme}
+                  className="theme-toggle dark-mode-toggle"
+                >
+                  <DarkModeIcon fontSize="large" />
+                </IconButton>
               </div>
             </>
           ) : (
@@ -75,6 +91,9 @@ function App() {
                 ))}
               </div>
               <div className="cart-icon">
+                <IconButton onClick={toggleTheme} className="theme-toggle">
+                  <DarkModeIcon />
+                </IconButton>
                 <IconButton onClick={() => navigate("/cart")}>
                   <ShoppingCart />
                 </IconButton>
@@ -99,6 +118,9 @@ function App() {
                   {item.label}
                 </MenuItem>
               ))}
+              <MenuItem onClick={toggleTheme}>
+                {theme === "light" ? "Dark Mode" : "Light Mode"}
+              </MenuItem>
             </div>
           </Drawer>
         )}
@@ -125,6 +147,9 @@ function App() {
           >
             <InstagramIcon />
           </a>
+          {/* <button onClick={toggleTheme} className="theme-toggle">
+            {theme === "light" ? "Dark Mode" : "Light Mode"}
+          </button> */}
         </div>
         <div className="footer-bottom">
           <a
