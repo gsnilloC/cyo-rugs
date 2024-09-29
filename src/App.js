@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import Home from "./components/Home";
-import Shop from "./components/Shop";
-import Cart from "./components/Cart";
-import Request from "./components/Request";
-import About from "./components/About";
+import { Home, Shop, Cart, Request, About } from "./components";
 import "./App.css";
-import { Menu } from "@mui/icons-material";
+import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
 import { IconButton, Drawer, MenuItem } from "@mui/material";
-import logoImage from "./assets/images/logo.JPG";
-import CloseIcon from "@mui/icons-material/Close";
+import { logoImage } from "./assets/images";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
 function App() {
