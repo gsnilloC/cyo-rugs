@@ -1,17 +1,19 @@
 import React from "react";
-import styles from "./Shop.module.css";
-import phantomImage from "../images/phantom.JPG";
-import offWhiteImage from "../images/off-white.JPG";
-import lebronImage from "../images/lebron.JPG";
-import arkyveImage from "../images/arkyve.JPG";
-import balloonImage from "../images/balloon.JPG";
-import blondImage from "../images/blond.JPG";
-import cdgImage from "../images/cdg.JPG";
-import kobeImage from "../images/kobe.JPG";
-import squirtleImage from "../images/squirtle.JPG";
-import stardewImage from "../images/stardew.JPG";
-import unoImage from "../images/uno.JPG";
-import zazaImage from "../images/zaza.JPG";
+import styles from "../styles/Shop.module.css";
+import {
+  phantomImage,
+  offWhiteImage,
+  lebronImage,
+  arkyveImage,
+  balloonImage,
+  blondImage,
+  cdgImage,
+  kobeImage,
+  squirtleImage,
+  stardewImage,
+  unoImage,
+  zazaImage,
+} from "../assets/images";
 
 function Shop() {
   const rugs = [

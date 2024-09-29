@@ -1,18 +1,19 @@
 import React, { useRef, useEffect } from "react";
-import styles from "./Home.module.css";
-import videoSource from "../images/cyo-rugs-intro.mp4"; // or use a GIF: "../images/cyo-rugs-intro.gif"
-import phantomImage from "../images/phantom.JPG";
-import offWhiteImage from "../images/off-white.JPG";
-import lebronImage from "../images/lebron.JPG";
-import arkyveImage from "../images/arkyve.JPG";
+import styles from "../styles/Home.module.css";
 import { Link } from "react-router-dom";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import cus1Image from "../images/cus1.JPG";
-import cus2Image from "../images/cus2.JPG";
-import cus3Image from "../images/cus3.JPG";
-import cus4Image from "../images/cus4.JPG";
-import cus5Image from "../images/cus5.JPG";
-import cus6Image from "../images/cus6.JPG";
+import {
+  phantomImage,
+  offWhiteImage,
+  lebronImage,
+  arkyveImage,
+  cus1Image,
+  cus2Image,
+  cus3Image,
+  cus4Image,
+  cus5Image,
+  cus6Image,
+} from "../assets/images";
+import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 
 function Home() {
   const featuredRugs = [

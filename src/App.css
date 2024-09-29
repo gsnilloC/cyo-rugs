@@ -187,10 +187,13 @@ footer a {
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
+  transition: background-color 0.3s ease;
+  font-size: 0.9rem;
+  margin-left: 1rem;
+}
+
+.theme-toggle:hover {
+  background-color: var(--secondary-color);
 }
 
 @media (max-width: 768px) {
@@ -283,4 +286,25 @@ footer a {
   font-size: 1.2rem;
   text-transform: uppercase;
   font-weight: normal;
+}
+
+.dark-mode-toggle {
+  position: relative;
+  top: -200px; /* Adjust this value to move the icon up or down */
+}
+
+@media (max-width: 768px) {
+  .dark-mode-toggle {
+    top: -3px; /* Adjust for mobile if needed */
+  }
+
+  .footer-top {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .theme-toggle {
+    margin-top: 1rem;
+    margin-left: 0;
+  }
 }

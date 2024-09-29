@@ -74,3 +74,29 @@
 .submitButton:hover {
   background-color: var(--secondary-color);
 }
+
+.instructions {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  color: #333;
+}
+
+.instructions h2 {
+  margin-bottom: 1rem;
+  font-weight: normal;
+}
+
+.instructions ol {
+  padding-left: 1.5rem;
+}
+
+.instructions li {
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+}
+
+.requestContainer h1 {
+  font-weight: normal;
+}

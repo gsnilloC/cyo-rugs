@@ -1,19 +1,19 @@
 import React from "react";
-import styles from "./Cart.module.css";
+import styles from "../styles/Cart.module.css";
 
 function Cart() {
   const cartItems = [
     {
       id: 1,
       name: "Phantom Troupe",
-      image: require("../images/phantom.JPG"),
+      image: require("../assets/images/phantom.JPG"),
       price: 299.99,
       quantity: 1,
     },
     {
       id: 2,
       name: "Off-White",
-      image: require("../images/off-white.JPG"),
+      image: require("../assets/images/off-white.JPG"),
       price: 199.99,
       quantity: 2,
     },
