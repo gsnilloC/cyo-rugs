@@ -9,7 +9,7 @@ import "./App.css";
 import { Menu } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
 import { IconButton, Drawer, MenuItem } from "@mui/material";
-import logoImage from "./images/logo.JPG";
+import logoImage from "./assets/images/logo.JPG";
 import CloseIcon from "@mui/icons-material/Close";
 import InstagramIcon from "@mui/icons-material/Instagram";
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./Request.module.css";
+import styles from "../styles/Request.module.css";
 
 function Request() {
   const [rugImage, setRugImage] = useState(null);
