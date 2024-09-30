@@ -68,12 +68,6 @@ function App() {
                 <IconButton onClick={() => navigate("/cart")}>
                   <ShoppingCart fontSize="large" />
                 </IconButton>
-                <IconButton
-                  onClick={toggleTheme}
-                  className="theme-toggle dark-mode-toggle"
-                >
-                  <DarkModeIcon fontSize="large" />
-                </IconButton>
               </div>
             </>
           ) : (
@@ -91,9 +85,6 @@ function App() {
                 ))}
               </div>
               <div className="cart-icon">
-                <IconButton onClick={toggleTheme} className="theme-toggle">
-                  <DarkModeIcon />
-                </IconButton>
                 <IconButton onClick={() => navigate("/cart")}>
                   <ShoppingCart />
                 </IconButton>
@@ -118,9 +109,6 @@ function App() {
                   {item.label}
                 </MenuItem>
               ))}
-              <MenuItem onClick={toggleTheme}>
-                {theme === "light" ? "Dark Mode" : "Light Mode"}
-              </MenuItem>
             </div>
           </Drawer>
         )}
@@ -147,9 +135,9 @@ function App() {
           >
             <InstagramIcon />
           </a>
-          {/* <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? "Dark Mode" : "Light Mode"}
-          </button> */}
+          <IconButton onClick={toggleTheme} className="theme-toggle">
+            <DarkModeIcon />
+          </IconButton>
         </div>
         <div className="footer-bottom">
           <a
