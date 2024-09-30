@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-//const connectDB = require("./db/config");
+const connectDB = require("./db/config");
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-//connectDB();
+connectDB();
 
 // Routes
 // Add your routes here
