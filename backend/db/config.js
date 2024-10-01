@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+console.log(process.env.MONGODB_URI);
 const connectDB = async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(
+    process.env.MONGODB_URI || "mongodb://localhost:27017/cyo_rugs",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
   console.log("MongoDB connected");
 };
 
