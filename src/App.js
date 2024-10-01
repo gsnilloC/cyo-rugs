@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { Home, Shop, Cart, Request, About } from "./components";
+import { Home, Shop, Cart, Request, About, PasswordPage } from "./components";
 import "./App.css";
 import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
@@ -51,56 +51,50 @@ function App() {
   return (
     <div className="App">
       <header>
-        <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
-          {isMobile ? (
-            <>
-              <div className="nav-left">
-                <IconButton onClick={handleDrawerToggle}>
-                  {isDrawerOpen ? <CloseIcon /> : <Menu />}
-                </IconButton>
-              </div>
-              <div className="logo">
-                <Link to="/">
-                  <img src={logoImage} alt="CYO Rugs Logo" />
-                </Link>
-              </div>
-              <div className="nav-right">
-                <IconButton onClick={() => navigate("/cart")}>
-                  <ShoppingCart fontSize="large" />
-                </IconButton>
-                <IconButton
-                  onClick={toggleTheme}
-                  className="theme-toggle dark-mode-toggle"
-                >
-                  <DarkModeIcon fontSize="large" />
-                </IconButton>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="logo">
-                <Link to="/">
-                  <img src={logoImage} alt="CYO Rugs Logo" />
-                </Link>
-              </div>
-              <div className="nav-links">
-                {navItems.map((item) => (
-                  <Link key={item.path} to={item.path}>
-                    {item.label}
+        {/* Conditionally render the nav only if not on the Password Page */}
+        {window.location.pathname !== "/" && (
+          <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
+            {isMobile ? (
+              <>
+                <div className="nav-left">
+                  <IconButton onClick={handleDrawerToggle}>
+                    {isDrawerOpen ? <CloseIcon /> : <Menu />}
+                  </IconButton>
+                </div>
+                <div className="logo">
+                  <Link to="/">
+                    <img src={logoImage} alt="CYO Rugs Logo" />
                   </Link>
-                ))}
-              </div>
-              <div className="cart-icon">
-                <IconButton onClick={toggleTheme} className="theme-toggle">
-                  <DarkModeIcon />
-                </IconButton>
-                <IconButton onClick={() => navigate("/cart")}>
-                  <ShoppingCart />
-                </IconButton>
-              </div>
-            </>
-          )}
-        </nav>
+                </div>
+                <div className="nav-right">
+                  <IconButton onClick={() => navigate("/cart")}>
+                    <ShoppingCart fontSize="large" />
+                  </IconButton>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="logo">
+                  <Link to="/">
+                    <img src={logoImage} alt="CYO Rugs Logo" />
+                  </Link>
+                </div>
+                <div className="nav-links">
+                  {navItems.map((item) => (
+                    <Link key={item.path} to={item.path}>
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+                <div className="cart-icon">
+                  <IconButton onClick={() => navigate("/cart")}>
+                    <ShoppingCart />
+                  </IconButton>
+                </div>
+              </>
+            )}
+          </nav>
+        )}
         {isMobile && (
           <Drawer
             anchor="left"
@@ -118,9 +112,6 @@ function App() {
                   {item.label}
                 </MenuItem>
               ))}
-              <MenuItem onClick={toggleTheme}>
-                {theme === "light" ? "Dark Mode" : "Light Mode"}
-              </MenuItem>
             </div>
           </Drawer>
         )}
@@ -128,7 +119,8 @@ function App() {
 
       <main>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<PasswordPage />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/request" element={<Request />} />
@@ -136,10 +128,13 @@ function App() {
         </Routes>
       </main>
 
-      <footer>
+      {/* Conditionally render the footer only on the Password Page */}
+      <footer
+        style={{ display: window.location.pathname === "/" ? "block" : "none" }}
+      >
         <div className="footer-divider"></div>
         <div className="footer-top">
-          <a href="/about">Meet the Artist</a>
+          {/* <a href="/about">Meet the Artist</a> */}
           <a
             href="https://www.instagram.com/cyorugs"
             target="_blank"
@@ -147,9 +142,9 @@ function App() {
           >
             <InstagramIcon />
           </a>
-          {/* <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? "Dark Mode" : "Light Mode"}
-          </button> */}
+          <IconButton onClick={toggleTheme} className="theme-toggle">
+            <DarkModeIcon />
+          </IconButton>
         </div>
         <div className="footer-bottom">
           <a
