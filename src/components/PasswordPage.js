@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Change this line
-import styles from "../styles/PasswordPage.module.css"; // Create a CSS file for styling
+import styles from "../styles/passwordPage.module.css"; // Create a CSS file for styling
 import logoImage from "../assets/images/logo.JPG"; // Adjust the path as necessary
 
 const PasswordPage = () => {
