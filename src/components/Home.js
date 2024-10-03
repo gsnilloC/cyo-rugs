@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import styles from "../styles/home.module.css";
+import styles from "../styles/Home.module.css";
 import { Link } from "react-router-dom";
 import {
   phantomImage,

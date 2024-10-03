@@ -128,7 +128,10 @@ function App() {
         </Routes>
       </main>
 
-      <footer>
+      {/* Conditionally render the footer only on the Password Page */}
+      <footer
+        style={{ display: window.location.pathname === "/" ? "block" : "none" }}
+      >
         <div className="footer-divider"></div>
         <div className="footer-top">
           {/* <a href="/about">Meet the Artist</a> */}
