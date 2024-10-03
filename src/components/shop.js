@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/Shop.module.css";
+import styles from "../styles/shop.module.css";
 import {
   phantomImage,
   offWhiteImage,
