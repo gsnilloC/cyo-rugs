@@ -2,9 +2,7 @@ const { Client, Environment } = require("square");
 
 const client = new Client({
   environment: Environment.Sandbox,
-  accessToken:
-    process.env.SQUARE_ACCESS_TOKEN ||
-    "EAAAl0ONNhJnTUCSsseWYApCo1Vv-04R8M5LhfQMttLQIWSO4J90AitdjbZ-ll8R",
+  accessToken: process.env.SQUARE_ACCESS_TOKEN,
 });
 
 const getImageUrls = async (imageIds) => {

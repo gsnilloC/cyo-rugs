@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const connectDB = async () => {
-  await mongoose.connect(
-    process.env.MONGODB_URI || "mongodb://localhost:27017/cyo_rugs"
-  );
+  await mongoose.connect(process.env.MONGODB_URI);
   //console.log("MongoDB connected");
 };
 
