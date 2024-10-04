@@ -4,12 +4,56 @@ const client = new Client({
   environment: Environment.Sandbox,
   accessToken:
     process.env.SQUARE_ACCESS_TOKEN ||
-    "EAAAl-bQr2mDkp_u8n3pY7Ml8xusiw3Ji03Cdb-Y_KoEva7H3nJsPYe6KpEEDgvS",
+    "EAAAl0ONNhJnTUCSsseWYApCo1Vv-04R8M5LhfQMttLQIWSO4J90AitdjbZ-ll8R",
 });
+
+// Function to get image URLs by image ID
+const getImageUrls = async (imageIds) => {
+  const imageUrls = await Promise.all(
+    imageIds.map(async (imageId) => {
+      const imageResponse = await client.catalogApi.retrieveCatalogObject(
+        imageId
+      );
+      return imageResponse.result.object.imageData.url; // This will return the image URL
+    })
+  );
+  return imageUrls;
+};
 
 const listItems = async () => {
   const response = await client.catalogApi.listCatalog();
-  return response.result.objects;
+  const items = response.result.objects;
+
+  // Map the items to include only the necessary fields
+  return await Promise.all(
+    items.map(async (item) => {
+      // Get price (assuming you're looking at the first variation)
+      const priceBigInt =
+        item.itemData.variations[0].itemVariationData.priceMoney.amount;
+      const formattedPrice = Number(priceBigInt) / 100; // Convert BigInt to Number and from cents to dollars
+
+      // Get image URLs
+      const imageIds = item.itemData.imageIds || [];
+      const imageUrls = imageIds.length > 0 ? await getImageUrls(imageIds) : [];
+
+      return {
+        id: item.id,
+        name: item.itemData.name,
+        description: item.itemData.description,
+        price: formattedPrice, // Price in dollars
+        imageUrls: imageUrls, // Array of image URLs
+      };
+    })
+  );
 };
 
-module.exports = { listItems };
+const testSquareApi = async () => {
+  try {
+    const items = await listItems();
+    console.log("Square API is working. Items:", items);
+  } catch (error) {
+    console.error("Error testing Square API:", error);
+  }
+};
+
+module.exports = { listItems, testSquareApi };
