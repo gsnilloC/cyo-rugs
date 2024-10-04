@@ -1,16 +1,22 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
 const connectDB = require("./db/config");
 const path = require("path");
-const { listItems } = require("./api/square");
-const app = express();
 const morgan = require("morgan");
+const { listItems } = require("./api/square");
+require("dotenv").config();
+
+const app = express();
 
 app.use(morgan("dev"));
-
 app.use(cors());
 app.use(express.json());
+
+// Check for dotenv loading errors
+const result = require("dotenv").config();
+if (result.error) {
+  throw result.error;
+}
 
 connectDB();
 
@@ -34,7 +40,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
