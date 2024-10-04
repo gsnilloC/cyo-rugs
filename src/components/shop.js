@@ -11,9 +11,10 @@ function Shop() {
     const fetchRugs = async () => {
       try {
         const response = await axios.get("/api/items");
-        console.log("Fetched items:", response.data.items);
-        setRugs(response.data.items || []);
+        console.log("Fetched items:", response.data); // Log the response data
+        setRugs(response.data); // Set rugs directly to the response data
       } catch (err) {
+        console.error("Error fetching rugs:", err);
         setError(err);
       } finally {
         setLoading(false);
@@ -52,7 +53,9 @@ function Shop() {
                 )}
                 <div className={styles.rugInfo}>
                   <h2 className={styles.rugName}>{rug.name}</h2>
-                  <p className={styles.rugDescription}>{rug.description}</p>
+                  <p className={styles.rugDescription}>
+                    {rug.description || "No description available."}
+                  </p>
                   <p className={styles.rugPrice}>
                     ${rug.price ? rug.price.toFixed(2) : "N/A"}
                   </p>
