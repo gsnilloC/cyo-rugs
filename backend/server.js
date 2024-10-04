@@ -3,8 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 const connectDB = require("./db/config");
 const path = require("path");
-const { testSquareApi } = require("./api/square"); // Import the testSquareApi function
-const { listItems } = require("./api/square"); // Import the listItems function
+const { listItems } = require("./api/square");
 const app = express();
 const morgan = require("morgan");
 

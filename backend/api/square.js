@@ -7,14 +7,13 @@ const client = new Client({
     "EAAAl0ONNhJnTUCSsseWYApCo1Vv-04R8M5LhfQMttLQIWSO4J90AitdjbZ-ll8R",
 });
 
-// Function to get image URLs by image ID
 const getImageUrls = async (imageIds) => {
   const imageUrls = await Promise.all(
     imageIds.map(async (imageId) => {
       const imageResponse = await client.catalogApi.retrieveCatalogObject(
         imageId
       );
-      return imageResponse.result.object.imageData.url; // This will return the image URL
+      return imageResponse.result.object.imageData.url;
     })
   );
   return imageUrls;
@@ -24,15 +23,12 @@ const listItems = async () => {
   const response = await client.catalogApi.listCatalog();
   const items = response.result.objects;
 
-  // Map the items to include only the necessary fields
   return await Promise.all(
     items.map(async (item) => {
-      // Get price (assuming you're looking at the first variation)
       const priceBigInt =
         item.itemData.variations[0].itemVariationData.priceMoney.amount;
-      const formattedPrice = Number(priceBigInt) / 100; // Convert BigInt to Number and from cents to dollars
+      const formattedPrice = Number(priceBigInt) / 100;
 
-      // Get image URLs
       const imageIds = item.itemData.imageIds || [];
       const imageUrls = imageIds.length > 0 ? await getImageUrls(imageIds) : [];
 
@@ -40,8 +36,8 @@ const listItems = async () => {
         id: item.id,
         name: item.itemData.name,
         description: item.itemData.description,
-        price: formattedPrice, // Price in dollars
-        imageUrls: imageUrls, // Array of image URLs
+        price: formattedPrice,
+        imageUrls: imageUrls,
       };
     })
   );

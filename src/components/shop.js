@@ -11,8 +11,8 @@ function Shop() {
     const fetchRugs = async () => {
       try {
         const response = await axios.get("/api/items");
-        console.log("Fetched items:", response.data.items); // Adjust based on the API response
-        setRugs(response.data.items || []); // Adjust based on the correct data structure
+        console.log("Fetched items:", response.data.items);
+        setRugs(response.data.items || []);
       } catch (err) {
         setError(err);
       } finally {
