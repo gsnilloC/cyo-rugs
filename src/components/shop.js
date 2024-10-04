@@ -12,7 +12,12 @@ function Shop() {
     const fetchRugs = async () => {
       try {
         const response = await axios.get("/api/items");
-        setRugs(response.data);
+        console.log("API Response:", response.data); // Log the response
+        if (Array.isArray(response.data)) {
+          setRugs(response.data);
+        } else {
+          throw new Error("Response is not an array");
+        }
       } catch (err) {
         console.error("Error fetching rugs:", err);
         setError(err);

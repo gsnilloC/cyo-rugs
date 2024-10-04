@@ -3,7 +3,7 @@ const cors = require("cors");
 const connectDB = require("./db/config");
 const path = require("path");
 const morgan = require("morgan");
-const { listItems, getItemById } = require("./api/square"); // Import the new function
+const { listItems, getItemById, testSquareApi } = require("./api/square"); // Import the new function
 require("dotenv").config();
 
 const app = express();
@@ -60,5 +60,5 @@ const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  //testSquareApi();
+  testSquareApi();
 });
