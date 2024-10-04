@@ -3,7 +3,7 @@ const cors = require("cors");
 const connectDB = require("./db/config");
 const path = require("path");
 const morgan = require("morgan");
-const { listItems, testSquareApi } = require("./api/square");
+const { listItems, getItemById } = require("./api/square"); // Import the new function
 require("dotenv").config();
 
 const app = express();
@@ -22,6 +22,7 @@ connectDB();
 
 app.use(express.static(path.join(__dirname, "../build")));
 
+// Existing route to get all items
 app.get("/api/items", async (req, res) => {
   try {
     const items = await listItems();
@@ -29,6 +30,21 @@ app.get("/api/items", async (req, res) => {
   } catch (error) {
     console.error("Error retrieving items:", error);
     res.status(500).json({ error: "Failed to retrieve items" });
+  }
+});
+
+// New route to get a specific item by ID
+app.get("/api/items/:id", async (req, res) => {
+  const { id } = req.params; // Get the ID from the request parameters
+  try {
+    const item = await getItemById(id); // Fetch the item by ID
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.json(item);
+  } catch (error) {
+    console.error("Error retrieving item:", error);
+    res.status(500).json({ error: "Failed to retrieve item" });
   }
 });
 

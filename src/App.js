@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import { Home, Shop, Cart, Request, About, PasswordPage } from "./components";
+import {
+  Home,
+  Shop,
+  Cart,
+  Request,
+  About,
+  PasswordPage,
+  Product,
+} from "./components";
 import "./App.css";
 import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
@@ -125,6 +133,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/request" element={<Request />} />
           <Route path="/about" element={<About />} />
+          <Route path="/product/:id" element={<Product />} />
         </Routes>
       </main>
 

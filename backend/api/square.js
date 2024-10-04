@@ -41,6 +41,36 @@ const listItems = async () => {
   );
 };
 
+// New function to get an item by ID
+const getItemById = async (id) => {
+  try {
+    const response = await client.catalogApi.retrieveCatalogObject(id);
+    const item = response.result.object;
+
+    if (!item || !item.itemData) {
+      return null; // Item not found
+    }
+
+    const priceBigInt =
+      item.itemData.variations[0].itemVariationData.priceMoney.amount;
+    const formattedPrice = Number(priceBigInt) / 100;
+
+    const imageIds = item.itemData.imageIds || [];
+    const imageUrls = imageIds.length > 0 ? await getImageUrls(imageIds) : [];
+
+    return {
+      id: item.id,
+      name: item.itemData.name,
+      description: item.itemData.description,
+      price: formattedPrice,
+      imageUrls: imageUrls,
+    };
+  } catch (error) {
+    console.error("Error retrieving item by ID:", error);
+    throw error; // Rethrow the error for handling in the route
+  }
+};
+
 const testSquareApi = async () => {
   try {
     const items = await listItems();
@@ -50,4 +80,4 @@ const testSquareApi = async () => {
   }
 };
 
-module.exports = { listItems, testSquareApi };
+module.exports = { listItems, getItemById, testSquareApi };
