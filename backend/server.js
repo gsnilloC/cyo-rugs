@@ -3,7 +3,8 @@ const cors = require("cors");
 const connectDB = require("./db/config");
 const path = require("path");
 const morgan = require("morgan");
-const { listItems, getItemById, testSquareApi } = require("./api/square"); // Import the new function
+const { listItems, getItemById, testSquareApi } = require("./api/square");
+
 require("dotenv").config();
 
 const app = express();
@@ -18,11 +19,10 @@ if (result.error) {
   throw result.error;
 }
 
-connectDB();
+// connectDB();
 
 app.use(express.static(path.join(__dirname, "../build")));
 
-// Existing route to get all items
 app.get("/api/items", async (req, res) => {
   try {
     const items = await listItems();
@@ -33,11 +33,10 @@ app.get("/api/items", async (req, res) => {
   }
 });
 
-// New route to get a specific item by ID
 app.get("/api/items/:id", async (req, res) => {
-  const { id } = req.params; // Get the ID from the request parameters
+  const { id } = req.params;
   try {
-    const item = await getItemById(id); // Fetch the item by ID
+    const item = await getItemById(id);
     if (!item) {
       return res.status(404).json({ error: "Item not found" });
     }

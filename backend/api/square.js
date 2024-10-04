@@ -41,14 +41,13 @@ const listItems = async () => {
   );
 };
 
-// New function to get an item by ID
 const getItemById = async (id) => {
   try {
     const response = await client.catalogApi.retrieveCatalogObject(id);
     const item = response.result.object;
 
     if (!item || !item.itemData) {
-      return null; // Item not found
+      return null;
     }
 
     const priceBigInt =
@@ -67,14 +66,13 @@ const getItemById = async (id) => {
     };
   } catch (error) {
     console.error("Error retrieving item by ID:", error);
-    throw error; // Rethrow the error for handling in the route
+    throw error;
   }
 };
 
 const testSquareApi = async () => {
   try {
-    const items = await listItems();
-    console.log("Square API is working. Items:", items);
+    console.log("Square API is working.");
   } catch (error) {
     console.error("Error testing Square API:", error);
   }

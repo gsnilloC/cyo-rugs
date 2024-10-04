@@ -83,7 +83,7 @@ function App() {
             ) : (
               <>
                 <div className="logo">
-                  <Link to="/">
+                  <Link to="/home">
                     <img src={logoImage} alt="CYO Rugs Logo" />
                   </Link>
                 </div>
