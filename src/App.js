@@ -42,7 +42,7 @@ function App() {
   };
 
   const navItems = [
-    { path: "/", label: "HOME" },
+    { path: "/home", label: "HOME" },
     { path: "/shop", label: "SHOP" },
     { path: "/request", label: "REQUEST" },
     { path: "/about", label: "ABOUT" },

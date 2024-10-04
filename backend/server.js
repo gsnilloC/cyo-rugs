@@ -6,6 +6,9 @@ const path = require("path");
 const { testSquareApi } = require("./api/square"); // Import the testSquareApi function
 const { listItems } = require("./api/square"); // Import the listItems function
 const app = express();
+const morgan = require("morgan");
+
+app.use(morgan("dev"));
 
 app.use(cors());
 app.use(express.json());
@@ -13,14 +16,6 @@ app.use(express.json());
 connectDB();
 
 app.use(express.static(path.join(__dirname, "../build")));
-
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
 
 app.get("/api/items", async (req, res) => {
   try {
@@ -32,9 +27,16 @@ app.get("/api/items", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  testSquareApi(); // Call the test function when the server starts
 });
