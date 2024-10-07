@@ -309,3 +309,19 @@ footer a {
     margin-left: 0;
   }
 }
+
+.nav-right .MuiIconButton-root {
+  position: relative; /* Ensure the badge is positioned correctly */
+}
+
+.cart-quantity-badge {
+  position: absolute;
+  top: -5px; /* Adjust for desired position */
+  right: -10px; /* Adjust as needed */
+  background-color: var(--accent-color); /* Red color */
+  color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
