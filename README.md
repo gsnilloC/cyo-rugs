@@ -1,1 +1,3 @@
-# CYO Rugs 🧶 | Create Your Own Rugs
+## CYO Rugs 🧶 | Create Your Own Rugs
+
+https://cyorugs.vercel.app/
