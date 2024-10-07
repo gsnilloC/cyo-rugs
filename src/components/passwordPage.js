@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/passwordPage.module.css";
-import logoImage from "../assets/images/logo.JPG";
+import logoImage from "../assests/images/logo.JPG";
 import usePassword from "../hooks/usePassword"; // Import the new usePassword hook
 
 const PasswordPage = () => {

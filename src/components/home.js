@@ -12,8 +12,8 @@ import {
   cus4Image,
   cus5Image,
   cus6Image,
-} from "../assets/images";
-import videoSource from "../assets/images/cyo-rugs-intro.mp4";
+} from "../assests/images";
+import videoSource from "../assests/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome"; // Import the new useHome hook
 
 function Home() {
