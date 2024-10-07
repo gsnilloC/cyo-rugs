@@ -1,21 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Change this line
-import styles from "../styles/passwordPage.module.css"; // Create a CSS file for styling
-import logoImage from "../assets/images/logo.JPG"; // Adjust the path as necessary
+import React from "react";
+import styles from "../styles/passwordPage.module.css";
+import logoImage from "../assets/images/logo.JPG";
+import usePassword from "../hooks/usePassword"; // Import the new usePassword hook
 
 const PasswordPage = () => {
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const correctPassword = "lookBOWHELLO";
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password === correctPassword) {
-      navigate("/home");
-    } else {
-      alert("Incorrect password. Please try again.");
-    }
-  };
+  const { password, setPassword, handleSubmit } = usePassword(); // Use the custom hook
 
   return (
     <div className={styles.container}>

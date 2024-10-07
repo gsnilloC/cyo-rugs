@@ -1,26 +1,16 @@
 import React from "react";
 import styles from "../styles/cart.module.css";
-import { useCart } from "./cartContext"; // Import the useCart hook
+import useCart from "../hooks/useCart"; // Import the new useCart hook
 
 function Cart() {
-  const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
-
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  const handleIncrease = (itemId) => {
-    const item = cartItems.find((item) => item.id === itemId);
-    updateQuantity(itemId, item.quantity + 1);
-  };
-
-  const handleDecrease = (itemId) => {
-    const item = cartItems.find((item) => item.id === itemId);
-    if (item.quantity > 1) {
-      updateQuantity(itemId, item.quantity - 1);
-    }
-  };
+  const {
+    cartItems,
+    removeFromCart,
+    clearCart,
+    total,
+    handleIncrease,
+    handleDecrease,
+  } = useCart();
 
   return (
     <div className={styles.cartContainer}>
@@ -63,8 +53,7 @@ function Cart() {
           </div>
         ))
       )}
-      <p className={styles.shippingMessage}>Shipping to be calculated</p>{" "}
-      {/* New shipping message */}
+      <p className={styles.shippingMessage}>Shipping to be calculated</p>
       <p className={styles.cartTotal}>Total: ${total.toFixed(2)}</p>
       <button className={styles.checkoutButton} onClick={clearCart}>
         Clear Cart

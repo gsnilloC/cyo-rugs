@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import styles from "../styles/home.module.css";
 import { Link } from "react-router-dom";
 import {
@@ -14,8 +14,11 @@ import {
   cus6Image,
 } from "../assets/images";
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
+import useHome from "../hooks/useHome"; // Import the new useHome hook
 
 function Home() {
+  const { scrollContainerRef } = useHome(); // Use the custom hook
+
   const featuredRugs = [
     { id: 1, name: "Phantom Troupe", image: phantomImage, price: 299.99 },
     { id: 2, name: "Off-White", image: offWhiteImage, price: 249.99 },
@@ -31,49 +34,6 @@ function Home() {
     { id: 5, image: cus5Image },
     { id: 6, image: cus6Image },
   ];
-
-  const scrollContainerRef = useRef(null);
-
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    const handleMouseDown = (e) => {
-      isDown = true;
-      startX = e.pageX - scrollContainer.offsetLeft;
-      scrollLeft = scrollContainer.scrollLeft;
-    };
-
-    const handleMouseLeave = () => {
-      isDown = false;
-    };
-
-    const handleMouseUp = () => {
-      isDown = false;
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - scrollContainer.offsetLeft;
-      const walk = (x - startX) * 2;
-      scrollContainer.scrollLeft = scrollLeft - walk;
-    };
-
-    scrollContainer.addEventListener("mousedown", handleMouseDown);
-    scrollContainer.addEventListener("mouseleave", handleMouseLeave);
-    scrollContainer.addEventListener("mouseup", handleMouseUp);
-    scrollContainer.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      scrollContainer.removeEventListener("mousedown", handleMouseDown);
-      scrollContainer.removeEventListener("mouseleave", handleMouseLeave);
-      scrollContainer.removeEventListener("mouseup", handleMouseUp);
-      scrollContainer.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
 
   return (
     <div className={styles.homeContainer}>

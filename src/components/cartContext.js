@@ -105,3 +105,5 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
+export { CartContext }; // Add this line to export CartContext

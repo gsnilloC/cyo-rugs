@@ -1,24 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "../styles/request.module.css";
+import useRequest from "../hooks/useRequest"; // Import the new useRequest hook
 
 function Request() {
-  const [rugImage, setRugImage] = useState(null);
-  const [wallImage, setWallImage] = useState(null);
-
-  const handleRugUpload = (event) => {
-    const file = event.target.files[0];
-    setRugImage(URL.createObjectURL(file));
-  };
-
-  const handleWallUpload = (event) => {
-    const file = event.target.files[0];
-    setWallImage(URL.createObjectURL(file));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Form submitted");
-  };
+  const {
+    rugImage,
+    wallImage,
+    handleRugUpload,
+    handleWallUpload,
+    handleSubmit,
+  } = useRequest(); // Use the custom hook
 
   return (
     <div className={styles.requestContainer}>

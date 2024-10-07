@@ -1,33 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "../styles/shop.module.css";
-import axios from "axios";
 import { Link } from "react-router-dom"; // Import Link component
+import useShop from "../hooks/useShop"; // Import the new useShop hook
 
 function Shop() {
-  const [rugs, setRugs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchRugs = async () => {
-      try {
-        const response = await axios.get("/api/items");
-        console.log("API Response:", response.data); // Log the response
-        if (Array.isArray(response.data)) {
-          setRugs(response.data);
-        } else {
-          throw new Error("Response is not an array");
-        }
-      } catch (err) {
-        console.error("Error fetching rugs:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRugs();
-  }, []);
+  const { rugs, loading, error } = useShop(); // Use the custom hook
 
   if (loading) {
     return <div>Loading...</div>;
