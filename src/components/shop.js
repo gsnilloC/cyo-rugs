@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "../styles/shop.module.css";
-import { Link } from "react-router-dom"; // Import Link component
-import useShop from "../hooks/useShop"; // Import the new useShop hook
+import { Link } from "react-router-dom";
+import useShop from "../hooks/useShop";
 
 function Shop() {
-  const { rugs, loading, error } = useShop(); // Use the custom hook
+  const { rugs, loading, error } = useShop();
 
   if (loading) {
     return <div>Loading...</div>;

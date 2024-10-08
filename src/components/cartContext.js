@@ -10,12 +10,10 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    // Load initial cart from localStorage or set it to an empty array if it doesn't exist
     const savedCart = localStorage.getItem("cartItems");
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
@@ -106,4 +104,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export { CartContext }; // Add this line to export CartContext
+export { CartContext };

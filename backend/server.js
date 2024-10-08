@@ -13,7 +13,6 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
-// Check for dotenv loading errors
 const result = require("dotenv").config();
 if (result.error) {
   throw result.error;

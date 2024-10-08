@@ -14,10 +14,10 @@ import {
   cus6Image,
 } from "../assests/images";
 import videoSource from "../assests/images/cyo-rugs-intro.mp4";
-import useHome from "../hooks/useHome"; // Import the new useHome hook
+import useHome from "../hooks/useHome";
 
 function Home() {
-  const { scrollContainerRef } = useHome(); // Use the custom hook
+  const { scrollContainerRef } = useHome();
 
   const featuredRugs = [
     { id: 1, name: "Phantom Troupe", image: phantomImage, price: 299.99 },

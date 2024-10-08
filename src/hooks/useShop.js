@@ -10,7 +10,7 @@ const useShop = () => {
     const fetchRugs = async () => {
       try {
         const response = await axios.get("/api/items");
-        console.log("API Response:", response.data); // Log the response
+        console.log("API Response:", response.data);
         if (Array.isArray(response.data)) {
           setRugs(response.data);
         } else {

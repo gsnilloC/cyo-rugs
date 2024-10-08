@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "../styles/product.module.css";
-import useProduct from "../hooks/useProduct"; // Import the new useProduct hook
+import useProduct from "../hooks/useProduct";
 
 const Product = () => {
-  const { rug, loading, error, handleAddToCart } = useProduct(); // Use the custom hook
+  const { rug, loading, error, handleAddToCart } = useProduct();
 
   if (loading) {
     return <div>Loading...</div>;

@@ -193,12 +193,12 @@ main {
 
 .dark-mode-toggle {
   position: relative;
-  top: -200px; /* Adjust this value to move the icon up or down */
+  top: -200px;
 }
 
 @media (max-width: 768px) {
   .dark-mode-toggle {
-    top: -3px; /* Adjust for mobile if needed */
+    top: -3px;
   }
 
   .footer-top {
@@ -213,14 +213,14 @@ main {
 }
 
 .nav-right .MuiIconButton-root {
-  position: relative; /* Ensure the badge is positioned correctly */
+  position: relative;
 }
 
 .cart-quantity-badge {
   position: absolute;
-  top: -5px; /* Adjust for desired position */
-  right: -10px; /* Adjust as needed */
-  background-color: var(--accent-color); /* Red color */
+  top: -5px;
+  right: -10px;
+  background-color: var(--accent-color);
   color: white;
   border-radius: 50%;
   padding: 0.2rem 0.5rem;

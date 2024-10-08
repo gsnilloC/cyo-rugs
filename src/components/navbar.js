@@ -1,15 +1,15 @@
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useNavigate
-import { IconButton, Drawer, MenuItem } from "@mui/material"; // Import Drawer and MenuItem
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { IconButton, Drawer, MenuItem } from "@mui/material";
 import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
-// import { useCart } from "./cartContext"; // Import useCart
 import logoImage from "../assests/images/logo.JPG";
+import style from "../styles/navbar.module.css";
 
 const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
-  const navigate = useNavigate(); // Get the
+  const navigate = useNavigate();
   const location = useLocation();
-  const currentPath = location.pathname; // Get the current pathnavigate function
+  const currentPath = location.pathname;
 
   const navItems = [
     { path: "/home", label: "HOME" },
@@ -18,15 +18,13 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
     { path: "/about", label: "ABOUT" },
   ];
 
-  // Handle navigation and close drawer
   const handleNavigation = (path) => {
     navigate(path);
-    handleDrawerToggle(); // Close the drawer after navigation
+    handleDrawerToggle();
   };
 
   return (
     <header>
-      {/* Conditionally render the nav only if not on the Password Page */}
       {currentPath !== "/" && (
         <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
           {isMobile ? (
@@ -83,11 +81,7 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
         </nav>
       )}
       {isMobile && (
-        <Drawer
-          anchor="left"
-          open={isDrawerOpen} // Ensure open is valid boolean
-          onClose={handleDrawerToggle}
-        >
+        <Drawer anchor="left" open={isDrawerOpen} onClose={handleDrawerToggle}>
           <div className="mobile-menu">
             {navItems.map((item) => (
               <MenuItem

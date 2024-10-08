@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../styles/request.module.css";
-import useRequest from "../hooks/useRequest"; // Import the new useRequest hook
+import useRequest from "../hooks/useRequest";
 
 function Request() {
   const {
@@ -9,7 +9,7 @@ function Request() {
     handleRugUpload,
     handleWallUpload,
     handleSubmit,
-  } = useRequest(); // Use the custom hook
+  } = useRequest();
 
   return (
     <div className={styles.requestContainer}>

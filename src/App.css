@@ -294,24 +294,8 @@ footer a {
   top: -200px; /* Adjust this value to move the icon up or down */
 }
 
-@media (max-width: 768px) {
-  .dark-mode-toggle {
-    top: -3px; /* Adjust for mobile if needed */
-  }
-
-  .footer-top {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .theme-toggle {
-    margin-top: 1rem;
-    margin-left: 0;
-  }
-}
-
 .nav-right .MuiIconButton-root {
-  position: relative; /* Ensure the badge is positioned correctly */
+  position: relative;
 }
 
 .cart-quantity-badge {

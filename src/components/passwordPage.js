@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "../styles/passwordPage.module.css";
 import logoImage from "../assests/images/logo.JPG";
-import usePassword from "../hooks/usePassword"; // Import the new usePassword hook
+import usePassword from "../hooks/usePassword";
 
 const PasswordPage = () => {
-  const { password, setPassword, handleSubmit } = usePassword(); // Use the custom hook
+  const { password, setPassword, handleSubmit } = usePassword();
 
   return (
     <div className={styles.container}>
