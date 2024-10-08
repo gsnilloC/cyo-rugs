@@ -2,7 +2,6 @@ import React from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { DarkMode as DarkModeIcon } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import styles from "../styles/footer.module.css";
 
 const Footer = ({ toggleTheme }) => {
   return (

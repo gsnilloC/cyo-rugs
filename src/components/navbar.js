@@ -4,7 +4,6 @@ import { IconButton, Drawer, MenuItem } from "@mui/material";
 import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
 import logoImage from "../assests/images/logo.JPG";
-import style from "../styles/navbar.module.css";
 
 const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
   const navigate = useNavigate();
