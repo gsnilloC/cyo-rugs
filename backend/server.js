@@ -52,14 +52,6 @@ app.get("/api/items/:id", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
-
 app.post("/api/checkout", async (req, res) => {
   const { amount } = req.body; // Get the amount from the request body
   try {
@@ -69,6 +61,14 @@ app.post("/api/checkout", async (req, res) => {
     console.error("Error during checkout:", error);
     res.status(500).json({ error: "Failed to initiate checkout" });
   }
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
 
 const PORT = process.env.PORT;
