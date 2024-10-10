@@ -33,6 +33,9 @@ async function createCheckout(cartItems) {
       },
       checkoutOptions: {
         redirectUrl: "http://localhost:3000/shop", // Redirect to your homepage after payment
+        askForShippingAdress: true,
+        customNote: "Thank you for shopping with CYO Rugs!",
+        allowPayerNote: true,
       },
     };
 
