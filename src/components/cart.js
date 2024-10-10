@@ -3,27 +3,23 @@ import styles from "../styles/cart.module.css";
 import useCart from "../hooks/useCart"; // Import the new useCart hook
 import axios from "axios";
 
-const handleCheckout = async () => {
-  const amount = 10000; // Amount in cents (e.g., $10.00)
-
+const handleCheckout = async (cartItems) => {
   try {
-    const response = await axios.post("/api/checkout", { amount });
+    const response = await axios.post("/api/checkout", { cartItems }); // Send cartItems to the backend
     const { checkoutLink } = response.data;
 
     // Redirect the user to the Square checkout page
-    window.location.href = checkoutLink;
+    if (checkoutLink) {
+      window.location.href = checkoutLink;
+    }
+
+    // Clear cart from local storage after payment
+    localStorage.removeItem("cartItems");
   } catch (error) {
     console.error("Error during checkout:", error);
     alert("Failed to initiate checkout. Please try again.");
   }
 };
-
-// Attach this function to your checkout button
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("checkout-button")
-    .addEventListener("click", handleCheckout);
-});
 
 function Cart() {
   const {
@@ -78,7 +74,10 @@ function Cart() {
       )}
       <p className={styles.shippingMessage}>Shipping to be calculated</p>
       <p className={styles.cartTotal}>Total: ${total.toFixed(2)}</p>
-      <button className={styles.checkoutButton} onClick={handleCheckout}>
+      <button
+        className={styles.checkoutButton}
+        onClick={() => handleCheckout(cartItems)} // Checkout button now properly passes cartItems
+      >
         Checkout
       </button>
       <button className={styles.checkoutButton} onClick={clearCart}>

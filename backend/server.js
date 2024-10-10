@@ -8,7 +8,7 @@ const {
   getItemById,
   testSquareApi,
   createCheckout,
-  testCreateQuickPay,
+  testCreateCheckout,
 } = require("./api/square");
 
 require("dotenv").config();
@@ -53,10 +53,10 @@ app.get("/api/items/:id", async (req, res) => {
 });
 
 app.post("/api/checkout", async (req, res) => {
-  const { amount } = req.body; // Get the amount from the request body
+  const { cartItems } = req.body; // Get cart items from the request body
   try {
-    const checkoutLink = await createCheckout(amount); // Call the createCheckout function
-    res.json({ checkoutLink }); // Send the checkout link back to the client
+    const checkoutLink = await createCheckout(cartItems); // Pass cart items to the checkout function
+    res.json({ checkoutLink });
   } catch (error) {
     console.error("Error during checkout:", error);
     res.status(500).json({ error: "Failed to initiate checkout" });
@@ -76,5 +76,5 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   // testSquareApi();
-  // testCreateQuickPay();
+  //testCreateCheckout();
 });
