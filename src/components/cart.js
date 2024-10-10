@@ -11,11 +11,10 @@ const handleCheckout = async (cartItems, setLoading) => {
     const response = await axios.post("/api/checkout", { cartItems }); // Send cartItems to the backend
     const { checkoutLink } = response.data;
 
-    // Introduce a delay before redirecting
     if (checkoutLink) {
       setTimeout(() => {
         window.location.href = checkoutLink; // Redirect the user to the Square checkout page
-      }, 3000); // Delay of 5000 milliseconds (5 seconds)
+      }, 3000); // Delay of 3 seconds
     }
 
     // Clear cart from local storage after payment
@@ -26,7 +25,7 @@ const handleCheckout = async (cartItems, setLoading) => {
   } finally {
     setTimeout(() => {
       setLoading(false); // Set loading to false after the process
-    }, 3500); // Keep loading for 5 seconds
+    }, 3500); // Loading animation for 3.5 seconds
   }
 };
 
@@ -44,7 +43,7 @@ function Cart() {
 
   return (
     <div className={styles.cartContainer}>
-      {loading ? ( // Show loading indicator if loading is true
+      {loading ? (
         <Box
           display="flex"
           justifyContent="center"
@@ -54,10 +53,10 @@ function Cart() {
           position="fixed"
           top="0"
           left="0"
-          bgcolor="rgba(255, 255, 255, 0.8)" // Optional: Add a background color
-          zIndex="9999" // Ensure it is on top of other elements
+          bgcolor="rgba(255, 255, 255, 0.8)" // Optional background color
+          zIndex="9999"
         >
-          <CircularProgress size={100} /> {/* Increase size of the spinner */}
+          <CircularProgress size={100} /> {/* Large spinner */}
         </Box>
       ) : (
         <>
@@ -68,7 +67,7 @@ function Cart() {
             cartItems.map((item) => (
               <div key={item.id} className={styles.cartItem}>
                 <img
-                  src={item.image}
+                  src={item.imageUrls[0]} // Get the first image URL
                   alt={item.name}
                   className={styles.cartItemImage}
                 />
