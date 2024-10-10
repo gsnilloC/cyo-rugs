@@ -14,32 +14,25 @@ const bigIntReplacer = (key, value) => {
 
 async function createCheckout(cartItems) {
   try {
-    // Prepare the order line items for Square API
     const lineItems = cartItems.map((item) => ({
       name: item.name,
-      quantity: item.quantity.toString(), // Square API expects quantity as a string
       basePriceMoney: {
-        amount: item.price * 100, // Convert price to cents for the Square API
         currency: "USD",
       },
     }));
 
-    // Create the order object for Square
     const orderRequest = {
-      idempotency_key: Date.now().toString(), // Ensure request uniqueness
       order: {
         locationId: process.env.SQUARE_LOCATION_ID,
         lineItems: lineItems,
       },
       checkoutOptions: {
-        redirectUrl: "http://localhost:3000/shop", // Redirect to your homepage after payment
         askForShippingAdress: true,
         customNote: "Thank you for shopping with CYO Rugs!",
         allowPayerNote: true,
       },
     };
 
-    // Send the order creation request to Square and get the payment link
     const response = await client.checkoutApi.createPaymentLink(orderRequest);
 
     console.log(
@@ -47,7 +40,6 @@ async function createCheckout(cartItems) {
       JSON.stringify(response, bigIntReplacer, 2)
     );
 
-    // Return the payment link URL if available
     const paymentLink = response.result.paymentLink;
     return paymentLink?.url || null;
   } catch (error) {
@@ -56,16 +48,11 @@ async function createCheckout(cartItems) {
   }
 }
 
-// Example function to create an order and log the URL
 const testCreateCheckout = async () => {
   try {
-    const cartItems = [
-      { name: "Glorious King", quantity: 2, price: 12500 }, // Example cart items
-      { name: "Majestic Queen", quantity: 1, price: 8000 },
-    ];
+    const cartItems = [{ name: "Majestic Queen", quantity: 1, price: 8000 }];
 
     const checkoutUrl = await createCheckout(cartItems);
-    console.log("Checkout URL:", checkoutUrl); // Log the checkout URL
   } catch (error) {
     console.error("Error creating checkout link:", error);
   }

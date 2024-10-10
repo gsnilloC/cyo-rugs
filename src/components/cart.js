@@ -1,31 +1,30 @@
 import React, { useState } from "react";
 import styles from "../styles/cart.module.css";
-import useCart from "../hooks/useCart"; // Import the new useCart hook
+import useCart from "../hooks/useCart";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
 const handleCheckout = async (cartItems, setLoading) => {
   try {
-    setLoading(true); // Set loading to true
-    const response = await axios.post("/api/checkout", { cartItems }); // Send cartItems to the backend
+    setLoading(true);
+    const response = await axios.post("/api/checkout", { cartItems });
     const { checkoutLink } = response.data;
 
     if (checkoutLink) {
       setTimeout(() => {
-        window.location.href = checkoutLink; // Redirect the user to the Square checkout page
-      }, 3000); // Delay of 3 seconds
+        window.location.href = checkoutLink;
+      }, 3000);
     }
 
-    // Clear cart from local storage after payment
     localStorage.removeItem("cartItems");
   } catch (error) {
     console.error("Error during checkout:", error);
     alert("Failed to initiate checkout. Please try again.");
   } finally {
     setTimeout(() => {
-      setLoading(false); // Set loading to false after the process
-    }, 3500); // Loading animation for 3.5 seconds
+      setLoading(false);
+    }, 3500);
   }
 };
 
@@ -39,7 +38,7 @@ function Cart() {
     handleDecrease,
   } = useCart();
 
-  const [loading, setLoading] = useState(false); // State to manage loading
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className={styles.cartContainer}>
@@ -53,10 +52,10 @@ function Cart() {
           position="fixed"
           top="0"
           left="0"
-          bgcolor="rgba(255, 255, 255, 0.8)" // Optional background color
+          bgcolor="rgba(255, 255, 255, 0.8)"
           zIndex="9999"
         >
-          <CircularProgress size={100} /> {/* Large spinner */}
+          <CircularProgress size={100} />
         </Box>
       ) : (
         <>
@@ -67,7 +66,7 @@ function Cart() {
             cartItems.map((item) => (
               <div key={item.id} className={styles.cartItem}>
                 <img
-                  src={item.imageUrls[0]} // Get the first image URL
+                  src={item.imageUrls[0]}
                   alt={item.name}
                   className={styles.cartItemImage}
                 />
@@ -105,7 +104,7 @@ function Cart() {
           <p className={styles.cartTotal}>Total: ${total.toFixed(2)}</p>
           <button
             className={styles.checkoutButton}
-            onClick={() => handleCheckout(cartItems, setLoading)} // Checkout button now properly passes cartItems
+            onClick={() => handleCheckout(cartItems, setLoading)}
           >
             Checkout
           </button>
