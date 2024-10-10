@@ -31,6 +31,9 @@ async function createCheckout(cartItems) {
         locationId: process.env.SQUARE_LOCATION_ID,
         lineItems: lineItems,
       },
+      checkoutOptions: {
+        redirectUrl: "http://localhost:3000/shop", // Redirect to your homepage after payment
+      },
     };
 
     // Send the order creation request to Square and get the payment link
