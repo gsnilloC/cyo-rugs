@@ -1,4 +1,5 @@
 const { Client, Environment } = require("square");
+require("dotenv").config();
 
 const client = new Client({
   environment: Environment.Sandbox,
@@ -36,11 +37,6 @@ async function createCheckout(cartItems) {
 
     const response = await client.checkoutApi.createPaymentLink(orderRequest);
 
-    console.log(
-      "Response from Square API:",
-      JSON.stringify(response, bigIntReplacer, 2)
-    );
-
     const paymentLink = response.result.paymentLink;
     return paymentLink?.url || null;
   } catch (error) {
@@ -50,13 +46,12 @@ async function createCheckout(cartItems) {
 }
 
 const testCreateCheckout = async () => {
-  try {
-    const cartItems = [{ name: "Majestic Queen", quantity: 1, price: 8000 }];
-
-    const checkoutUrl = await createCheckout(cartItems);
-  } catch (error) {
-    console.error("Error creating checkout link:", error);
-  }
+  // try {
+  //   const cartItems = [{ name: "Majestic Queen", quantity: 1, price: 8000 }];
+  //   const checkoutUrl = await createCheckout(cartItems);
+  // } catch (error) {
+  //   console.error("Error creating checkout link:", error);
+  // }
 };
 
 const getImageUrls = async (imageIds) => {

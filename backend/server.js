@@ -1,30 +1,25 @@
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./db/config");
 const path = require("path");
 const morgan = require("morgan");
+const multer = require("multer");
+const { uploadImage } = require("./api/aws");
 const {
   listItems,
   getItemById,
-  testSquareApi,
+  //testSquareApi,
   createCheckout,
-  testCreateCheckout,
+  // testCreateCheckout,
 } = require("./api/square");
 
 require("dotenv").config();
 
 const app = express();
+const upload = multer();
 
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-
-const result = require("dotenv").config();
-if (result.error) {
-  throw result.error;
-}
-
-// connectDB();
 
 app.use(express.static(path.join(__dirname, "../build")));
 
@@ -52,6 +47,16 @@ app.get("/api/items/:id", async (req, res) => {
   }
 });
 
+app.post("/api/upload", upload.single("image"), async (req, res) => {
+  try {
+    const imageUrl = await uploadImage(req.file);
+    res.status(200).json({ imageUrl });
+  } catch (error) {
+    console.error("Error uploading image: ", error);
+    res.status(500).json({ error: "Failed to upload image" });
+  }
+});
+
 app.post("/api/checkout", async (req, res) => {
   const { cartItems } = req.body;
   try {
@@ -76,5 +81,5 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   //testSquareApi();
-  testCreateCheckout();
+  //testCreateCheckout();
 });
