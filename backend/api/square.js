@@ -6,13 +6,6 @@ const client = new Client({
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
 });
 
-const bigIntReplacer = (key, value) => {
-  if (typeof value === "bigint") {
-    return value.toString();
-  }
-  return value;
-};
-
 async function createCheckout(cartItems) {
   try {
     const lineItems = cartItems.map((item) => ({

@@ -3,7 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const morgan = require("morgan");
 const multer = require("multer");
-const { uploadImage } = require("./api/aws");
+const { uploadImages, uploadMetadata } = require("./api/aws");
 const {
   listItems,
   getItemById,
@@ -11,6 +11,7 @@ const {
   createCheckout,
   // testCreateCheckout,
 } = require("./api/square");
+const crypto = require("crypto");
 
 require("dotenv").config();
 
@@ -47,13 +48,31 @@ app.get("/api/items/:id", async (req, res) => {
   }
 });
 
-app.post("/api/upload", upload.single("image"), async (req, res) => {
+app.post("/api/upload", upload.array("images", 3), async (req, res) => {
+  const generateUniqueIdentifier = () => {
+    const shortTimestamp = Math.floor(Date.now() / 1000); // Seconds since Unix epoch
+    const randomString = crypto.randomBytes(3).toString("hex"); // Generate a short random string
+    return `${shortTimestamp}-${randomString}`;
+  };
+
+  const uniqueIdentifier = generateUniqueIdentifier();
+
   try {
-    const imageUrl = await uploadImage(req.file);
-    res.status(200).json({ imageUrl });
+    const customerData = {
+      name: req.body.name,
+      phone: req.body.phone,
+      email: req.body.email,
+      description: req.body.description,
+    };
+    // Upload metadata once
+    await uploadMetadata(customerData, uniqueIdentifier);
+    // Upload images
+    const imageUrls = await uploadImages(req.files, customerData, uniqueIdentifier);
+
+    res.status(200).json({ imageUrls });
   } catch (error) {
-    console.error("Error uploading image: ", error);
-    res.status(500).json({ error: "Failed to upload image" });
+    console.error("Error uploading images: ", error);
+    res.status(500).json({ error: "Failed to upload images" });
   }
 });
 
@@ -82,4 +101,5 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   //testSquareApi();
   //testCreateCheckout();
+  // displayOrders();
 });
