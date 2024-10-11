@@ -1,32 +1,8 @@
 import React, { useState } from "react";
 import styles from "../styles/cart.module.css";
 import useCart from "../hooks/useCart";
-import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-
-const handleCheckout = async (cartItems, setLoading) => {
-  try {
-    setLoading(true);
-    const response = await axios.post("/api/checkout", { cartItems });
-    const { checkoutLink } = response.data;
-
-    if (checkoutLink) {
-      setTimeout(() => {
-        window.location.href = checkoutLink;
-      }, 3000);
-    }
-
-    localStorage.removeItem("cartItems");
-  } catch (error) {
-    console.error("Error during checkout:", error);
-    alert("Failed to initiate checkout. Please try again.");
-  } finally {
-    setTimeout(() => {
-      setLoading(false);
-    }, 3500);
-  }
-};
 
 function Cart() {
   const {
@@ -36,6 +12,7 @@ function Cart() {
     total,
     handleIncrease,
     handleDecrease,
+    handleCheckout,
   } = useCart();
 
   const [loading, setLoading] = useState(false);

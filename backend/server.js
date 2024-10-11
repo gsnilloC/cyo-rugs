@@ -53,9 +53,9 @@ app.get("/api/items/:id", async (req, res) => {
 });
 
 app.post("/api/checkout", async (req, res) => {
-  const { cartItems } = req.body; // Get cart items from the request body
+  const { cartItems } = req.body;
   try {
-    const checkoutLink = await createCheckout(cartItems); // Pass cart items to the checkout function
+    const checkoutLink = await createCheckout(cartItems);
     res.json({ checkoutLink });
   } catch (error) {
     console.error("Error during checkout:", error);
@@ -75,6 +75,6 @@ const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  // testSquareApi();
-  //testCreateCheckout();
+  //testSquareApi();
+  testCreateCheckout();
 });
