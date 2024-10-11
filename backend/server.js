@@ -1,30 +1,26 @@
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./db/config");
 const path = require("path");
 const morgan = require("morgan");
+const multer = require("multer");
+const { uploadImages, uploadMetadata } = require("./api/aws");
 const {
   listItems,
   getItemById,
-  testSquareApi,
+  //testSquareApi,
   createCheckout,
-  testCreateQuickPay,
+  // testCreateCheckout,
 } = require("./api/square");
+const crypto = require("crypto");
 
 require("dotenv").config();
 
 const app = express();
+const upload = multer();
 
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-
-const result = require("dotenv").config();
-if (result.error) {
-  throw result.error;
-}
-
-// connectDB();
 
 app.use(express.static(path.join(__dirname, "../build")));
 
@@ -52,11 +48,39 @@ app.get("/api/items/:id", async (req, res) => {
   }
 });
 
-app.post("/api/checkout", async (req, res) => {
-  const { amount } = req.body; // Get the amount from the request body
+app.post("/api/upload", upload.array("images", 3), async (req, res) => {
+  const generateUniqueIdentifier = () => {
+    const shortTimestamp = Math.floor(Date.now() / 1000); // Seconds since Unix epoch
+    const randomString = crypto.randomBytes(3).toString("hex"); // Generate a short random string
+    return `${shortTimestamp}-${randomString}`;
+  };
+
+  const uniqueIdentifier = generateUniqueIdentifier();
+
   try {
-    const checkoutLink = await createCheckout(amount); // Call the createCheckout function
-    res.json({ checkoutLink }); // Send the checkout link back to the client
+    const customerData = {
+      name: req.body.name,
+      phone: req.body.phone,
+      email: req.body.email,
+      description: req.body.description,
+    };
+    // Upload metadata once
+    await uploadMetadata(customerData, uniqueIdentifier);
+    // Upload images
+    const imageUrls = await uploadImages(req.files, customerData, uniqueIdentifier);
+
+    res.status(200).json({ imageUrls });
+  } catch (error) {
+    console.error("Error uploading images: ", error);
+    res.status(500).json({ error: "Failed to upload images" });
+  }
+});
+
+app.post("/api/checkout", async (req, res) => {
+  const { cartItems } = req.body;
+  try {
+    const checkoutLink = await createCheckout(cartItems);
+    res.json({ checkoutLink });
   } catch (error) {
     console.error("Error during checkout:", error);
     res.status(500).json({ error: "Failed to initiate checkout" });
@@ -75,6 +99,7 @@ const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  // testSquareApi();
-  // testCreateQuickPay();
+  //testSquareApi();
+  //testCreateCheckout();
+  // displayOrders();
 });

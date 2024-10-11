@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../components/cartContext";
+import axios from "axios";
 
 const useCart = () => {
   const { cartItems, removeFromCart, clearCart, updateQuantity } =
@@ -22,6 +23,29 @@ const useCart = () => {
     }
   };
 
+  const handleCheckout = async (cartItems, setLoading) => {
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/checkout", { cartItems });
+      const { checkoutLink } = response.data;
+
+      if (checkoutLink) {
+        setTimeout(() => {
+          window.location.href = checkoutLink;
+        }, 3000);
+      }
+
+      localStorage.removeItem("cartItems");
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("Failed to initiate checkout. Please try again.");
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3500);
+    }
+  };
+
   return {
     cartItems,
     removeFromCart,
@@ -29,6 +53,7 @@ const useCart = () => {
     total,
     handleIncrease,
     handleDecrease,
+    handleCheckout,
   };
 };
 

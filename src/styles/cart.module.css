@@ -17,8 +17,8 @@
 }
 
 .cartItemImage {
-  width: 100px;
-  height: 100px;
+  width: 100px; /* Adjust width as needed */
+  height: auto; /* Change height to auto to maintain aspect ratio */
   object-fit: contain;
   background-color: #f0f0f0;
   border-radius: 4px;

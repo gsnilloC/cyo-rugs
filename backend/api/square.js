@@ -1,62 +1,50 @@
 const { Client, Environment } = require("square");
+require("dotenv").config();
 
 const client = new Client({
   environment: Environment.Sandbox,
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
 });
 
-const bigIntReplacer = (key, value) => {
-  if (typeof value === "bigint") {
-    return value.toString();
-  }
-  return value;
-};
-
-async function createCheckout(amount) {
+async function createCheckout(cartItems) {
   try {
-    const response = await client.checkoutApi.createPaymentLink({
-      idempotency_key: Date.now().toString(),
-      quickPay: {
-        name: "Auto Detailing",
-        priceMoney: {
-          amount: amount,
-          currency: "USD",
-        },
-        locationId: process.env.SQUARE_LOCATION_ID,
+    const lineItems = cartItems.map((item) => ({
+      name: item.name,
+      quantity: item.quantity.toString(),
+      basePriceMoney: {
+        amount: item.price * 100,
+        currency: "USD",
       },
-    });
+    }));
 
-    console.log(
-      "Response from Square API:",
-      JSON.stringify(response, bigIntReplacer, 2)
-    );
+    const orderRequest = {
+      idempotency_key: Date.now().toString(),
+      order: {
+        locationId: process.env.SQUARE_LOCATION_ID,
+        lineItems: lineItems,
+      },
+      checkoutOptions: {
+        redirectUrl: "http://localhost:3000/shop",
+      },
+    };
 
-    // Check if the payment link was successfully created and return the URL
+    const response = await client.checkoutApi.createPaymentLink(orderRequest);
+
     const paymentLink = response.result.paymentLink;
-    if (paymentLink && paymentLink.url) {
-      console.log("Payment Link ID:", paymentLink.id);
-      console.log("Order ID:", paymentLink.orderId);
-      console.log("Payment Link URL:", paymentLink.url);
-      console.log("Created At:", paymentLink.createdAt);
-      return paymentLink.url; // Return the checkout URL
-    } else {
-      console.log("No payment link returned.");
-      return null; // Return null if no link is available
-    }
+    return paymentLink?.url || null;
   } catch (error) {
     console.log("Error creating checkout:", error);
-    throw error; // Propagate the error to the calling function
+    throw error;
   }
 }
 
-// Example function to create a Quick Pay link and log the URL
-const testCreateQuickPay = async () => {
-  try {
-    const checkoutUrl = await createCheckout(12500); // Amount in cents (e.g., $125.00)
-    console.log("Checkout URL:", checkoutUrl); // Log the checkout URL
-  } catch (error) {
-    console.error("Error creating Quick Pay link:", error);
-  }
+const testCreateCheckout = async () => {
+  // try {
+  //   const cartItems = [{ name: "Majestic Queen", quantity: 1, price: 8000 }];
+  //   const checkoutUrl = await createCheckout(cartItems);
+  // } catch (error) {
+  //   console.error("Error creating checkout link:", error);
+  // }
 };
 
 const getImageUrls = async (imageIds) => {
@@ -137,5 +125,5 @@ module.exports = {
   getItemById,
   testSquareApi,
   createCheckout,
-  testCreateQuickPay,
+  testCreateCheckout,
 };
