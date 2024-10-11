@@ -16,20 +16,21 @@ async function createCheckout(cartItems) {
   try {
     const lineItems = cartItems.map((item) => ({
       name: item.name,
+      quantity: item.quantity.toString(),
       basePriceMoney: {
+        amount: item.price * 100,
         currency: "USD",
       },
     }));
 
     const orderRequest = {
+      idempotency_key: Date.now().toString(),
       order: {
         locationId: process.env.SQUARE_LOCATION_ID,
         lineItems: lineItems,
       },
       checkoutOptions: {
-        askForShippingAdress: true,
-        customNote: "Thank you for shopping with CYO Rugs!",
-        allowPayerNote: true,
+        redirectUrl: "http://localhost:3000/shop",
       },
     };
 
