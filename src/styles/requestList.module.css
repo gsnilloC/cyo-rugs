@@ -1,0 +1,27 @@
+.requestListContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.orderItem {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.orderItem p {
+  margin: 0.5rem 0;
+}
+
+.orderItem a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.orderItem a:hover {
+  text-decoration: underline;
+}
+

@@ -3,7 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const morgan = require("morgan");
 const multer = require("multer");
-const { uploadImages, uploadMetadata } = require("./api/aws");
+const { uploadImages, uploadMetadata, displayOrders, listOrders } = require("./api/aws");
 const {
   listItems,
   getItemById,
@@ -67,12 +67,27 @@ app.post("/api/upload", upload.array("images", 3), async (req, res) => {
     // Upload metadata once
     await uploadMetadata(customerData, uniqueIdentifier);
     // Upload images
-    const imageUrls = await uploadImages(req.files, customerData, uniqueIdentifier);
+    const imageUrls = await uploadImages(
+      req.files,
+      customerData,
+      uniqueIdentifier
+    );
 
     res.status(200).json({ imageUrls });
   } catch (error) {
     console.error("Error uploading images: ", error);
     res.status(500).json({ error: "Failed to upload images" });
+  }
+});
+
+// Display all orders with images
+app.get("/api/orders", async (req, res) => {
+  try {
+    const orders = await listOrders();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error retrieving orders:", error);
+    res.status(500).json({ error: "Failed to retrieve orders" });
   }
 });
 

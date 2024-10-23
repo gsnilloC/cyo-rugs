@@ -79,7 +79,8 @@ const listOrders = async () => {
           Key: orderKey,
         });
 
-        const orderContent = orderData.Body.toString("utf-8");
+        // Convert the Body to a string
+        const orderContent = await streamToString(orderData.Body);
         const orderMetadata = JSON.parse(orderContent);
 
         // Get the corresponding image
@@ -95,6 +96,16 @@ const listOrders = async () => {
     console.error("Error listing orders: ", error);
     throw error;
   }
+};
+
+// Helper function to convert stream to string
+const streamToString = (stream) => {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf-8")));
+    stream.on("error", reject);
+  });
 };
 
 const displayOrders = async () => {
@@ -113,4 +124,9 @@ const displayOrders = async () => {
   }
 };
 
-module.exports = { uploadImages, uploadMetadata, listOrders, displayOrders };
+module.exports = {
+  uploadImages,
+  uploadMetadata,
+  listOrders,
+  displayOrders,
+};

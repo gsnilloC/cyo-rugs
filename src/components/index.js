@@ -5,3 +5,4 @@ export { default as Request } from "./request";
 export { default as About } from "./about";
 export { default as PasswordPage } from "./passwordPage";
 export { default as Product } from "./product";
+export { default as RequestList } from "./requestList";

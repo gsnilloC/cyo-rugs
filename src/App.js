@@ -8,6 +8,7 @@ import {
   About,
   PasswordPage,
   Product,
+  RequestList,
 } from "./components";
 import "./App.css";
 import { useCart } from "./components/cartContext";
@@ -51,6 +52,7 @@ function App() {
     { path: "/shop", label: "SHOP" },
     { path: "/request", label: "REQUEST" },
     { path: "/about", label: "ABOUT" },
+    { path: "/list", label: "LIST" },
   ];
 
   const currentPath = window?.location?.pathname || "/home";
@@ -75,6 +77,7 @@ function App() {
           <Route path="/request" element={<Request />} />
           <Route path="/about" element={<About />} />
           <Route path="/product/:id" element={<Product />} />
+          <Route path="/list" element={<RequestList />} />
         </Routes>
       </main>
       <Footer toggleTheme={toggleTheme} />
