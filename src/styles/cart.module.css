@@ -105,3 +105,36 @@
   margin: 1rem 0;
   text-align: right;
 }
+
+@media (max-width: 768px) {
+  .cartContainer {
+    padding: 1rem; /* Reduce padding for mobile */
+  }
+
+  .cartItem {
+    grid-template-columns: 1fr auto; /* Simplify layout for mobile */
+    gap: 0.5rem; /* Reduce gap */
+  }
+
+  .cartItemImage {
+    width: 80px; /* Smaller image size */
+  }
+
+  .cartItemInfo {
+    align-items: flex-start; /* Align text to the start */
+  }
+
+  .quantityControl {
+    justify-content: flex-start; /* Align quantity controls to the start */
+  }
+
+  .checkoutButton {
+    font-size: 1rem; /* Smaller font size */
+    padding: 0.75rem; /* Adjust padding */
+  }
+
+  .removeButton {
+    padding: 0.25rem 0.5rem; /* Smaller button size */
+    width: 100%;
+  }
+}

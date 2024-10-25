@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
 
 const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
+  const [quantity, setQuantity] = useState(1);
+
+  const handleIncrease = () => setQuantity(quantity + 1);
+  const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -35,8 +39,11 @@ const Product = () => {
             id="quantity"
             name="quantity"
             min="1"
-            defaultValue="1"
+            value={quantity}
+            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
           />
+          <button onClick={handleDecrease}>-</button>
+          <button onClick={handleIncrease}>+</button>
         </div>
         <button className={styles.addToCartButton} onClick={handleAddToCart}>
           Add to Cart
