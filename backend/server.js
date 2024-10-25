@@ -3,7 +3,12 @@ const cors = require("cors");
 const path = require("path");
 const morgan = require("morgan");
 const multer = require("multer");
-const { uploadImages, uploadMetadata, displayOrders, listOrders } = require("./api/aws");
+const {
+  uploadImages,
+  uploadMetadata,
+  displayOrders,
+  listOrders,
+} = require("./api/aws");
 const {
   listItems,
   getItemById,

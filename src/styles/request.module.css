@@ -107,12 +107,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 2rem; /* Adjust padding for smaller success message */
+  padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  width: 60%; /* Adjust width for smaller success message */
-  max-width: 500px; /* Set a maximum width for success message */
+  width: 60%;
+  max-width: 500px;
 }
 
 .modal form {
@@ -155,13 +155,13 @@
 
 .closeIcon {
   cursor: pointer;
-  font-size: 2rem; /* Make the icon larger */
+  font-size: 2rem;
   color: var(--text-color);
 }
 
 .descriptionTextarea {
-  height: 150px; /* Make the textarea taller */
-  font-family: inherit; /* Use the same font as the rest of the app */
+  height: 150px;
+  font-family: inherit;
 }
 
 .imagePreviewContainer {
@@ -169,9 +169,72 @@
   gap: 1rem;
 }
 
+.imageWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.removeImage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: white;
+  color: red;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(50%, -50%);
+  z-index: 1;
+}
+
 .imagePreview {
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 4px;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+  .modal {
+    width: 85%;
+    max-width: none;
+    padding: 1rem;
+  }
+
+  .requestForm {
+    gap: 0.5rem;
+  }
+
+  .submitButton {
+    font-size: 1rem;
+    margin-top: -1rem;
+  }
+
+  .closeIcon {
+    font-size: 1.5rem;
+  }
+
+  .modalHeader {
+    margin-bottom: 0.5rem;
+  }
+
+  .descriptionTextarea {
+    height: 100px;
+  }
+
+  .imagePreviewContainer {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .imagePreview {
+    width: 50px; /* Reduce width to half */
+    height: 50px; /* Reduce height to half */
+  }
 }

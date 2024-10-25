@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/request.module.css";
-import useRequest from "../hooks/useRequest";
 import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon from Material UI
 import axios from "axios";
 
 function Request() {
-  const { handleSubmit } = useRequest();
-
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -16,6 +13,18 @@ function Request() {
     images: [], // Initialize as an empty array
   });
   const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Enable scrolling
+    }
+
+    return () => {
+      document.body.style.overflow = "auto"; // Clean up on unmount
+    };
+  }, [showModal]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,6 +64,13 @@ function Request() {
     } catch (error) {
       console.error("Error uploading data:", error);
     }
+  };
+
+  const handleRemoveImage = (index) => {
+    setFormData({
+      ...formData,
+      images: formData.images.filter((_, i) => i !== index),
+    });
   };
 
   return (
@@ -114,17 +130,24 @@ function Request() {
                 type="file"
                 onChange={handleImageUpload}
                 multiple
-                accept="image/*"
+                accept="image/png, image/jpeg, image/jpg, image/gif" // Accept only image formats
               />
               <p>{formData.images.length}/3 images uploaded</p>
               <div className={styles.imagePreviewContainer}>
                 {formData.images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={URL.createObjectURL(image)}
-                    alt={`Upload Preview ${index + 1}`}
-                    className={styles.imagePreview}
-                  />
+                  <div key={index} className={styles.imageWrapper}>
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Upload Preview ${index + 1}`}
+                      className={styles.imagePreview}
+                    />
+                    <span
+                      className={styles.removeImage}
+                      onClick={() => handleRemoveImage(index)}
+                    >
+                      &times;
+                    </span>
+                  </div>
                 ))}
               </div>
               <button type="submit">Upload</button>
