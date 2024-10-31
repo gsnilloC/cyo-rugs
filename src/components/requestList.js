@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import styles from "../styles/requestList.module.css"; // Adjust the path as necessary
+import styles from "../styles/requestList.module.css";
 
 function RequestList() {
   const [orders, setOrders] = useState([]);
@@ -11,7 +11,7 @@ function RequestList() {
     const fetchOrders = async () => {
       try {
         const response = await axios.get("/api/orders");
-        console.log("API Response:", response.data); // Log the response to check its structure
+        console.log("API Response:", response.data);
         if (Array.isArray(response.data)) {
           setOrders(response.data);
         } else {
@@ -45,7 +45,11 @@ function RequestList() {
           <p>Email: {order.email}</p>
           <p>Description: {order.description}</p>
           <div>
-            <img src={order.imageUrl} alt={`Order ${index + 1}`} style={{ maxWidth: "100%", height: "auto", borderRadius: "8px" }} />
+            <img
+              src={order.imageUrl}
+              alt={`Order ${index + 1}`}
+              style={{ maxWidth: "100%", height: "auto", borderRadius: "8px" }}
+            />
           </div>
           <hr />
         </div>

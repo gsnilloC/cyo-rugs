@@ -17,8 +17,8 @@
 }
 
 .cartItemImage {
-  width: 100px; /* Adjust width as needed */
-  height: auto; /* Change height to auto to maintain aspect ratio */
+  width: 100px;
+  height: auto;
   object-fit: contain;
   background-color: #f0f0f0;
   border-radius: 4px;
@@ -108,33 +108,33 @@
 
 @media (max-width: 768px) {
   .cartContainer {
-    padding: 1rem; /* Reduce padding for mobile */
+    padding: 1rem;
   }
 
   .cartItem {
-    grid-template-columns: 1fr auto; /* Simplify layout for mobile */
-    gap: 0.5rem; /* Reduce gap */
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
   }
 
   .cartItemImage {
-    width: 80px; /* Smaller image size */
+    width: 80px;
   }
 
   .cartItemInfo {
-    align-items: flex-start; /* Align text to the start */
+    align-items: flex-start;
   }
 
   .quantityControl {
-    justify-content: flex-start; /* Align quantity controls to the start */
+    justify-content: flex-start;
   }
 
   .checkoutButton {
-    font-size: 1rem; /* Smaller font size */
-    padding: 0.75rem; /* Adjust padding */
+    font-size: 1rem;
+    padding: 0.75rem;
   }
 
   .removeButton {
-    padding: 0.25rem 0.5rem; /* Smaller button size */
+    padding: 0.25rem 0.5rem;
     width: 100%;
   }
 }

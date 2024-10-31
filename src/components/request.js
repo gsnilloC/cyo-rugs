@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/request.module.css";
-import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon from Material UI
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 
 function Request() {
@@ -10,19 +10,19 @@ function Request() {
     phone: "",
     email: "",
     description: "",
-    images: [], // Initialize as an empty array
+    images: [],
   });
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
   useEffect(() => {
     if (showModal) {
-      document.body.style.overflow = "hidden"; // Disable scrolling
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; // Enable scrolling
+      document.body.style.overflow = "auto";
     }
 
     return () => {
-      document.body.style.overflow = "auto"; // Clean up on unmount
+      document.body.style.overflow = "auto";
     };
   }, [showModal]);
 
@@ -130,7 +130,7 @@ function Request() {
                 type="file"
                 onChange={handleImageUpload}
                 multiple
-                accept="image/png, image/jpeg, image/jpg, image/gif" // Accept only image formats
+                accept="image/png, image/jpeg, image/jpg, image/gif"
               />
               <p>{formData.images.length}/3 images uploaded</p>
               <div className={styles.imagePreviewContainer}>
