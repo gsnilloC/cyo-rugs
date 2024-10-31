@@ -1,0 +1,66 @@
+.requestListContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.orderItem {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.orderItem p {
+  margin: 0.5rem 0;
+}
+
+.orderItem a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.orderItem a:hover {
+  text-decoration: underline;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.imageContainer img {
+  width: 30%; /* Adjust width to fit three images side by side */
+  cursor: pointer; /* Change cursor to pointer for clickable images */
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+}
+
+.modal img {
+  display: block;
+  margin: auto;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+

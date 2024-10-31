@@ -72,6 +72,11 @@ const listOrders = async () => {
         const orderKey = order.Key;
         const timestamp = orderKey.split("/")[1].split("-")[1]; // Extract the timestamp to match with image
         const customerName = orderKey.split("/")[1].split("-")[0]; // Extract customer name
+        const uniqueIdentifier = orderKey
+          .split("/")[1]
+          .split("-")
+          .slice(1, 2)
+          .join("-"); // Extract unique identifier
 
         // Get the metadata
         const orderData = await s3.getObject({
@@ -79,14 +84,20 @@ const listOrders = async () => {
           Key: orderKey,
         });
 
-        const orderContent = orderData.Body.toString("utf-8");
+        // Convert the Body to a string
+        const orderContent = await streamToString(orderData.Body);
         const orderMetadata = JSON.parse(orderContent);
 
-        // Get the corresponding image
-        const imageKey = `orders/${customerName}-${timestamp}-${orderMetadata.imageFileName}`; // Get image file name dynamically if stored in metadata
-        const imageUrl = `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${imageKey}`;
+        // Get the corresponding images (up to 3)
+        const imageUrls = [];
+        for (let i = 1; i <= 3; i++) {
+          const imageKey = `orders/${customerName}-${uniqueIdentifier}-image${i}`; // Construct image key with unique identifier
+          imageUrls.push(
+            `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`
+          );
+        }
 
-        return { ...orderMetadata, imageUrl }; // Return the metadata and image URL
+        return { ...orderMetadata, imageUrls }; // Return the metadata and image URLs
       })
     );
 
@@ -97,6 +108,16 @@ const listOrders = async () => {
   }
 };
 
+// Helper function to convert stream to string
+const streamToString = (stream) => {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf-8")));
+    stream.on("error", reject);
+  });
+};
+
 const displayOrders = async () => {
   try {
     const orders = await listOrders();
@@ -105,7 +126,7 @@ const displayOrders = async () => {
       console.log(`Phone: ${order.phone}`);
       console.log(`Email: ${order.email}`);
       console.log(`Description: ${order.description}`);
-      console.log(`Image URL: ${order.imageUrl}`);
+      console.log(`Image URLs: ${order.imageUrls.join(", ")}`);
       console.log("-------------------------");
     });
   } catch (error) {
@@ -113,4 +134,9 @@ const displayOrders = async () => {
   }
 };
 
-module.exports = { uploadImages, uploadMetadata, listOrders, displayOrders };
+module.exports = {
+  uploadImages,
+  uploadMetadata,
+  listOrders,
+  displayOrders,
+};

@@ -1,6 +1,6 @@
 import React from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import { DarkMode as DarkModeIcon } from "@mui/icons-material";
+import { DarkMode as DarkModeIcon, Key as KeyIcon } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
 const Footer = ({ toggleTheme }) => {
@@ -18,6 +18,9 @@ const Footer = ({ toggleTheme }) => {
         <IconButton onClick={toggleTheme} className="theme-toggle">
           <DarkModeIcon />
         </IconButton>
+        <a href="/home" className="footer-icon-link">
+          <KeyIcon />
+        </a>
       </div>
       <div className="footer-bottom">
         <a

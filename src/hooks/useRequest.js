@@ -8,14 +8,14 @@ const useRequest = () => {
   const handleRugUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setRugImage(file); // Store the actual file
+      setRugImage(file);
     }
   };
 
   const handleWallUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setWallImage(file); // Store the actual file
+      setWallImage(file);
     }
   };
 
@@ -24,12 +24,12 @@ const useRequest = () => {
 
     const formData = new FormData();
     if (rugImage) {
-      const rugFile = rugImage; // Use the actual file
-      formData.append("image", rugFile); // Append the rug image
+      const rugFile = rugImage;
+      formData.append("image", rugFile);
     }
     if (wallImage) {
-      const wallFile = wallImage; // Use the actual file
-      formData.append("image", wallFile); // Append the wall image
+      const wallFile = wallImage;
+      formData.append("image", wallFile);
     }
 
     try {

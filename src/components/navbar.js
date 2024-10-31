@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IconButton, Drawer, MenuItem } from "@mui/material";
 import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";
-import logoImage from "../assests/images/logo.JPG";
+import logoImage from "../assets/images/logo.JPG";
 
 const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
   const navigate = useNavigate();

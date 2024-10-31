@@ -8,6 +8,7 @@ import {
   About,
   PasswordPage,
   Product,
+  RequestList,
 } from "./components";
 import "./App.css";
 import { useCart } from "./components/cartContext";
@@ -46,13 +47,6 @@ function App() {
     setIsDrawerOpen((prev) => !prev);
   };
 
-  const navItems = [
-    { path: "/home", label: "HOME" },
-    { path: "/shop", label: "SHOP" },
-    { path: "/request", label: "REQUEST" },
-    { path: "/about", label: "ABOUT" },
-  ];
-
   const currentPath = window?.location?.pathname || "/home";
 
   return (
@@ -62,7 +56,6 @@ function App() {
         isDrawerOpen={isDrawerOpen}
         handleDrawerToggle={handleDrawerToggle}
         totalItems={totalItems}
-        navItems={navItems}
         currentPath={currentPath}
         navigate={navigate}
       />
@@ -75,6 +68,7 @@ function App() {
           <Route path="/request" element={<Request />} />
           <Route path="/about" element={<About />} />
           <Route path="/product/:id" element={<Product />} />
+          <Route path="/list" element={<RequestList />} />
         </Routes>
       </main>
       <Footer toggleTheme={toggleTheme} />
