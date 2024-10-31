@@ -15,7 +15,6 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
     { path: "/shop", label: "SHOP" },
     { path: "/request", label: "REQUEST" },
     { path: "/about", label: "ABOUT" },
-    { path: "/list", label: "LIST" },
   ];
 
   const handleNavigation = (path) => {

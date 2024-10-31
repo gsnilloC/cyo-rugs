@@ -3,12 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const morgan = require("morgan");
 const multer = require("multer");
-const {
-  uploadImages,
-  uploadMetadata,
-  displayOrders,
-  listOrders,
-} = require("./api/aws");
+const { uploadImages, uploadMetadata, listOrders } = require("./api/aws");
 const {
   listItems,
   getItemById,
@@ -16,7 +11,6 @@ const {
   createCheckout,
   // testCreateCheckout,
 } = require("./api/square");
-const crypto = require("crypto");
 
 require("dotenv").config();
 

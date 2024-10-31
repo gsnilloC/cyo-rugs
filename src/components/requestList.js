@@ -58,7 +58,7 @@ function RequestList() {
               <img
                 key={imgIndex}
                 src={imageUrl}
-                alt={`Order Image ${imgIndex + 1}`}
+                alt={`Order ${imgIndex + 1}`}
                 onClick={() => openModal(imageUrl)}
               />
             ))}
@@ -69,7 +69,9 @@ function RequestList() {
 
       {selectedImage && (
         <div className={styles.modal} onClick={closeModal}>
-          <span className={styles.close} onClick={closeModal}>&times;</span>
+          <span className={styles.close} onClick={closeModal}>
+            &times;
+          </span>
           <img src={selectedImage} alt="Enlarged" />
         </div>
       )}

@@ -47,14 +47,6 @@ function App() {
     setIsDrawerOpen((prev) => !prev);
   };
 
-  const navItems = [
-    { path: "/home", label: "HOME" },
-    { path: "/shop", label: "SHOP" },
-    { path: "/request", label: "REQUEST" },
-    { path: "/about", label: "ABOUT" },
-    { path: "/list", label: "LIST" },
-  ];
-
   const currentPath = window?.location?.pathname || "/home";
 
   return (
@@ -64,7 +56,6 @@ function App() {
         isDrawerOpen={isDrawerOpen}
         handleDrawerToggle={handleDrawerToggle}
         totalItems={totalItems}
-        navItems={navItems}
         currentPath={currentPath}
         navigate={navigate}
       />
