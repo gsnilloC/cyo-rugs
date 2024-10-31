@@ -72,6 +72,11 @@ const listOrders = async () => {
         const orderKey = order.Key;
         const timestamp = orderKey.split("/")[1].split("-")[1]; // Extract the timestamp to match with image
         const customerName = orderKey.split("/")[1].split("-")[0]; // Extract customer name
+        const uniqueIdentifier = orderKey
+          .split("/")[1]
+          .split("-")
+          .slice(1, 2)
+          .join("-"); // Extract unique identifier
 
         // Get the metadata
         const orderData = await s3.getObject({
@@ -83,11 +88,16 @@ const listOrders = async () => {
         const orderContent = await streamToString(orderData.Body);
         const orderMetadata = JSON.parse(orderContent);
 
-        // Get the corresponding image
-        const imageKey = `orders/${customerName}-${timestamp}-${orderMetadata.imageFileName}`; // Get image file name dynamically if stored in metadata
-        const imageUrl = `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${imageKey}`;
+        // Get the corresponding images (up to 3)
+        const imageUrls = [];
+        for (let i = 1; i <= 3; i++) {
+          const imageKey = `orders/${customerName}-${uniqueIdentifier}-image${i}`; // Construct image key with unique identifier
+          imageUrls.push(
+            `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`
+          );
+        }
 
-        return { ...orderMetadata, imageUrl }; // Return the metadata and image URL
+        return { ...orderMetadata, imageUrls }; // Return the metadata and image URLs
       })
     );
 
@@ -116,7 +126,7 @@ const displayOrders = async () => {
       console.log(`Phone: ${order.phone}`);
       console.log(`Email: ${order.email}`);
       console.log(`Description: ${order.description}`);
-      console.log(`Image URL: ${order.imageUrl}`);
+      console.log(`Image URLs: ${order.imageUrls.join(", ")}`);
       console.log("-------------------------");
     });
   } catch (error) {

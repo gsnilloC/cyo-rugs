@@ -56,8 +56,7 @@ app.get("/api/items/:id", async (req, res) => {
 app.post("/api/upload", upload.array("images", 3), async (req, res) => {
   const generateUniqueIdentifier = () => {
     const shortTimestamp = Math.floor(Date.now() / 1000); // Seconds since Unix epoch
-    const randomString = crypto.randomBytes(3).toString("hex"); // Generate a short random string
-    return `${shortTimestamp}-${randomString}`;
+    return `${shortTimestamp}`;
   };
 
   const uniqueIdentifier = generateUniqueIdentifier();
