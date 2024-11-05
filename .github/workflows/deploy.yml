@@ -3,7 +3,7 @@ name: Build and Deploy to EC2
 on:
   push:
     branches:
-      - main # This triggers the workflow when you push to the main branch
+      - master # This triggers the workflow when you push to the main branch
 
 jobs:
   build:
