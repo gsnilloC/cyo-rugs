@@ -40,7 +40,7 @@ jobs:
           chmod 600 private_key.pem
 
           # Copy the build files to the EC2 instance's specified directory
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r build/* $EC2_USER@$EC2_IP:/home/ubuntu/cyo_rugs/cyo-rugs
+          scp -i private_key.pem -o StrictHostKeyChecking=no -r build/* $EC2_USER@$EC2_IP:/home/ubuntu/cyo_rugs/cyo-rugs/build
 
           # Optionally, restart the server or service if needed
           # ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP 'sudo systemctl restart your-service'
