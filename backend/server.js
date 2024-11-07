@@ -7,7 +7,7 @@ const { uploadImages, uploadMetadata, listOrders } = require("./api/aws");
 const {
   listItems,
   getItemById,
-  //testSquareApi,
+  testSquareApi,
   createCheckout,
   // testCreateCheckout,
 } = require("./api/square");
@@ -115,5 +115,4 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   //testSquareApi();
   //testCreateCheckout();
-  // displayOrders();
 });

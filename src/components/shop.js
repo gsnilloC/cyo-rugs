@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles/shop.module.css";
 import { Link } from "react-router-dom";
 import useShop from "../hooks/useShop";
-// import mockProducts from "../mocks/mockProducts";
+import mockProducts from "../mocks/mockProducts";
 function Shop() {
   const { rugs, loading, error } = useShop();
 
@@ -33,8 +33,8 @@ function Shop() {
                 className={styles.rugImage}
               />
               <div className={styles.rugInfo}>
-                <h2 className={styles.rugName}>{rug.name}</h2>
-                <p className={styles.rugPrice}>${rug.price.toFixed(2)}</p>
+                <p className={styles.rugName}>{rug.name}</p>
+                <p className={styles.rugPrice}>${rug.price.toFixed(2)} USD</p>
               </div>
             </Link>
           ))}
