@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
+// import mockProducts from "../mocks/mockProducts";
 
 const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
@@ -29,25 +30,18 @@ const Product = () => {
         className={styles.productImage}
       />
       <div className={styles.productDetails}>
-        <h1>{rug.name}</h1>
+        <h1 className={styles.productName}>{rug.name}</h1>
         <p className={styles.productPrice}>${rug.price.toFixed(2)} USD</p>
+        <p className={styles.productShipping}>
+          Shipping calculated at checkout
+        </p>
         <p className={styles.productDescription}>{rug.description}</p>
         <div className={styles.quantityContainer}>
-          <label htmlFor="quantity">Quantity:</label>
-          <input
-            type="number"
-            id="quantity"
-            name="quantity"
-            min="1"
-            value={quantity}
-            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
-          />
           <button onClick={handleDecrease}>-</button>
+          <input type="number" id="quantity" value={quantity} readOnly />
           <button onClick={handleIncrease}>+</button>
         </div>
-        <button className={styles.addToCartButton} onClick={handleAddToCart}>
-          Add to Cart
-        </button>
+        <button className={styles.addToCartButton} onClick={() => handleAddToCart(quantity)}>Add to Cart</button>
       </div>
     </div>
   );

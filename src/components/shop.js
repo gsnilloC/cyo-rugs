@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles/shop.module.css";
 import { Link } from "react-router-dom";
 import useShop from "../hooks/useShop";
-
+// import mockProducts from "../mocks/mockProducts";
 function Shop() {
   const { rugs, loading, error } = useShop();
 
@@ -13,6 +13,8 @@ function Shop() {
   if (error) {
     return <div>Error fetching items: {error.message}</div>;
   }
+
+  // const rugs = mockProducts;
 
   return (
     <div>

@@ -38,15 +38,6 @@ async function createCheckout(cartItems) {
   }
 }
 
-const testCreateCheckout = async () => {
-  // try {
-  //   const cartItems = [{ name: "Majestic Queen", quantity: 1, price: 8000 }];
-  //   const checkoutUrl = await createCheckout(cartItems);
-  // } catch (error) {
-  //   console.error("Error creating checkout link:", error);
-  // }
-};
-
 const getImageUrls = async (imageIds) => {
   const imageUrls = await Promise.all(
     imageIds.map(async (imageId) => {
@@ -125,5 +116,4 @@ module.exports = {
   getItemById,
   testSquareApi,
   createCheckout,
-  testCreateCheckout,
 };
