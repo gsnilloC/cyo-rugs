@@ -77,8 +77,8 @@ function Cart() {
               </div>
             ))
           )}
+          <p className={styles.cartTotal}>Subtotal ${total.toFixed(2)}</p>
           <p className={styles.shippingMessage}>Shipping to be calculated</p>
-          <p className={styles.cartTotal}>Total: ${total.toFixed(2)}</p>
           <button
             className={styles.checkoutButton}
             onClick={() => handleCheckout(cartItems, setLoading)}
