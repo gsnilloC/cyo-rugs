@@ -35,9 +35,19 @@
   margin-bottom: 0.5rem;
 }
 
+.cartItemName a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.cartItemName a:hover {
+  color: inherit;
+}
+
 .cartItemPrice {
   font-weight: bold;
   color: var(--accent-color);
+  margin-top: -0.5rem;
 }
 
 .quantityControl {

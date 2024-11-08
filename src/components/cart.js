@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styles from "../styles/cart.module.css";
 import useCart from "../hooks/useCart";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -48,7 +49,9 @@ function Cart() {
                   className={styles.cartItemImage}
                 />
                 <div className={styles.cartItemInfo}>
-                  <h2 className={styles.cartItemName}>{item.name}</h2>
+                  <p className={styles.cartItemName}>
+                    <Link to={`/product/${item.id}`}>{item.name}</Link>
+                  </p>
                   <p className={styles.cartItemPrice}>
                     ${item.price.toFixed(2)}
                   </p>

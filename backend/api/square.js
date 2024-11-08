@@ -15,9 +15,12 @@ async function createCheckout(cartItems) {
       basePriceMoney: {
         amount: Math.round(item.price * 100), // price in cents
         currency: "USD",
+        note: `Price: $${item.price.toFixed(2)} | Description: ${
+          item.description || "No description available"
+        }`,
       },
     }));
-    
+
     // Define the order request with a custom field for address collection
     const orderRequest = {
       idempotency_key: Date.now().toString(),
@@ -32,17 +35,17 @@ async function createCheckout(cartItems) {
         },
         customFields: [
           {
-            title: "Address", // Label for the custom field
+            title: "Please Enter Full Address", // Label for the custom field
             inputType: "TEXT",
             text: "Please enter your full shipping address.", // Prompt for users
           },
         ],
       },
     };
-    
+
     // Create the checkout link with Square
     const response = await client.checkoutApi.createPaymentLink(orderRequest);
-    
+
     // Extract and return the payment link URL
     const paymentLink = response.result.paymentLink;
     return paymentLink?.url || null;
@@ -72,40 +75,40 @@ const listItems = async () => {
   try {
     const response = await client.catalogApi.listCatalog();
     const items = response.result.objects;
-    
+
     return await Promise.all(
       items
-      .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION") // Filter out custom attribute definitions
-      .map(async (item) => {
-        // Check if itemData is available and has the necessary properties
-        if (!item.itemData) {
-          console.warn(`Item with ID ${item.id} does not have itemData.`);
-          return null; // Skip items without itemData
-        }
-        
-        const { name, description, variations, imageIds } = item.itemData;
-        
-        // Retrieve price from variations (first variation or default to 0)
-        let formattedPrice = 0;
-        if (variations && variations.length > 0) {
-          const priceMoney = variations[0].itemVariationData.priceMoney;
-          if (priceMoney) {
-            formattedPrice = Number(priceMoney.amount) / 100; // Convert from cents to dollars
+        .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION") // Filter out custom attribute definitions
+        .map(async (item) => {
+          // Check if itemData is available and has the necessary properties
+          if (!item.itemData) {
+            console.warn(`Item with ID ${item.id} does not have itemData.`);
+            return null; // Skip items without itemData
           }
-        }
-        
-        // Get image URLs (if any)
-        const imageUrls =
-        imageIds && imageIds.length > 0 ? await getImageUrls(imageIds) : [];
-        
-        return {
-          id: item.id,
-          name: name || "Unnamed Item", // Fallback to "Unnamed Item" if name is missing
-          description: description || "No description available", // Default if no description
-          price: formattedPrice,
-          imageUrls: imageUrls,
-        };
-      })
+
+          const { name, description, variations, imageIds } = item.itemData;
+
+          // Retrieve price from variations (first variation or default to 0)
+          let formattedPrice = 0;
+          if (variations && variations.length > 0) {
+            const priceMoney = variations[0].itemVariationData.priceMoney;
+            if (priceMoney) {
+              formattedPrice = Number(priceMoney.amount) / 100; // Convert from cents to dollars
+            }
+          }
+
+          // Get image URLs (if any)
+          const imageUrls =
+            imageIds && imageIds.length > 0 ? await getImageUrls(imageIds) : [];
+
+          return {
+            id: item.id,
+            name: name || "Unnamed Item", // Fallback to "Unnamed Item" if name is missing
+            description: description || "No description available", // Default if no description
+            price: formattedPrice,
+            imageUrls: imageUrls,
+          };
+        })
     );
   } catch (error) {
     console.error("Error retrieving items:", error);
@@ -117,18 +120,18 @@ const getItemById = async (id) => {
   try {
     const response = await client.catalogApi.retrieveCatalogObject(id);
     const item = response.result.object;
-    
+
     if (!item || !item.itemData) {
       return null;
     }
-    
+
     const priceBigInt =
-    item.itemData.variations[0].itemVariationData.priceMoney.amount;
+      item.itemData.variations[0].itemVariationData.priceMoney.amount;
     const formattedPrice = Number(priceBigInt) / 100;
-    
+
     const imageIds = item.itemData.imageIds || [];
     const imageUrls = imageIds.length > 0 ? await getImageUrls(imageIds) : [];
-    
+
     return {
       id: item.id,
       name: item.itemData.name,
