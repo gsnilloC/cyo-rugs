@@ -12,7 +12,7 @@ async function createCheckout(cartItems) {
       name: item.name,
       quantity: item.quantity.toString(),
       basePriceMoney: {
-        amount: item.price * 100,
+        amount: Math.round(item.price * 100),
         currency: "USD",
       },
     }));
