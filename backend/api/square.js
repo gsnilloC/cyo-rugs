@@ -8,20 +8,29 @@ const client = new Client({
 
 async function createCheckout(cartItems) {
   try {
-    // Convert cart items to Square's line items format
     const lineItems = cartItems.map((item) => ({
       name: item.name,
       quantity: item.quantity.toString(),
       basePriceMoney: {
-        amount: Math.round(item.price * 100), // price in cents
-        currency: "USD",
+        amount: Math.round(item.price * 100),
         note: `Price: $${item.price.toFixed(2)} | Description: ${
           item.description || "No description available"
         }`,
       },
     }));
 
-    // Define the order request with a custom field for address collection
+    for (const item of cartItems) {
+      const itemDetails = await client.catalogApi.retrieveCatalogObject(
+        item.id
+      );
+      const inventoryQuantity =
+        itemDetails.result.object.itemData.inventoryQuantity || 0;
+
+      if (inventoryQuantity < item.quantity) {
+        throw new Error(`Not enough stock for ${item.name}.`);
+      }
+    }
+
     const orderRequest = {
       idempotency_key: Date.now().toString(),
       order: {
@@ -31,22 +40,20 @@ async function createCheckout(cartItems) {
       checkoutOptions: {
         redirectUrl: "http://54.241.69.82/shop",
         shippingAddressCollection: {
-          allowedCountries: ["US"], // Collects US-based addresses if possible
+          allowedCountries: ["US"],
         },
         customFields: [
           {
-            title: "Please Enter Full Address", // Label for the custom field
+            title: "Please Enter Full Address",
             inputType: "TEXT",
-            text: "Please enter your full shipping address.", // Prompt for users
+            text: "Please enter your full shipping address.",
           },
         ],
       },
     };
 
-    // Create the checkout link with Square
     const response = await client.checkoutApi.createPaymentLink(orderRequest);
 
-    // Extract and return the payment link URL
     const paymentLink = response.result.paymentLink;
     return paymentLink?.url || null;
   } catch (error) {
@@ -78,33 +85,30 @@ const listItems = async () => {
 
     return await Promise.all(
       items
-        .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION") // Filter out custom attribute definitions
+        .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION")
         .map(async (item) => {
-          // Check if itemData is available and has the necessary properties
           if (!item.itemData) {
             console.warn(`Item with ID ${item.id} does not have itemData.`);
-            return null; // Skip items without itemData
+            return null;
           }
 
           const { name, description, variations, imageIds } = item.itemData;
 
-          // Retrieve price from variations (first variation or default to 0)
           let formattedPrice = 0;
           if (variations && variations.length > 0) {
             const priceMoney = variations[0].itemVariationData.priceMoney;
             if (priceMoney) {
-              formattedPrice = Number(priceMoney.amount) / 100; // Convert from cents to dollars
+              formattedPrice = Number(priceMoney.amount) / 100;
             }
           }
 
-          // Get image URLs (if any)
           const imageUrls =
             imageIds && imageIds.length > 0 ? await getImageUrls(imageIds) : [];
 
           return {
             id: item.id,
-            name: name || "Unnamed Item", // Fallback to "Unnamed Item" if name is missing
-            description: description || "No description available", // Default if no description
+            name: name || "Unnamed Item",
+            description: description || "No description available",
             price: formattedPrice,
             imageUrls: imageUrls,
           };

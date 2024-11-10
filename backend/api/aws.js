@@ -70,34 +70,30 @@ const listOrders = async () => {
     const orderDetails = await Promise.all(
       orders.map(async (order) => {
         const orderKey = order.Key;
-        const timestamp = orderKey.split("/")[1].split("-")[1]; // Extract the timestamp to match with image
-        const customerName = orderKey.split("/")[1].split("-")[0]; // Extract customer name
+        const customerName = orderKey.split("/")[1].split("-")[0];
         const uniqueIdentifier = orderKey
           .split("/")[1]
           .split("-")
           .slice(1, 2)
-          .join("-"); // Extract unique identifier
+          .join("-");
 
-        // Get the metadata
         const orderData = await s3.getObject({
           Bucket: process.env.AWS_S3_BUCKET,
           Key: orderKey,
         });
 
-        // Convert the Body to a string
         const orderContent = await streamToString(orderData.Body);
         const orderMetadata = JSON.parse(orderContent);
 
-        // Get the corresponding images (up to 3)
         const imageUrls = [];
         for (let i = 1; i <= 3; i++) {
-          const imageKey = `orders/${customerName}-${uniqueIdentifier}-image${i}`; // Construct image key with unique identifier
+          const imageKey = `orders/${customerName}-${uniqueIdentifier}-image${i}`;
           imageUrls.push(
             `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`
           );
         }
 
-        return { ...orderMetadata, imageUrls }; // Return the metadata and image URLs
+        return { ...orderMetadata, imageUrls };
       })
     );
 
@@ -108,7 +104,6 @@ const listOrders = async () => {
   }
 };
 
-// Helper function to convert stream to string
 const streamToString = (stream) => {
   return new Promise((resolve, reject) => {
     const chunks = [];

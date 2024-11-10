@@ -85,3 +85,14 @@
     gap: 1rem;
   }
 }
+
+.rugItem.soldOut {
+  opacity: 0.5; /* Gray out the item */
+  pointer-events: none; /* Disable interaction */
+}
+
+.soldOutMessage {
+  color: red; /* Change the color of the sold out message */
+  font-weight: bold;
+  text-align: center;
+}

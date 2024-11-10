@@ -37,8 +37,8 @@ const useCart = () => {
 
       localStorage.removeItem("cartItems");
     } catch (error) {
-      console.error("Error during checkout:", error);
-      alert("Failed to initiate checkout. Please try again.");
+      const errorMessage = error.response.data.error;
+      alert("Failed to initiate checkout:" + errorMessage);
     } finally {
       setTimeout(() => {
         setLoading(false);

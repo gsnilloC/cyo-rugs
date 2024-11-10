@@ -50,7 +50,7 @@ app.get("/api/items/:id", async (req, res) => {
 
 app.post("/api/upload", upload.array("images", 3), async (req, res) => {
   const generateUniqueIdentifier = () => {
-    const shortTimestamp = Math.floor(Date.now() / 1000); // Seconds since Unix epoch
+    const shortTimestamp = Math.floor(Date.now() / 1000); 
     return `${shortTimestamp}`;
   };
 
@@ -63,9 +63,7 @@ app.post("/api/upload", upload.array("images", 3), async (req, res) => {
       email: req.body.email,
       description: req.body.description,
     };
-    // Upload metadata once
     await uploadMetadata(customerData, uniqueIdentifier);
-    // Upload images
     const imageUrls = await uploadImages(
       req.files,
       customerData,
@@ -79,7 +77,6 @@ app.post("/api/upload", upload.array("images", 3), async (req, res) => {
   }
 });
 
-// Display all orders with images
 app.get("/api/orders", async (req, res) => {
   try {
     const orders = await listOrders();
@@ -97,7 +94,9 @@ app.post("/api/checkout", async (req, res) => {
     res.json({ checkoutLink });
   } catch (error) {
     console.error("Error during checkout:", error);
-    res.status(500).json({ error: "Failed to initiate checkout" });
+    const errorMessage = error.message;
+
+    res.status(500).json({ error: errorMessage });
   }
 });
 
