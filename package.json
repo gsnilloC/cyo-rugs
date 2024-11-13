@@ -27,6 +27,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.5",
     "save-dev": "^0.0.1-security",
+    "serve": "^14.2.4",
     "sharp": "^0.33.5",
     "square": "^38.1.0",
     "toastify": "^2.0.1",
