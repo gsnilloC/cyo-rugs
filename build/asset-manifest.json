@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.25548346.css",
+    "main.js": "/static/js/main.58944ce8.js",
+    "static/media/cyo-rugs-intro.mp4": "/static/media/cyo-rugs-intro.0ecf2ac877b95b4be370.mp4",
+    "static/media/cus2.JPG": "/static/media/cus2.10ea9eefe457d421417c.JPG",
+    "static/media/cus4.JPG": "/static/media/cus4.a78315bdee9db4224328.JPG",
+    "static/media/cus5.JPG": "/static/media/cus5.9c57250d261c0c87f36c.JPG",
+    "static/media/cus3.JPG": "/static/media/cus3.fd73af5333454e681fd1.JPG",
+    "static/media/cus6.JPG": "/static/media/cus6.ccf8b1d3e86b9afca6a6.JPG",
+    "static/media/cus1.JPG": "/static/media/cus1.7b4255b3863e0d1dda06.JPG",
+    "static/media/logo.JPG": "/static/media/logo.fe1792b02352f0026477.JPG",
+    "static/media/blondremoved.png": "/static/media/blondremoved.cb168c92b44455c41deb.png",
+    "static/media/starremoved.png": "/static/media/starremoved.5ac377033b64f8deefd8.png",
+    "static/media/koberemoved.png": "/static/media/koberemoved.d4baa7ad1a4c7daa2cd6.png",
+    "static/media/phantomremoved.png": "/static/media/phantomremoved.d20cfd8b7bbaa35bd0f1.png",
+    "static/media/livingroom.png": "/static/media/livingroom.c23b4c53c55b1dd76a34.png",
+    "index.html": "/index.html",
+    "main.25548346.css.map": "/static/css/main.25548346.css.map",
+    "main.58944ce8.js.map": "/static/js/main.58944ce8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.25548346.css",
+    "static/js/main.58944ce8.js"
+  ]
+}
