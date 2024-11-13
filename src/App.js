@@ -47,8 +47,6 @@ function App() {
     setIsDrawerOpen((prev) => !prev);
   };
 
-  const currentPath = window?.location?.pathname || "/home";
-
   return (
     <div className="App">
       <Navbar
@@ -56,7 +54,6 @@ function App() {
         isDrawerOpen={isDrawerOpen}
         handleDrawerToggle={handleDrawerToggle}
         totalItems={totalItems}
-        currentPath={currentPath}
         navigate={navigate}
       />
       <main>

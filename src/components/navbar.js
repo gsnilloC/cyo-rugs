@@ -7,8 +7,6 @@ import logoImage from "../assets/images/logo.JPG";
 
 const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const currentPath = location.pathname;
 
   const navItems = [
     { path: "/home", label: "HOME" },
@@ -24,61 +22,59 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
 
   return (
     <header>
-      {currentPath !== "/" && (
-        <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
-          {isMobile ? (
-            <>
-              <div className="nav-left">
-                <IconButton onClick={handleDrawerToggle}>
-                  {isDrawerOpen ? <CloseIcon /> : <Menu />}
-                </IconButton>
-              </div>
-              <div className="logo">
-                <Link to="/home">
-                  <img src={logoImage} alt="CYO Rugs Logo" />
+      <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
+        {isMobile ? (
+          <>
+            <div className="nav-left">
+              <IconButton onClick={handleDrawerToggle}>
+                {isDrawerOpen ? <CloseIcon /> : <Menu />}
+              </IconButton>
+            </div>
+            <div className="logo">
+              <Link to="/home">
+                <img src={logoImage} alt="CYO Rugs Logo" />
+              </Link>
+            </div>
+            <div className="nav-right">
+              <IconButton
+                onClick={() => navigate("/cart")}
+                style={{ position: "relative" }}
+              >
+                <ShoppingCart fontSize="large" style={{ fontSize: "2rem" }} />
+                {totalItems > 0 && (
+                  <span className="cart-quantity-badge">{totalItems}</span>
+                )}
+              </IconButton>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="logo">
+              <Link to="/home">
+                <img src={logoImage} alt="CYO Rugs Logo" />
+              </Link>
+            </div>
+            <div className="nav-links">
+              {navItems.map((item) => (
+                <Link key={item.path} to={item.path}>
+                  {item.label}
                 </Link>
-              </div>
-              <div className="nav-right">
-                <IconButton
-                  onClick={() => navigate("/cart")}
-                  style={{ position: "relative" }}
-                >
-                  <ShoppingCart fontSize="large" style={{ fontSize: "2rem" }} />
-                  {totalItems > 0 && (
-                    <span className="cart-quantity-badge">{totalItems}</span>
-                  )}
-                </IconButton>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="logo">
-                <Link to="/home">
-                  <img src={logoImage} alt="CYO Rugs Logo" />
-                </Link>
-              </div>
-              <div className="nav-links">
-                {navItems.map((item) => (
-                  <Link key={item.path} to={item.path}>
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-              <div className="nav-right">
-                <IconButton
-                  onClick={() => navigate("/cart")}
-                  style={{ position: "relative" }}
-                >
-                  <ShoppingCart fontSize="large" style={{ fontSize: "2rem" }} />
-                  {totalItems > 0 && (
-                    <span className="cart-quantity-badge">{totalItems}</span>
-                  )}
-                </IconButton>
-              </div>
-            </>
-          )}
-        </nav>
-      )}
+              ))}
+            </div>
+            <div className="nav-right">
+              <IconButton
+                onClick={() => navigate("/cart")}
+                style={{ position: "relative" }}
+              >
+                <ShoppingCart fontSize="large" style={{ fontSize: "2rem" }} />
+                {totalItems > 0 && (
+                  <span className="cart-quantity-badge">{totalItems}</span>
+                )}
+              </IconButton>
+            </div>
+          </>
+        )}
+      </nav>
       {isMobile && (
         <Drawer anchor="left" open={isDrawerOpen} onClose={handleDrawerToggle}>
           <div className="mobile-menu">
