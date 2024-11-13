@@ -18,6 +18,16 @@ console.log(process.env.PORT);
 const app = express();
 const upload = multer();
 
+// Force HTTPS in production
+app.use((req, res, next) => {
+  // Check if the request is over HTTP
+  if (req.headers["x-forwarded-proto"] !== "https") {
+    // Redirect to HTTPS version
+    return res.redirect("https://" + req.headers.host + req.url);
+  }
+  next();
+});
+
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
