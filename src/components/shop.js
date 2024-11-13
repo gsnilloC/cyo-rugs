@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../styles/shop.module.css";
 import { Link } from "react-router-dom";
 import useShop from "../hooks/useShop";
-// import mockProducts from "../mocks/mockProducts";
+
 function Shop() {
   const { rugs, loading, error } = useShop();
 
@@ -14,8 +14,6 @@ function Shop() {
     return <div>Error fetching items: {error.message}</div>;
   }
 
-  // const rugs = mockProducts;
-
   return (
     <div>
       <h1 className={styles.shopTitle}>Rugs</h1>
@@ -25,7 +23,9 @@ function Shop() {
             <Link
               to={`/product/${rug.id}`}
               key={rug.id}
-              className={styles.rugItem}
+              className={`${styles.rugItem} ${
+                rug.inventoryCount === 0 ? styles.soldOut : ""
+              }`}
             >
               <img
                 src={rug.imageUrls[0]}
@@ -35,6 +35,9 @@ function Shop() {
               <div className={styles.rugInfo}>
                 <p className={styles.rugName}>{rug.name}</p>
                 <p className={styles.rugPrice}>${rug.price.toFixed(2)} USD</p>
+                {rug.inventoryCount === 0 && (
+                  <div className={styles.soldOutMessage}>Sold Out</div>
+                )}
               </div>
             </Link>
           ))}

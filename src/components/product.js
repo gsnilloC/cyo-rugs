@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
-// import mockProducts from "../mocks/mockProducts";
 
 const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
@@ -41,7 +40,12 @@ const Product = () => {
           <input type="number" id="quantity" value={quantity} readOnly />
           <button onClick={handleIncrease}>+</button>
         </div>
-        <button className={styles.addToCartButton} onClick={() => handleAddToCart(quantity)}>Add to Cart</button>
+        <button
+          className={styles.addToCartButton}
+          onClick={() => handleAddToCart(quantity)}
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );

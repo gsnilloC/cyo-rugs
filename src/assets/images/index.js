@@ -8,3 +8,4 @@ export { default as cus3Image } from "./compressed/cus3.JPG";
 export { default as cus4Image } from "./compressed/cus4.JPG";
 export { default as cus5Image } from "./compressed/cus5.JPG";
 export { default as cus6Image } from "./compressed/cus6.JPG";
+export { default as livingroom } from "./compressed/livingroom.png";

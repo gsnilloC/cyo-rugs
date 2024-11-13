@@ -94,5 +94,17 @@
 .soldOutMessage {
   color: red; /* Change the color of the sold out message */
   font-weight: bold;
-  text-align: center;
+  font-size: 1.5rem;
+  text-align: left;
+  margin-top: 1.1rem;
+  transform: rotate(35deg); /* Rotate the message 45 degrees */
+}
+
+/* Mobile version adjustments for soldOutMessage */
+@media (max-width: 768px) {
+  .soldOutMessage {
+    font-size: 1.2rem; /* Adjust font size for mobile */
+    margin-top: 0.5rem; /* Adjust margin for mobile */
+    transform: rotate(35deg); /* Reset rotation for mobile */
+  }
 }

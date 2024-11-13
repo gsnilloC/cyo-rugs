@@ -23,7 +23,7 @@ function Home() {
     { id: 1, name: "Kobe Bryant", image: kobeImage },
     { id: 2, name: "Phantom Troupe", image: troupe },
     { id: 3, name: "Blond", image: blondImage2 },
-    { id: 4, name: "Start", image: star },
+    { id: 4, name: "Star", image: star },
   ];
 
   const customerPhotos = [

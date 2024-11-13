@@ -20,20 +20,17 @@ function About() {
           <li>All orders are final</li>
           <li>Main page orders: 2-3 weeks delivery</li>
           <li>Custom page orders: 3-4 weeks delivery</li>
-          <p>
-            [Insert any additional delivery information here, such as shipping
-            methods, tracking, or special handling instructions.]
-          </p>
         </ul>
       </section>
 
-      <section className={styles.rugCare}>
-        <h2>Rug Care</h2>
-        <ul>
-          <li>Heavy foot traffic area: Vacuum whenever you use vacuum</li>
-          <li>Regular foot traffic: Vacuum biweekly</li>
-          <li>Wall art: Vacuum biweekly (ideally hand held)</li>
-        </ul>
+      <section className={styles.contact}>
+        <h2>Contact Us</h2>
+        <p>
+          Follow us on Instagram:{" "}
+          <a href="https://www.instagram.com/cyorugs" target="_blank" rel="noopener noreferrer">
+            @cyorugs
+          </a>
+        </p>
       </section>
     </div>
   );

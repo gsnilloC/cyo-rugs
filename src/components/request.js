@@ -75,9 +75,13 @@ function Request() {
 
   return (
     <div className={styles.requestContainer}>
-      <h1>Custom Rug Request</h1>
-      <button onClick={() => setShowModal(true)}>Rug</button>
-      <button onClick={() => setShowModal(true)}>Wall Art</button>
+      <h1>Custom Requests</h1>
+      <button onClick={() => setShowModal(true)} className={styles.button}>
+        Rug
+      </button>
+      <button onClick={() => setShowModal(true)} className={styles.button}>
+        Wall Art
+      </button>
 
       {showModal && (
         <div className={styles.modal}>
