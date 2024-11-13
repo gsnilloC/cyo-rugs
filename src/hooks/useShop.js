@@ -10,14 +10,18 @@ const useShop = () => {
     const fetchRugs = async () => {
       try {
         const response = await axios.get("/api/items");
-        console.log("API Response:", response.data);
         if (Array.isArray(response.data)) {
-          setRugs(response.data);
+          const rugsWithInventory = await Promise.all(
+            response.data.map(async (rug) => {
+              const inventoryResponse = await axios.get(`/api/inventory/${rug.id}`);
+              return { ...rug, inventoryCount: inventoryResponse.data.inventoryCount };
+            })
+          );
+          setRugs(rugsWithInventory);
         } else {
           throw new Error("Response is not an array");
         }
       } catch (err) {
-        console.error("Error fetching rugs:", err);
         setError(err);
       } finally {
         setLoading(false);

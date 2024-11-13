@@ -2,16 +2,16 @@ import React from "react";
 import styles from "../styles/home.module.css";
 import { Link } from "react-router-dom";
 import {
-  phantomImage,
-  offWhiteImage,
-  lebronImage,
-  arkyveImage,
   cus1Image,
   cus2Image,
   cus3Image,
   cus4Image,
   cus5Image,
   cus6Image,
+  kobeImage,
+  troupe,
+  blondImage2,
+  star,
 } from "../assets/images";
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome";
@@ -20,10 +20,10 @@ function Home() {
   const { scrollContainerRef } = useHome();
 
   const featuredRugs = [
-    { id: 1, name: "Phantom Troupe", image: phantomImage, price: 299.99 },
-    { id: 2, name: "Off-White", image: offWhiteImage, price: 249.99 },
-    { id: 3, name: "Lebron James", image: lebronImage, price: 349.99 },
-    { id: 4, name: "Arkyve", image: arkyveImage, price: 200.99 },
+    { id: 1, name: "Kobe Bryant", image: kobeImage },
+    { id: 2, name: "Phantom Troupe", image: troupe },
+    { id: 3, name: "Blond", image: blondImage2 },
+    { id: 4, name: "Star", image: star },
   ];
 
   const customerPhotos = [
@@ -67,10 +67,9 @@ function Home() {
                 <img
                   src={rug.image}
                   alt={rug.name}
-                  className={styles.rugImage}
+                  className={styles.featuredRugImage}
                 />
-                <h3>{rug.name}</h3>
-                <p>${rug.price.toFixed(2)}</p>
+                <p>{rug.name}</p>
               </div>
             ))}
           </div>

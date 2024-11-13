@@ -7,9 +7,9 @@ const { uploadImages, uploadMetadata, listOrders } = require("./api/aws");
 const {
   listItems,
   getItemById,
-  //testSquareApi,
   createCheckout,
-  // testCreateCheckout,
+  getInventoryCount,
+  decrementInventory,
 } = require("./api/square");
 
 require("dotenv").config();
@@ -50,7 +50,7 @@ app.get("/api/items/:id", async (req, res) => {
 
 app.post("/api/upload", upload.array("images", 3), async (req, res) => {
   const generateUniqueIdentifier = () => {
-    const shortTimestamp = Math.floor(Date.now() / 1000); // Seconds since Unix epoch
+    const shortTimestamp = Math.floor(Date.now() / 1000);
     return `${shortTimestamp}`;
   };
 
@@ -63,9 +63,7 @@ app.post("/api/upload", upload.array("images", 3), async (req, res) => {
       email: req.body.email,
       description: req.body.description,
     };
-    // Upload metadata once
     await uploadMetadata(customerData, uniqueIdentifier);
-    // Upload images
     const imageUrls = await uploadImages(
       req.files,
       customerData,
@@ -79,7 +77,6 @@ app.post("/api/upload", upload.array("images", 3), async (req, res) => {
   }
 });
 
-// Display all orders with images
 app.get("/api/orders", async (req, res) => {
   try {
     const orders = await listOrders();
@@ -97,7 +94,20 @@ app.post("/api/checkout", async (req, res) => {
     res.json({ checkoutLink });
   } catch (error) {
     console.error("Error during checkout:", error);
-    res.status(500).json({ error: "Failed to initiate checkout" });
+    const errorMessage = error.message;
+
+    res.status(500).json({ error: errorMessage });
+  }
+});
+
+app.get("/api/inventory/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const inventoryCount = await getInventoryCount(id);
+    res.json({ inventoryCount });
+  } catch (error) {
+    console.error("Error retrieving inventory count:", error);
+    res.status(500).json({ error: "Failed to retrieve inventory count" });
   }
 });
 
@@ -109,11 +119,50 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
 
+const processedPayments = new Set();
+
+app.post("/webhook", async (req, res) => {
+  console.log("in webhook");
+  const event = req.body;
+  console.log("Received event:");
+
+  const paymentData = event.data.object.payment;
+  console.log("Payment data:");
+
+  switch (event.type) {
+    case "payment.updated":
+      console.log("Processing payment.updated event");
+
+      if (paymentData && paymentData.status === "COMPLETED") {
+        console.log("Payment was completed!");
+        const paymentId = paymentData.id;
+
+        if (!processedPayments.has(paymentId)) {
+          const orderId = paymentData.order_id;
+
+          if (orderId) {
+            await decrementInventory(orderId);
+            processedPayments.add(paymentId);
+          } else {
+            console.log("No order_id found in payment data.");
+          }
+        } else {
+          console.log("Payment already processed, skipping...");
+        }
+      } else {
+        console.log("Payment not completed or status missing");
+      }
+      break;
+
+    default:
+      console.warn("Unhandled event type:", event.type);
+  }
+
+  res.status(200).send("Event received");
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  //testSquareApi();
-  //testCreateCheckout();
-  // displayOrders();
 });

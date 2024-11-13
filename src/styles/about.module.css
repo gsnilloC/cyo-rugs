@@ -30,3 +30,12 @@
 .aboutContainer li {
   margin-bottom: 0.5rem;
 }
+
+.contact a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+}

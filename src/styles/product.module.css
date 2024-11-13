@@ -3,18 +3,20 @@
   padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
+  margin-top: -3rem;
+  margin-bottom: 0.5rem;
 }
 
 .productImage {
   width: 50%;
   height: auto;
-  border-radius: 8px;
 }
 
 .productDetails {
   padding-left: 2rem;
   display: flex;
   flex-direction: column;
+  max-width: 300px;
 }
 
 .productPrice {
@@ -23,14 +25,32 @@
   margin: 1rem 0;
 }
 
+.productShipping {
+  margin-bottom: 1.5rem;
+  margin-top: -0.9rem;
+  font-size: 0.8rem;
+}
+
 .productDescription {
   margin-bottom: 1.5rem;
+}
+
+.productName {
+  margin-bottom: -0.5rem;
+  text-decoration: bold;
 }
 
 .quantityContainer {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
+  width: 48.5%;
+}
+
+.quantityContainer input {
+  width: 50px;
+  text-align: center;
+  margin: 0 0.5rem;
 }
 
 .addToCartButton {
@@ -52,16 +72,22 @@
     flex-direction: column;
     align-items: center;
     padding: 0.5rem;
+    margin-bottom: 0;
   }
 
   .productImage {
-    width: 100%;
+    width: 90%;
     padding: 0;
+    margin-top: 1rem;
   }
 
   .productDetails {
     padding-left: 0;
     align-items: center;
+  }
+
+  .productName {
+    margin-top: 1rem;
   }
 
   .quantityContainer {
@@ -71,7 +97,7 @@
   }
 
   .quantityContainer label {
-    margin-right: 0.1rem;
+    margin-right: 2rem;
   }
 
   .quantityContainer input {
@@ -87,6 +113,7 @@
   }
 
   .addToCartButton {
-    margin-top: 0.1rem;
+    margin-top: 0.4rem;
+    width: 50%;
   }
 }

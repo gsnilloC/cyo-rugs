@@ -1,7 +1,8 @@
 .shopContainer {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 1.5rem;
+  margin-top: -2rem;
 }
 
 @media (max-width: 768px) {
@@ -11,17 +12,20 @@
 }
 
 .rugItem {
-  background-color: var(--card-bg);
-  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.rugItem:hover .rugImage {
+  transform: scale(1.2);
 }
 
 .rugImage {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
+  height: auto;
+  max-height: 250px;
+  object-fit: contain;
 }
 
 .rugInfo {
@@ -29,14 +33,23 @@
 }
 
 .rugName {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: normal;
+  transition: text-decoration 0.3s ease;
+}
+
+.rugItem:hover .rugName {
+  text-decoration: underline;
 }
 
 .rugPrice {
   font-weight: normal;
-  color: var(--accent-color);
-  margin-bottom: 1rem;
+  color: var(--text-color);
+  margin-top: -0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .addToCartButton {
@@ -70,5 +83,28 @@
   .rugGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
+  }
+}
+
+.rugItem.soldOut {
+  opacity: 0.5; /* Gray out the item */
+  pointer-events: none; /* Disable interaction */
+}
+
+.soldOutMessage {
+  color: red; /* Change the color of the sold out message */
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align: left;
+  margin-top: 1.1rem;
+  transform: rotate(35deg); /* Rotate the message 45 degrees */
+}
+
+/* Mobile version adjustments for soldOutMessage */
+@media (max-width: 768px) {
+  .soldOutMessage {
+    font-size: 1.2rem; /* Adjust font size for mobile */
+    margin-top: 0.5rem; /* Adjust margin for mobile */
+    transform: rotate(35deg); /* Reset rotation for mobile */
   }
 }

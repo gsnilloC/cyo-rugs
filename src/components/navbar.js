@@ -34,7 +34,7 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
                 </IconButton>
               </div>
               <div className="logo">
-                <Link to="/">
+                <Link to="/home">
                   <img src={logoImage} alt="CYO Rugs Logo" />
                 </Link>
               </div>

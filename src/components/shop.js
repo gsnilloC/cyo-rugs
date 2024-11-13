@@ -23,7 +23,9 @@ function Shop() {
             <Link
               to={`/product/${rug.id}`}
               key={rug.id}
-              className={styles.rugItem}
+              className={`${styles.rugItem} ${
+                rug.inventoryCount === 0 ? styles.soldOut : ""
+              }`}
             >
               <img
                 src={rug.imageUrls[0]}
@@ -31,8 +33,11 @@ function Shop() {
                 className={styles.rugImage}
               />
               <div className={styles.rugInfo}>
-                <h2 className={styles.rugName}>{rug.name}</h2>
-                <p className={styles.rugPrice}>${rug.price.toFixed(2)}</p>
+                <p className={styles.rugName}>{rug.name}</p>
+                <p className={styles.rugPrice}>${rug.price.toFixed(2)} USD</p>
+                {rug.inventoryCount === 0 && (
+                  <div className={styles.soldOutMessage}>Sold Out</div>
+                )}
               </div>
             </Link>
           ))}
