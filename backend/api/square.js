@@ -36,7 +36,7 @@ async function createCheckout(cartItems) {
         lineItems: lineItems,
       },
       checkoutOptions: {
-        redirectUrl: "http://localhost:3000/home",
+        redirectUrl: "https://www.cyorugs.com/shop",
         shippingAddressCollection: {
           allowedCountries: ["US"],
         },

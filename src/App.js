@@ -61,7 +61,7 @@ function App() {
       />
       <main>
         <Routes>
-          <Route path="/" element={<PasswordPage />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/cart" element={<Cart />} />
