@@ -75,7 +75,7 @@ const listItems = async () => {
     const response = await client.catalogApi.listCatalog();
     const items = response.result.objects;
 
-    return await Promise.all(
+    const validItems = await Promise.all(
       items
         .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION")
         .map(async (item) => {
@@ -106,6 +106,8 @@ const listItems = async () => {
           };
         })
     );
+
+    return validItems.filter(item => item !== null);
   } catch (error) {
     console.error("Error retrieving items:", error);
     throw error;
