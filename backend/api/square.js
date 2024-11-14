@@ -176,10 +176,12 @@ const getInventoryCount = async (itemId) => {
 
     for (const variation of variations) {
       const variationId = variation.id;
-      const inventoryResponse =
-        await client.inventoryApi.retrieveInventoryCount(variationId);
+      const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
 
-      const quantity = inventoryResponse.result.counts[0]?.quantity || 0;
+      const quantity = inventoryResponse.result.counts && inventoryResponse.result.counts.length > 0
+        ? inventoryResponse.result.counts[0].quantity
+        : 0;
+
       totalInventory += parseInt(quantity, 10);
     }
     return totalInventory;
