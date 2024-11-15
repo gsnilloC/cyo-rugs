@@ -4,15 +4,7 @@ import styles from "../styles/about.module.css";
 function About() {
   return (
     <div className={styles.aboutContainer}>
-      <h1>About Us</h1>
-
-      <section className={styles.aboutArtist}>
-        <h2>About the Artist</h2>
-        <p>
-          [Insert information about the artist here. This could include their
-          background, inspiration, and passion for creating custom rugs.]
-        </p>
-      </section>
+      <h1>FAQ</h1>
 
       <section className={styles.instructions}>
         <h2>Delivery Information</h2>
@@ -23,12 +15,34 @@ function About() {
         </ul>
       </section>
 
+      <section className={styles.aboutArtist}>
+        <h2>Refund Policy</h2>
+        <p>
+          Refund Policy - All sales are final unless there is a proven
+          discrepancy found on our end.
+        </p>
+      </section>
+
       <section className={styles.contact}>
         <h2>Contact Us</h2>
         <p>
           Follow us on Instagram:{" "}
-          <a href="https://www.instagram.com/cyorugs" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.instagram.com/cyorugs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             @cyorugs
+          </a>
+        </p>
+        <p>
+          Email:{" "}
+          <a
+            href="https://www.instagram.com/cyorugs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            cyorugs@gmail.com
           </a>
         </p>
       </section>

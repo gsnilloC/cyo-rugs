@@ -47,11 +47,10 @@ function Home() {
         <div className={styles.textContainer}>
           <h1>Welcome to CYO Rugs</h1>
           <p>
-            Ex vis veri diceret, et est enim indoctum. Ei sed natum assueverit,
-            enim tation placerat ad usu. Cu dico sint repudiandae per, et vel
-            idque vidisse, mundi inermis id per. Eam fugit hendrerit ea, his
-            populo albucius elaboraret at. Tation timeam ad duo, cu tation
-            partem usu, eius ludus pro in.
+            Create your own world by transforming your space with a CYO piece
+            crafted from your imagination. From rugs and wall art to unique,
+            rugged designs, we bring an extra touch of style and personality to
+            your space.
           </p>
           <Link to="/shop" className={styles.seeMoreButton}>
             Shop Now
