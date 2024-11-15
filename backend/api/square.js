@@ -8,32 +8,35 @@ const client = new Client({
 
 async function createCheckout(cartItems) {
   try {
-    const lineItems = cartItems.map((item) => ({
-      name: item.name,
-      quantity: item.quantity.toString(),
-      basePriceMoney: {
-        amount: Math.round(item.price * 100),
-        currency: "USD",
-      },
-      note: `Price: $${item.price.toFixed(2)} | Description: ${
-        item.description || "No description available"
-      }`,
+    const lineItems = await Promise.all(cartItems.map(async (item) => {
+      try {
+        const inventoryQuantity = await getInventoryCount(item.id);
+        if (inventoryQuantity < item.quantity) {
+          throw new Error(`Not enough stock for ${item.name}. Available: ${inventoryQuantity}`);
+        }
+
+        return {
+          name: item.name,
+          quantity: item.quantity.toString(),
+          basePriceMoney: {
+            amount: Math.round(item.price * 100),
+            currency: "USD",
+          },
+          note: `Price: $${item.price.toFixed(2)} | Description: ${item.description || "No description available"}`,
+        };
+      } catch (error) {
+        console.error(`Error processing item ${item.name}:`, error.message);
+        return null;
+      }
     }));
 
-    for (const item of cartItems) {
-      const inventoryQuantity = await getInventoryCount(item.id);
-      if (inventoryQuantity < item.quantity) {
-        throw new Error(
-          `Not enough stock for ${item.name}. Available: ${inventoryQuantity}`
-        );
-      }
-    }
+    const validLineItems = lineItems.filter(item => item !== null);
 
     const orderRequest = {
       idempotency_key: Date.now().toString(),
       order: {
         locationId: process.env.SQUARE_LOCATION_ID,
-        lineItems: lineItems,
+        lineItems: validLineItems,
       },
       checkoutOptions: {
         redirectUrl: "https://www.cyorugs.com/shop",
@@ -79,31 +82,35 @@ const listItems = async () => {
       items
         .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION")
         .map(async (item) => {
-          if (!item.itemData) {
-            console.warn(`Item with ID ${item.id} does not have itemData.`);
+          try {
+            if (!item.itemData) {
+              console.warn(`Item with ID ${item.id} does not have itemData.`);
+              return null;
+            }
+
+            const { name, description, variations, imageIds } = item.itemData;
+
+            let formattedPrice = 0;
+            if (variations && variations.length > 0) {
+              const priceMoney = variations[0].itemVariationData.priceMoney;
+              if (priceMoney) {
+                formattedPrice = Number(priceMoney.amount) / 100;
+              }
+            }
+
+            const imageUrls = imageIds && imageIds.length > 0 ? await getImageUrls(imageIds) : [];
+
+            return {
+              id: item.id,
+              name: name || "No name available",
+              description: description || "No description available",
+              price: formattedPrice,
+              imageUrls: imageUrls,
+            };
+          } catch (error) {
+            console.error(`Error processing item ${item.id}:`, error.message);
             return null;
           }
-
-          const { name, description, variations, imageIds } = item.itemData;
-
-          let formattedPrice = 0;
-          if (variations && variations.length > 0) {
-            const priceMoney = variations[0].itemVariationData.priceMoney;
-            if (priceMoney) {
-              formattedPrice = Number(priceMoney.amount) / 100;
-            }
-          }
-
-          const imageUrls =
-            imageIds && imageIds.length > 0 ? await getImageUrls(imageIds) : [];
-
-          return {
-            id: item.id,
-            name: name || "No name available",
-            description: description || "No description available",
-            price: formattedPrice,
-            imageUrls: imageUrls,
-          };
         })
     );
 
@@ -165,8 +172,8 @@ const testSquareApi = async () => {
 const getInventoryCount = async (itemId) => {
   try {
     const itemDetails = await client.catalogApi.retrieveCatalogObject(itemId);
-
     const variations = itemDetails.result.object.itemData.variations;
+
     if (!variations || variations.length === 0) {
       console.warn(`No variations found for item ${itemId}.`);
       return 0;
@@ -175,19 +182,22 @@ const getInventoryCount = async (itemId) => {
     let totalInventory = 0;
 
     for (const variation of variations) {
-      const variationId = variation.id;
-      const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
+      try {
+        const variationId = variation.id;
+        const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
+        const quantity = inventoryResponse.result.counts && inventoryResponse.result.counts.length > 0
+          ? inventoryResponse.result.counts[0].quantity
+          : 0;
 
-      const quantity = inventoryResponse.result.counts && inventoryResponse.result.counts.length > 0
-        ? inventoryResponse.result.counts[0].quantity
-        : 0;
-
-      totalInventory += parseInt(quantity, 10);
+        totalInventory += parseInt(quantity, 10);
+      } catch (error) {
+        console.error(`Error retrieving inventory for variation ${variation.id}:`, error.message);
+      }
     }
     return totalInventory;
   } catch (error) {
     console.error("Error retrieving inventory count:", error);
-    throw error;
+    return 0;
   }
 };
 
