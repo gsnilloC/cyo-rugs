@@ -11,6 +11,7 @@ const {
   getInventoryCount,
   decrementInventory,
 } = require("./api/square");
+const rateLimit = require('express-rate-limit');
 
 require("dotenv").config();
 
@@ -18,15 +19,21 @@ console.log(process.env.PORT);
 const app = express();
 const upload = multer();
 
-// Force HTTPS in production
-app.use((req, res, next) => {
-  // Check if the request is over HTTP
-  if (req.headers["x-forwarded-proto"] !== "https") {
-    // Redirect to HTTPS version
-    return res.redirect("https://" + req.headers.host + req.url);
-  }
-  next();
+const uploadLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 5, // limit each IP to 5 requests per windowMs
+  message: 'Too many upload requests from this IP, please try again after an hour'
 });
+
+// // Force HTTPS in production
+// app.use((req, res, next) => {
+//   // Check if the request is over HTTP
+//   if (req.headers["x-forwarded-proto"] !== "https") {
+//     // Redirect to HTTPS version
+//     return res.redirect("https://" + req.headers.host + req.url);
+//   }
+//   next();
+// });
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -58,7 +65,7 @@ app.get("/api/items/:id", async (req, res) => {
   }
 });
 
-app.post("/api/upload", upload.array("images", 3), async (req, res) => {
+app.post("/api/upload", uploadLimiter, upload.array("images", 3), async (req, res) => {
   const generateUniqueIdentifier = () => {
     const shortTimestamp = Math.floor(Date.now() / 1000);
     return `${shortTimestamp}`;
