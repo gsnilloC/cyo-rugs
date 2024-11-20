@@ -11,7 +11,8 @@ const {
   getInventoryCount,
   decrementInventory,
 } = require("./api/square");
-const rateLimit = require('express-rate-limit');
+const rateLimit = require("express-rate-limit");
+const axios = require("axios");
 
 require("dotenv").config();
 
@@ -22,7 +23,8 @@ const upload = multer();
 const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour window
   max: 5, // limit each IP to 5 requests per windowMs
-  message: 'Too many upload requests from this IP, please try again after an hour'
+  message:
+    "Too many upload requests from this IP, please try again after an hour",
 });
 
 // // Force HTTPS in production
@@ -65,15 +67,27 @@ app.get("/api/items/:id", async (req, res) => {
   }
 });
 
-app.post("/api/upload", uploadLimiter, upload.array("images", 3), async (req, res) => {
-  const generateUniqueIdentifier = () => {
-    const shortTimestamp = Math.floor(Date.now() / 1000);
-    return `${shortTimestamp}`;
-  };
-
-  const uniqueIdentifier = generateUniqueIdentifier();
-
+app.post("/api/upload", upload.array("images"), async (req, res) => {
   try {
+    const recaptchaToken = req.body.recaptchaToken;
+    const isHuman = await verifyRecaptcha(recaptchaToken);
+
+    if (!isHuman) {
+      console.log("reCAPTCHA verification failed");
+      return res.status(400).json({
+        error: "reCAPTCHA verification failed. Please try again.",
+      });
+    }
+
+    console.log("reCAPTCHA verification successful");
+
+    const generateUniqueIdentifier = () => {
+      const shortTimestamp = Math.floor(Date.now() / 1000);
+      return `${shortTimestamp}`;
+    };
+
+    const uniqueIdentifier = generateUniqueIdentifier();
+
     const customerData = {
       name: req.body.name,
       phone: req.body.phone,
@@ -89,8 +103,8 @@ app.post("/api/upload", uploadLimiter, upload.array("images", 3), async (req, re
 
     res.status(200).json({ imageUrls });
   } catch (error) {
-    console.error("Error uploading images: ", error);
-    res.status(500).json({ error: "Failed to upload images" });
+    console.error("Upload error:", error);
+    res.status(500).json({ error: "Upload failed" });
   }
 });
 
@@ -177,6 +191,27 @@ app.post("/webhook", async (req, res) => {
 
   res.status(200).send("Event received");
 });
+
+async function verifyRecaptcha(token) {
+  try {
+    const response = await axios.post(
+      "https://www.google.com/recaptcha/api/siteverify",
+      null,
+      {
+        params: {
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: token,
+        },
+      }
+    );
+
+    console.log("reCAPTCHA verification response:", response.data);
+    return response.data.success;
+  } catch (error) {
+    console.error("reCAPTCHA verification error:", error);
+    return false;
+  }
+}
 
 const PORT = process.env.PORT || 3000;
 

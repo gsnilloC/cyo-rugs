@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../styles/request.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import ReCAPTCHA from 'react-google-recaptcha';
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Request() {
   const [showModal, setShowModal] = useState(false);
@@ -36,9 +36,9 @@ function Request() {
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    
-    const validFiles = files.filter(file => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+
+    const validFiles = files.filter((file) => {
       if (!allowedTypes.includes(file.type)) {
         alert(`File ${file.name} is not a supported image type`);
         return false;
@@ -59,22 +59,22 @@ function Request() {
 
   const validateForm = (formData) => {
     const errors = [];
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      errors.push('Please enter a valid email address');
+      errors.push("Please enter a valid email address");
     }
 
     // Phone validation
     const phoneRegex = /^\+?[\d\s-]{10,}$/;
     if (!phoneRegex.test(formData.phone)) {
-      errors.push('Please enter a valid phone number');
+      errors.push("Please enter a valid phone number");
     }
 
     // Description length
     if (formData.description.length < 10) {
-      errors.push('Description must be at least 10 characters long');
+      errors.push("Description must be at least 10 characters long");
     }
 
     return errors;
@@ -82,15 +82,15 @@ function Request() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationErrors = validateForm(formData);
     if (validationErrors.length > 0) {
-      alert(validationErrors.join('\n'));
+      alert(validationErrors.join("\n"));
       return;
     }
-    
+
     if (!recaptchaValue) {
-      alert('Please verify that you are human');
+      alert("Please verify that you are human");
       return;
     }
 
@@ -99,6 +99,7 @@ function Request() {
     data.append("phone", formData.phone);
     data.append("email", formData.email);
     data.append("description", formData.description);
+    data.append("recaptchaToken", recaptchaValue);
 
     formData.images.forEach((image) => {
       data.append("images", image);
@@ -114,6 +115,7 @@ function Request() {
       setUploadSuccess(true);
     } catch (error) {
       console.error("Error uploading data:", error);
+      alert("Upload failed. Please try again.");
     }
   };
 
@@ -122,6 +124,11 @@ function Request() {
       ...formData,
       images: formData.images.filter((_, i) => i !== index),
     });
+  };
+
+  const handleRecaptchaChange = (value) => {
+    console.log("reCAPTCHA value:", value);
+    setRecaptchaValue(value);
   };
 
   return (
@@ -206,8 +213,8 @@ function Request() {
                 ))}
               </div>
               <ReCAPTCHA
-                sitekey="YOUR_RECAPTCHA_SITE_KEY"
-                onChange={(value) => setRecaptchaValue(value)}
+                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                onChange={handleRecaptchaChange}
               />
               <button type="submit">Upload</button>
             </form>
