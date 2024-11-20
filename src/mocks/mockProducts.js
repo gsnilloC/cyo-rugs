@@ -1,4 +1,4 @@
-import { kobeImage, troupe } from "../assets/images";
+import { blondImage2, star, kobeImage, troupe } from "../assets/images";
 
 const mockProducts = [
   {
@@ -7,7 +7,7 @@ const mockProducts = [
     description:
       "A beautiful handwoven Persian rug that adds elegance to any room.",
     price: 299.99,
-    imageUrls: [kobeImage],
+    imageUrls: [star],
     inventoryCount: 10,
   },
   {
@@ -33,7 +33,7 @@ const mockProducts = [
     description:
       "A beautiful handwoven Persian rug that adds elegance to any room.",
     price: 299.99,
-    imageUrls: [kobeImage],
+    imageUrls: [blondImage2],
     inventoryCount: 10,
   },
   {
@@ -59,7 +59,7 @@ const mockProducts = [
     description:
       "A beautiful handwoven Persian rug that adds elegance to any room.",
     price: 299.99,
-    imageUrls: [kobeImage],
+    imageUrls: [blondImage2],
     inventoryCount: 10,
   },
   {

@@ -41,11 +41,13 @@ function Shop() {
                 key={rug.id}
                 className={`${styles.rugItem} ${rug.inventoryCount === 0 ? styles.soldOut : ""}`}
               >
-                <img
-                  src={rug.imageUrls[0]}
-                  alt={rug.name}
-                  className={styles.rugImage}
-                />
+                <div className={styles.rugFrame}>
+                  <img
+                    src={rug.imageUrls[0]}
+                    alt={rug.name}
+                    className={styles.rugImage}
+                  />
+                </div>
                 <div className={styles.rugInfo}>
                   <p className={styles.rugName}>{rug.name}</p>
                   <p className={styles.rugPrice}>${rug.price.toFixed(2)} USD</p>
@@ -59,13 +61,34 @@ function Shop() {
         </div>
       </div>
       <div className={styles.pagination}>
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+        <span 
+          onClick={handlePreviousPage} 
+          className={`${styles.arrow} ${currentPage === 1 ? styles.disabled : ''}`}
+        >
           ←
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+        </span>
+        <div className={styles.pageNumbers}>
+          {[...Array(totalPages)].map((_, index) => (
+            <div key={index + 1} className={styles.pageNumberContainer}>
+              <span
+                className={`${styles.pageNumber} ${currentPage === index + 1 ? styles.activePage : ''}`}
+                onClick={() => {
+                  setCurrentPage(index + 1);
+                  window.scrollTo(0, 0);
+                }}
+              >
+                {index + 1}
+              </span>
+              {currentPage === index + 1 && <div className={styles.pageIndicator} />}
+            </div>
+          ))}
+        </div>
+        <span 
+          onClick={handleNextPage} 
+          className={`${styles.arrow} ${currentPage === totalPages ? styles.disabled : ''}`}
+        >
           →
-        </button>
+        </span>
       </div>
     </div>
   );

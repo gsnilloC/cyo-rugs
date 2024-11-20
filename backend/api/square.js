@@ -8,29 +8,35 @@ const client = new Client({
 
 async function createCheckout(cartItems) {
   try {
-    const lineItems = await Promise.all(cartItems.map(async (item) => {
-      try {
-        const inventoryQuantity = await getInventoryCount(item.id);
-        if (inventoryQuantity < item.quantity) {
-          throw new Error(`Not enough stock for ${item.name}. Available: ${inventoryQuantity}`);
+    const lineItems = await Promise.all(
+      cartItems.map(async (item) => {
+        try {
+          const inventoryQuantity = await getInventoryCount(item.id);
+          if (inventoryQuantity < item.quantity) {
+            throw new Error(
+              `Not enough stock for ${item.name}. Available: ${inventoryQuantity}`
+            );
+          }
+
+          return {
+            name: item.name,
+            quantity: item.quantity.toString(),
+            basePriceMoney: {
+              amount: Math.round(item.price * 100),
+              currency: "USD",
+            },
+            note: `Price: $${item.price.toFixed(2)} | Description: ${
+              item.description || "No description available"
+            }`,
+          };
+        } catch (error) {
+          console.error(`Error processing item ${item.name}:`, error.message);
+          return null;
         }
+      })
+    );
 
-        return {
-          name: item.name,
-          quantity: item.quantity.toString(),
-          basePriceMoney: {
-            amount: Math.round(item.price * 100),
-            currency: "USD",
-          },
-          note: `Price: $${item.price.toFixed(2)} | Description: ${item.description || "No description available"}`,
-        };
-      } catch (error) {
-        console.error(`Error processing item ${item.name}:`, error.message);
-        return null;
-      }
-    }));
-
-    const validLineItems = lineItems.filter(item => item !== null);
+    const validLineItems = lineItems.filter((item) => item !== null);
 
     const orderRequest = {
       idempotency_key: Date.now().toString(),
@@ -98,7 +104,10 @@ const listItems = async () => {
               }
             }
 
-            const imageUrls = imageIds && imageIds.length > 0 ? await getImageUrls(imageIds) : [];
+            const imageUrls =
+              imageIds && imageIds.length > 0
+                ? await getImageUrls(imageIds)
+                : [];
 
             return {
               id: item.id,
@@ -114,7 +123,7 @@ const listItems = async () => {
         })
     );
 
-    return validItems.filter(item => item !== null);
+    return validItems.filter((item) => item !== null);
   } catch (error) {
     console.error("Error retrieving items:", error);
     throw error;
@@ -169,8 +178,11 @@ const testSquareApi = async () => {
   }
 };
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const getInventoryCount = async (itemId) => {
   try {
+    await delay(100);
     const itemDetails = await client.catalogApi.retrieveCatalogObject(itemId);
     const variations = itemDetails.result.object.itemData.variations;
 
@@ -184,6 +196,7 @@ const getInventoryCount = async (itemId) => {
     for (const variation of variations) {
       try {
         const variationId = variation.id;
+        await delay(100);
         const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
         const quantity = inventoryResponse.result.counts && inventoryResponse.result.counts.length > 0
           ? inventoryResponse.result.counts[0].quantity
@@ -191,11 +204,19 @@ const getInventoryCount = async (itemId) => {
 
         totalInventory += parseInt(quantity, 10);
       } catch (error) {
+        if (error.statusCode === 429) {
+          console.log(429);
+          return 0;
+        }
         console.error(`Error retrieving inventory for variation ${variation.id}:`, error.message);
       }
     }
     return totalInventory;
   } catch (error) {
+    if (error.statusCode === 429) {
+      console.log(429);
+      return 0;
+    }
     console.error("Error retrieving inventory count:", error);
     return 0;
   }
