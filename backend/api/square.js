@@ -196,11 +196,14 @@ const getInventoryCount = async (itemId) => {
     for (const variation of variations) {
       try {
         const variationId = variation.id;
-        await delay(100);
-        const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
-        const quantity = inventoryResponse.result.counts && inventoryResponse.result.counts.length > 0
-          ? inventoryResponse.result.counts[0].quantity
-          : 0;
+        await delay(500);
+        const inventoryResponse =
+          await client.inventoryApi.retrieveInventoryCount(variationId);
+        const quantity =
+          inventoryResponse.result.counts &&
+          inventoryResponse.result.counts.length > 0
+            ? inventoryResponse.result.counts[0].quantity
+            : 0;
 
         totalInventory += parseInt(quantity, 10);
       } catch (error) {
@@ -208,7 +211,10 @@ const getInventoryCount = async (itemId) => {
           console.log(429);
           return 0;
         }
-        console.error(`Error retrieving inventory for variation ${variation.id}:`, error.message);
+        console.error(
+          `Error retrieving inventory for variation ${variation.id}:`,
+          error.message
+        );
       }
     }
     return totalInventory;

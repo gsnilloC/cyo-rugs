@@ -11,21 +11,14 @@ const {
   getInventoryCount,
   decrementInventory,
 } = require("./api/square");
-const rateLimit = require("express-rate-limit");
 const axios = require("axios");
+const { testConnection } = require('./db/config');
 
 require("dotenv").config();
 
 console.log(process.env.PORT);
 const app = express();
 const upload = multer();
-
-const uploadLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 5, // limit each IP to 5 requests per windowMs
-  message:
-    "Too many upload requests from this IP, please try again after an hour",
-});
 
 // // Force HTTPS in production
 // app.use((req, res, next) => {
@@ -43,9 +36,38 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../build")));
 
+// Add this utility function for delay
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Add this retry wrapper function
+async function withRetry(operation, maxAttempts = 3, initialDelay = 1000) {
+  let attempt = 1;
+  let lastError;
+
+  while (attempt <= maxAttempts) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      if (error.status === 429 && attempt < maxAttempts) {
+        const waitTime = initialDelay * Math.pow(2, attempt - 1); // exponential backoff
+        console.log(
+          `Rate limited. Retrying in ${waitTime}ms (attempt ${attempt}/${maxAttempts})`
+        );
+        await delay(waitTime);
+        attempt++;
+      } else {
+        throw error;
+      }
+    }
+  }
+  throw lastError;
+}
+
+// Modify the items endpoint to use retry logic
 app.get("/api/items", async (req, res) => {
   try {
-    const items = await listItems();
+    const items = await withRetry(() => listItems());
     res.json(items);
   } catch (error) {
     console.error("Error retrieving items:", error);
@@ -131,10 +153,11 @@ app.post("/api/checkout", async (req, res) => {
   }
 });
 
+// Modify the inventory endpoint to use retry logic
 app.get("/api/inventory/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const inventoryCount = await getInventoryCount(id);
+    const inventoryCount = await withRetry(() => getInventoryCount(id));
     res.json({ inventoryCount });
   } catch (error) {
     console.error("Error retrieving inventory count:", error);
@@ -218,3 +241,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+testConnection();

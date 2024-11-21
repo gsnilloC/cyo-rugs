@@ -18,12 +18,12 @@ const useShop = () => {
         if (Array.isArray(response.data)) {
           const rugsWithInventory = await Promise.all(
             response.data.map(async (rug) => {
-              const inventoryResponse = await axios.get(
-                `/api/inventory/${rug.id}`
-              );
+              // const inventoryResponse = await axios.get(
+              //   `/api/inventory/${rug.id}`
+              // );
               return {
                 ...rug,
-                inventoryCount: inventoryResponse.data.inventoryCount,
+                inventoryCount: 4,
               };
             })
           );
