@@ -49,34 +49,6 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../build")));
 
-// Add this utility function for delay
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// Add this retry wrapper function
-async function withRetry(operation, maxAttempts = 3, initialDelay = 1000) {
-  let attempt = 1;
-  let lastError;
-
-  while (attempt <= maxAttempts) {
-    try {
-      return await operation();
-    } catch (error) {
-      lastError = error;
-      if (error.status === 429 && attempt < maxAttempts) {
-        const waitTime = initialDelay * Math.pow(2, attempt - 1); // exponential backoff
-        console.log(
-          `Rate limited. Retrying in ${waitTime}ms (attempt ${attempt}/${maxAttempts})`
-        );
-        await delay(waitTime);
-        attempt++;
-      } else {
-        throw error;
-      }
-    }
-  }
-  throw lastError;
-}
-
 async function syncInventoryFromSquare() {
   console.log("Starting inventory sync from Square...");
   const client = await pool.connect();
