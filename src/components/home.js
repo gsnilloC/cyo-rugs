@@ -11,7 +11,7 @@ import {
   kobeImage,
   troupe,
   blondImage2,
-  star,
+  quasi,
 } from "../assets/images";
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome";
@@ -23,7 +23,7 @@ function Home() {
     { id: 1, name: "Kobe Bryant", image: kobeImage },
     { id: 2, name: "Phantom Troupe", image: troupe },
     { id: 3, name: "Blond", image: blondImage2 },
-    { id: 4, name: "Star", image: star },
+    { id: 4, name: "Quasimoto", image: quasi },
   ];
 
   const customerPhotos = [

@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { DarkMode as DarkModeIcon, Key as KeyIcon } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
+import LoginModal from "./LoginModal";
 
 const Footer = ({ toggleTheme }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   return (
     <footer>
       <div className="footer-divider"></div>
@@ -18,9 +21,9 @@ const Footer = ({ toggleTheme }) => {
         <IconButton onClick={toggleTheme} className="theme-toggle">
           <DarkModeIcon />
         </IconButton>
-        <a href="/home" className="footer-icon-link">
+        <IconButton onClick={() => setIsLoginModalOpen(true)}>
           <KeyIcon />
-        </a>
+        </IconButton>
       </div>
       <div className="footer-bottom">
         <a
@@ -31,6 +34,10 @@ const Footer = ({ toggleTheme }) => {
           Made with ❤️
         </a>
       </div>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
     </footer>
   );
 };

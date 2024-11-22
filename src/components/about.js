@@ -4,22 +4,40 @@ import styles from "../styles/about.module.css";
 function About() {
   return (
     <div className={styles.aboutContainer}>
-      <h1>FAQ</h1>
+      <h1>About</h1>
 
       <section className={styles.instructions}>
         <h2>Delivery Information</h2>
         <ul>
-          <li>All orders are final</li>
           <li>Main page orders: 2-3 weeks delivery</li>
           <li>Custom page orders: 3-4 weeks delivery</li>
+          <li>
+            For main page orders once the payment has been credited, orders are
+            prepared and
+          </li>
+          <li>
+            If we are experiencing a high volume of orders resulting in
+            shipments being delayed, we will contact you via email.
+          </li>
         </ul>
       </section>
 
       <section className={styles.aboutArtist}>
         <h2>Refund Policy</h2>
         <p>
-          Refund Policy - All sales are final unless there is a proven
-          discrepancy found on our end.
+          All Sales Final! Refunds and exchanges are not accepted at this time.
+        </p>
+      </section>
+
+      <section className={styles.aboutArtist}>
+        <h2>Damage</h2>
+        <p>
+          All products are carefully packaged taking into account all the risks
+          for breakage or deterioration while in transit. CYO Rugs is not liable
+          for any products damaged or lost during shipping. If you received your
+          order damaged, please contact the shipping provider within 24 hours
+          with photos including the exterior and interior packaging, the
+          shipping label, and the damaged item to file an insurance claim.
         </p>
       </section>
 

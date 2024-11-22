@@ -9,3 +9,4 @@ export { default as cus4Image } from "./cus4.JPG";
 export { default as cus5Image } from "./cus5.JPG";
 export { default as cus6Image } from "./cus6.JPG";
 export { default as livingroom } from "./livingroom.png";
+export { default as quasi } from "./quasi.png";
