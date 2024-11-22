@@ -12,7 +12,14 @@ const {
   decrementInventory,
 } = require("./api/square");
 const axios = require("axios");
-const { testConnection } = require('./db/config');
+const {
+  pool,
+  testConnection,
+  listTables,
+  createInventoryTable,
+  getInventoryItems,
+  getInventoryItemById,
+} = require("./db/config");
 
 require("dotenv").config();
 
@@ -64,11 +71,76 @@ async function withRetry(operation, maxAttempts = 3, initialDelay = 1000) {
   throw lastError;
 }
 
+async function syncInventoryFromSquare() {
+  console.log("Starting inventory sync from Square...");
+  try {
+    // Fetch all items from Square
+    const items = await listItems();
+    console.log(`Found ${items.length} items in Square`);
+
+    // Begin transaction
+    const client = await pool.connect();
+    try {
+      await client.query("BEGIN");
+
+      for (const item of items) {
+        // Get inventory count for each item
+        const quantity = await getInventoryCount(item.id);
+        console.log(
+          `Processing item: ${item.name} (ID: ${item.id}) - Quantity: ${quantity}`
+        );
+
+        // Insert or update the item in the database
+        await client.query(
+          `
+          INSERT INTO inventory (item_id, name, description, quantity, price, image_urls, last_updated)
+          VALUES ($1, $2, $3, $4, $5, $6, NOW())
+          ON CONFLICT (item_id)
+          DO UPDATE SET
+            name = EXCLUDED.name,
+            description = EXCLUDED.description,
+            quantity = EXCLUDED.quantity,
+            price = EXCLUDED.price,
+            image_urls = EXCLUDED.image_urls,
+            last_updated = NOW();
+          `,
+          [
+            item.id,
+            item.name,
+            item.description,
+            quantity,
+            item.price,
+            item.imageUrls,
+          ]
+        );
+      }
+
+      await client.query("COMMIT");
+      console.log("Inventory sync completed successfully");
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error("Error syncing inventory:", error);
+    throw error;
+  }
+}
+
 // Modify the items endpoint to use retry logic
 app.get("/api/items", async (req, res) => {
   try {
-    const items = await withRetry(() => listItems());
-    res.json(items);
+    const items = await getInventoryItems();
+    const formattedItems = items.map((item) => ({
+      id: item.item_id,
+      name: item.name,
+      description: item.description,
+      price: parseFloat(item.price),
+      imageUrls: item.image_urls || [],
+    }));
+    res.json(formattedItems);
   } catch (error) {
     console.error("Error retrieving items:", error);
     res.status(500).json({ error: "Failed to retrieve items" });
@@ -78,11 +150,18 @@ app.get("/api/items", async (req, res) => {
 app.get("/api/items/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const item = await getItemById(id);
+    const item = await getInventoryItemById(id);
     if (!item) {
       return res.status(404).json({ error: "Item not found" });
     }
-    res.json(item);
+    const formattedItem = {
+      id: item.item_id,
+      name: item.name,
+      description: item.description,
+      price: parseFloat(item.price),
+      imageUrls: item.image_urls || [],
+    };
+    res.json(formattedItem);
   } catch (error) {
     console.error("Error retrieving item:", error);
     res.status(500).json({ error: "Failed to retrieve item" });
@@ -157,8 +236,11 @@ app.post("/api/checkout", async (req, res) => {
 app.get("/api/inventory/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const inventoryCount = await withRetry(() => getInventoryCount(id));
-    res.json({ inventoryCount });
+    const item = await getInventoryItemById(id);
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.json({ inventoryCount: item.quantity });
   } catch (error) {
     console.error("Error retrieving inventory count:", error);
     res.status(500).json({ error: "Failed to retrieve inventory count" });
@@ -242,4 +324,39 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-testConnection();
+// async function testInventoryAccess() {
+//   try {
+//     console.log("Creating inventory table if it doesn't exist...");
+//     await createInventoryTable();
+
+//     console.log("\nFetching inventory items...");
+//     const items = await getInventoryItems();
+
+//     if (items.length === 0) {
+//       console.log("No items found in inventory table.");
+//     } else {
+//       console.log("\nInventory Items:");
+//       items.forEach((item) => {
+//         console.log("\n------------------------");
+//         console.log(`ID: ${item.item_id}`);
+//         console.log(`Name: ${item.name}`);
+//         console.log(`Description: ${item.description}`);
+//         console.log(`Quantity: ${item.quantity}`);
+//         console.log(`Price: $${item.price}`);
+//         console.log(`Last Updated: ${item.last_updated}`);
+//         console.log(
+//           `Image URLs: ${item.image_urls ? item.image_urls.join(", ") : "None"}`
+//         );
+//       });
+//     }
+//   } catch (error) {
+//     console.error("Error:", error);
+//   } finally {
+//     await pool.end();
+//   }
+// }
+
+// createInventoryTable();
+// listTables();
+// testInventoryAccess();
+//syncInventoryFromSquare();

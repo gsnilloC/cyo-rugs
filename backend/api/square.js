@@ -6,6 +6,22 @@ const client = new Client({
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
 });
 
+const { getInventoryItemById } = require("../db/config");
+
+const getInventoryCount = async (itemId) => {
+  try {
+    const item = await getInventoryItemById(itemId);
+    if (!item) {
+      console.warn(`No inventory found for item ${itemId}`);
+      return 0;
+    }
+    return item.quantity;
+  } catch (error) {
+    console.error("Error retrieving inventory count from database:", error);
+    return 0;
+  }
+};
+
 async function createCheckout(cartItems) {
   try {
     const lineItems = await Promise.all(
@@ -117,7 +133,7 @@ const listItems = async () => {
               imageUrls: imageUrls,
             };
           } catch (error) {
-            console.error(`Error processing item ${item.id}:`, error.message);
+            console.error("Error processing item:", error.message);
             return null;
           }
         })
@@ -180,53 +196,53 @@ const testSquareApi = async () => {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const getInventoryCount = async (itemId) => {
-  try {
-    await delay(100);
-    const itemDetails = await client.catalogApi.retrieveCatalogObject(itemId);
-    const variations = itemDetails.result.object.itemData.variations;
+// const getInventoryCount = async (itemId) => {
+//   try {
+//     await delay(100);
+//     const itemDetails = await client.catalogApi.retrieveCatalogObject(itemId);
+//     const variations = itemDetails.result.object.itemData.variations;
 
-    if (!variations || variations.length === 0) {
-      console.warn(`No variations found for item ${itemId}.`);
-      return 0;
-    }
+//     if (!variations || variations.length === 0) {
+//       console.warn(`No variations found for item ${itemId}.`);
+//       return 0;
+//     }
 
-    let totalInventory = 0;
+//     let totalInventory = 0;
 
-    for (const variation of variations) {
-      try {
-        const variationId = variation.id;
-        await delay(500);
-        const inventoryResponse =
-          await client.inventoryApi.retrieveInventoryCount(variationId);
-        const quantity =
-          inventoryResponse.result.counts &&
-          inventoryResponse.result.counts.length > 0
-            ? inventoryResponse.result.counts[0].quantity
-            : 0;
+//     for (const variation of variations) {
+//       try {
+//         const variationId = variation.id;
+//         await delay(500);
+//         const inventoryResponse =
+//           await client.inventoryApi.retrieveInventoryCount(variationId);
+//         const quantity =
+//           inventoryResponse.result.counts &&
+//           inventoryResponse.result.counts.length > 0
+//             ? inventoryResponse.result.counts[0].quantity
+//             : 0;
 
-        totalInventory += parseInt(quantity, 10);
-      } catch (error) {
-        if (error.statusCode === 429) {
-          console.log(429);
-          return 0;
-        }
-        console.error(
-          `Error retrieving inventory for variation ${variation.id}:`,
-          error.message
-        );
-      }
-    }
-    return totalInventory;
-  } catch (error) {
-    if (error.statusCode === 429) {
-      console.log(429);
-      return 0;
-    }
-    console.error("Error retrieving inventory count:", error);
-    return 0;
-  }
-};
+//         totalInventory += parseInt(quantity, 10);
+//       } catch (error) {
+//         if (error.statusCode === 429) {
+//           console.log(429);
+//           return 0;
+//         }
+//         console.error(
+//           `Error retrieving inventory for variation ${variation.id}:`,
+//           error.message
+//         );
+//       }
+//     }
+//     return totalInventory;
+//   } catch (error) {
+//     if (error.statusCode === 429) {
+//       console.log(429);
+//       return 0;
+//     }
+//     console.error("Error retrieving inventory count:", error);
+//     return 0;
+//   }
+// };
 
 const decrementInventory = async (orderId) => {
   const serializeBigInt = (obj) => {
