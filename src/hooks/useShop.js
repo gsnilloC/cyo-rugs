@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import mockProducts from "../mocks/mockProducts"; // Import the mock data
 
 const ITEMS_PER_PAGE = 6;
 
 const useShop = () => {
   const [rugs, setRugs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {

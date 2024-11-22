@@ -10,11 +10,12 @@ const pool = new Pool({
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
+  allowExitOnIdle: false,
+  keepAlive: true,
 });
 
 pool.on("error", (err, client) => {
   console.error("Unexpected error on idle client", err);
-  process.exit(-1);
 });
 
 async function testConnection() {
@@ -56,6 +57,7 @@ async function createInventoryTable() {
     await client.query(`
       CREATE TABLE IF NOT EXISTS inventory (
         item_id TEXT PRIMARY KEY,
+        catalog_object_id TEXT,
         name TEXT NOT NULL,
         description TEXT,
         quantity INTEGER DEFAULT 0,

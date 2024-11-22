@@ -95,6 +95,44 @@ const getImageUrls = async (imageIds) => {
   return imageUrls;
 };
 
+const getInventoryCounts = async (itemId) => {
+  try {
+    const itemDetails = await client.catalogApi.retrieveCatalogObject(itemId);
+    const variations = itemDetails.result.object.itemData.variations;
+
+    if (!variations || variations.length === 0) {
+      console.warn(`No variations found for item ${itemId}.`);
+      return 0;
+    }
+
+    let totalInventory = 0;
+
+    for (const variation of variations) {
+      try {
+        const variationId = variation.id;
+        const inventoryResponse =
+          await client.inventoryApi.retrieveInventoryCount(variationId);
+        const quantity =
+          inventoryResponse.result.counts &&
+          inventoryResponse.result.counts.length > 0
+            ? inventoryResponse.result.counts[0].quantity
+            : 0;
+
+        totalInventory += parseInt(quantity, 10);
+      } catch (error) {
+        console.error(
+          `Error retrieving inventory for variation ${variation.id}:`,
+          error.message
+        );
+      }
+    }
+    return totalInventory;
+  } catch (error) {
+    console.error("Error retrieving inventory count:", error);
+    return 0;
+  }
+};
+
 const listItems = async () => {
   try {
     const response = await client.catalogApi.listCatalog();
@@ -103,6 +141,11 @@ const listItems = async () => {
     const validItems = await Promise.all(
       items
         .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION")
+        .filter(
+          (item) =>
+            item.id !== "XGPSDFAI4HGP5Q7EL2SKETHN" &&
+            item.id !== "QPMG56NM75BMOG3QQXECF3BA"
+        )
         .map(async (item) => {
           try {
             if (!item.itemData) {
@@ -111,6 +154,9 @@ const listItems = async () => {
             }
 
             const { name, description, variations, imageIds } = item.itemData;
+
+            // Get the catalog_object_id from the first variation
+            const catalogObjectId = variations?.[0]?.id || null;
 
             let formattedPrice = 0;
             if (variations && variations.length > 0) {
@@ -127,6 +173,7 @@ const listItems = async () => {
 
             return {
               id: item.id,
+              catalog_object_id: catalogObjectId,
               name: name || "No name available",
               description: description || "No description available",
               price: formattedPrice,
@@ -335,4 +382,5 @@ module.exports = {
   createCheckout,
   getInventoryCount,
   decrementInventory,
+  getInventoryCounts,
 };
