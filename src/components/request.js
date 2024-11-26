@@ -95,10 +95,10 @@ function Request() {
     }
 
     const data = new FormData();
-    data.append("name", formData.name);
-    data.append("phone", formData.phone);
-    data.append("email", formData.email);
-    data.append("description", formData.description);
+    data.append("name", `(${formData.name})`);
+    data.append("phone", `(${formData.phone})`);
+    data.append("email", `(${formData.email})`);
+    data.append("description", `(${formData.description})`);
     data.append("recaptchaToken", recaptchaValue);
 
     formData.images.forEach((image) => {
@@ -133,13 +133,62 @@ function Request() {
 
   return (
     <div className={styles.requestContainer}>
-      <h1>Custom Requests</h1>
-      <button onClick={() => setShowModal(true)} className={styles.button}>
-        Rug
-      </button>
-      <button onClick={() => setShowModal(true)} className={styles.button}>
-        Wall Art
-      </button>
+      <h1>Bring Your Vision to Life!</h1>
+      <p>
+        Grab a personalized rug tailored to your vision. Whether it's a specific
+        design, size, color scheme, or theme, we bring your ideas to life.
+      </p>
+      <p>
+        To ensure your custom rug is everything you’ve dreamed of, please
+        provide detailed and accurate information in your request. Include
+        specifics such as:
+      </p>
+      <ul>
+        <li>
+          <strong>Size</strong>: Exact dimensions (in feet or inches) to fit
+          your space perfectly.
+        </li>
+        <li>
+          <strong>Design</strong>: Attach clear references, sketches, or
+          describe your design as vividly as possible.
+        </li>
+        <li>
+          <strong>Colors</strong>: Mention preferred color schemes or specific
+          shades.
+        </li>
+        <li>
+          <strong>Material Preferences</strong>: If applicable, let us know your
+          preferred texture or type of material (e.g., wool, cotton, etc.).
+        </li>
+      </ul>
+      <p>
+        💡 <strong>Tip</strong>: The more precise your details, the better we
+        can meet your expectations!
+      </p>
+      <p>
+        <strong>Important:</strong>
+      </p>
+      <ul>
+        <li>
+          Double-check your contact information (email and phone number) to
+          avoid delays.
+        </li>
+        <li>
+          If you have any questions or special requirements, don’t hesitate to
+          include them in your request.
+        </li>
+      </ul>
+      <p>
+        We’re excited to collaborate with you and create a rug that’s as unique
+        as you are! Start your custom rug request today, and let’s turn your
+        idea into a masterpiece.
+      </p>
+
+      <div className={styles.buttonContainer}>
+        <button onClick={() => setShowModal(true)} className={styles.button}>
+          Upload Your Creation Here
+        </button>
+      </div>
 
       {showModal && (
         <div className={styles.modal}>

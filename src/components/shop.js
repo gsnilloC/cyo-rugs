@@ -4,7 +4,14 @@ import { Link } from "react-router-dom";
 import useShop from "../hooks/useShop";
 
 function Shop() {
-  const { paginatedRugs, loading, error, currentPage, setCurrentPage, totalPages } = useShop();
+  const {
+    paginatedRugs,
+    loading,
+    error,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+  } = useShop();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -30,7 +37,7 @@ function Shop() {
 
   return (
     <div>
-      <h1 className={styles.shopTitle}>Rugs</h1>
+      <h1 className={styles.shopTitle}>Hand Tufted Rugs</h1>
       <div className={styles.shopContainer}>
         <div className={styles.rugGrid}>
           {paginatedRugs.map((rug) => {
@@ -39,7 +46,9 @@ function Shop() {
               <Link
                 to={`/product/${rug.id}`}
                 key={rug.id}
-                className={`${styles.rugItem} ${rug.inventoryCount === 0 ? styles.soldOut : ""}`}
+                className={`${styles.rugItem} ${
+                  rug.inventoryCount === 0 ? styles.soldOut : ""
+                }`}
               >
                 <div className={styles.rugFrame}>
                   <img
@@ -61,9 +70,11 @@ function Shop() {
         </div>
       </div>
       <div className={styles.pagination}>
-        <span 
-          onClick={handlePreviousPage} 
-          className={`${styles.arrow} ${currentPage === 1 ? styles.disabled : ''}`}
+        <span
+          onClick={handlePreviousPage}
+          className={`${styles.arrow} ${
+            currentPage === 1 ? styles.disabled : ""
+          }`}
         >
           ←
         </span>
@@ -71,7 +82,9 @@ function Shop() {
           {[...Array(totalPages)].map((_, index) => (
             <div key={index + 1} className={styles.pageNumberContainer}>
               <span
-                className={`${styles.pageNumber} ${currentPage === index + 1 ? styles.activePage : ''}`}
+                className={`${styles.pageNumber} ${
+                  currentPage === index + 1 ? styles.activePage : ""
+                }`}
                 onClick={() => {
                   setCurrentPage(index + 1);
                   window.scrollTo(0, 0);
@@ -79,13 +92,17 @@ function Shop() {
               >
                 {index + 1}
               </span>
-              {currentPage === index + 1 && <div className={styles.pageIndicator} />}
+              {currentPage === index + 1 && (
+                <div className={styles.pageIndicator} />
+              )}
             </div>
           ))}
         </div>
-        <span 
-          onClick={handleNextPage} 
-          className={`${styles.arrow} ${currentPage === totalPages ? styles.disabled : ''}`}
+        <span
+          onClick={handleNextPage}
+          className={`${styles.arrow} ${
+            currentPage === totalPages ? styles.disabled : ""
+          }`}
         >
           →
         </span>

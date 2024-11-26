@@ -2,65 +2,130 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .orderItem {
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
   padding: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.orderItem p {
-  margin: 0.5rem 0;
+.orderItemName {
+  font-size: 1.3rem;
+  margin-top: -55px;
 }
 
-.orderItem a {
-  color: var(--primary-color);
-  text-decoration: none;
+.orderItemEmail {
+  font-size: 1rem;
 }
 
-.orderItem a:hover {
-  text-decoration: underline;
+.orderItemContact {
+  font-size: 1rem;
+  padding-bottom: 20px;
+}
+
+.descriptionTextarea {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.orderItemCreatedAt {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.5rem;
 }
 
 .imageContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1rem;
   margin-top: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 10px;
+}
+
+.imageContainer::-webkit-scrollbar {
+  display: none;
 }
 
 .imageContainer img {
-  width: 30%; /* Adjust width to fit three images side by side */
-  cursor: pointer; /* Change cursor to pointer for clickable images */
+  width: 26%;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  transition: transform 0.2s, border-color 0.2s;
+  margin-right: 3rem;
+}
+
+.imageContainer img:hover {
+  transform: scale(1.05);
+}
+
+.noImages {
+  font-size: 1rem;
+  color: #999;
+  margin-top: 1rem;
 }
 
 .modal {
-  display: none; /* Hidden by default */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
-  z-index: 1000;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900;
 }
 
-.modal img {
-  display: block;
-  margin: auto;
+.modalImage {
   max-width: 90%;
   max-height: 90%;
+  border-radius: 8px;
+  position: relative;
 }
 
-.close {
+.closeButton {
   position: absolute;
-  top: 20px;
-  right: 30px;
+  top: 500px;
+  right: 20%;
+  background-color: transparent;
   color: white;
-  font-size: 30px;
+  border: none;
+  font-size: 4rem;
   cursor: pointer;
+  z-index: 10;
 }
 
+.statusSelect {
+  margin-left: auto;
+  left: 475px;
+  top: 0px;
+  z-index: 10;
+  width: 200px;
+  height: 50px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: #333;
+}
+
+.requestTitle {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}

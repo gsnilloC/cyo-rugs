@@ -7,9 +7,7 @@
 
 @media (max-width: 768px) {
   .shopContainer {
-    padding-left: 0px;
-    padding-right: 0px;
-    margin-top: -2rem;
+    margin-top: -120px;
   }
 }
 
@@ -49,8 +47,8 @@
 }
 
 .rugInfo {
-  padding: 1rem;
-  margin-top: -6rem;
+  padding: 0.5rem;
+  margin-top: -3rem;
 }
 
 .rugName {
@@ -105,6 +103,10 @@
   .rugGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
+  }
+
+  .rugInfo {
+    margin-top: -150px;
   }
 }
 

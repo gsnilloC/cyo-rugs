@@ -20,6 +20,10 @@ const {
   createInventoryTable,
   getInventoryItems,
   getInventoryItemById,
+  createRequestsTable,
+  createRequest,
+  getRequests,
+  updateRequestStatus,
 } = require("./db/config");
 
 const { Client, Environment } = require("square");
@@ -33,15 +37,15 @@ const client = new Client({
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
 });
 
-// // Force HTTPS in production
-// app.use((req, res, next) => {
-//   // Check if the request is over HTTP
-//   if (req.headers["x-forwarded-proto"] !== "https") {
-//     // Redirect to HTTPS version
-//     return res.redirect("https://" + req.headers.host + req.url);
-//   }
-//   next();
-// });
+// Force HTTPS in production
+app.use((req, res, next) => {
+  // Check if the request is over HTTP
+  if (req.headers["x-forwarded-proto"] !== "https") {
+    // Redirect to HTTPS version
+    return res.redirect("https://" + req.headers.host + req.url);
+  }
+  next();
+});
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -192,29 +196,27 @@ app.post("/api/upload", upload.array("images"), async (req, res) => {
       });
     }
 
-    console.log("reCAPTCHA verification successful");
-
-    const generateUniqueIdentifier = () => {
-      const shortTimestamp = Math.floor(Date.now() / 1000);
-      return `${shortTimestamp}`;
-    };
-
-    const uniqueIdentifier = generateUniqueIdentifier();
-
     const customerData = {
       name: req.body.name,
       phone: req.body.phone,
       email: req.body.email,
       description: req.body.description,
     };
-    await uploadMetadata(customerData, uniqueIdentifier);
+
+    // Upload images to S3
     const imageUrls = await uploadImages(
       req.files,
       customerData,
-      uniqueIdentifier
+      Date.now().toString()
     );
 
-    res.status(200).json({ imageUrls });
+    // Store request data in PostgreSQL
+    const createdRequest = await createRequest(customerData, imageUrls);
+
+    res.status(200).json({
+      request: createdRequest,
+      message: "Request submitted successfully",
+    });
   } catch (error) {
     console.error("Upload error:", error);
     res.status(500).json({ error: "Upload failed" });
@@ -223,8 +225,8 @@ app.post("/api/upload", upload.array("images"), async (req, res) => {
 
 app.get("/api/orders", async (req, res) => {
   try {
-    const orders = await listOrders();
-    res.status(200).json(orders);
+    const requests = await getRequests();
+    res.status(200).json(requests);
   } catch (error) {
     console.error("Error retrieving orders:", error);
     res.status(500).json({ error: "Failed to retrieve orders" });
@@ -488,8 +490,6 @@ async function verifyRecaptcha(token) {
         },
       }
     );
-
-    console.log("reCAPTCHA verification response:", response.data);
     return response.data.success;
   } catch (error) {
     console.error("reCAPTCHA verification error:", error);
@@ -569,7 +569,34 @@ async function deleteInventoryItem(itemId) {
 
 //deleteInventoryItem("QGATGG6URFOLPC3QCWGQ3NAA");
 
-//createInventoryTable();
+// createInventoryTable();
 // listTables();
 // syncInventoryFromSquare();
 // testInventoryAccess();
+// createRequestsTable();
+
+app.patch("/api/orders/:id/status", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (
+      !["Received", "In Progress", "Preparing for Shipping", "Done"].includes(
+        status
+      )
+    ) {
+      return res.status(400).json({ error: "Invalid status" });
+    }
+
+    const updatedRequest = await updateRequestStatus(id, status);
+
+    if (!updatedRequest) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+
+    res.json(updatedRequest);
+  } catch (error) {
+    console.error("Error updating request status:", error);
+    res.status(500).json({ error: "Failed to update request status" });
+  }
+});

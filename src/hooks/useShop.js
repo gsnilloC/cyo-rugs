@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+// import mockProducts from "../mocks/mockProducts";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -12,7 +13,7 @@ const useShop = () => {
   useEffect(() => {
     const fetchRugs = async () => {
       try {
-        // Fetching from the API
+        //Fetching from the API
         const response = await axios.get("/api/items");
         if (Array.isArray(response.data)) {
           const rugsWithInventory = await Promise.all(
@@ -30,6 +31,9 @@ const useShop = () => {
         } else {
           throw new Error("Response is not an array");
         }
+
+        // Use mock products instead
+        // setRugs(mockProducts);
       } catch (err) {
         console.error("Error fetching rugs from API, using mock data:", err);
       } finally {

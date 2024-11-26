@@ -1,44 +1,7 @@
-.roomPreview {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 2rem;
-}
-
-.rugSpace {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 40%;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.wallSpace {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60%;
-  height: 30%;
-  background-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
 .uploadText {
   color: var(--text-color);
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .requestForm {
@@ -89,10 +52,6 @@
 
 .instructions li {
   margin-bottom: 0.5rem;
-  font-weight: normal;
-}
-
-.requestContainer h1 {
   font-weight: normal;
 }
 
@@ -194,6 +153,60 @@
   border-radius: 4px;
 }
 
+.button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin: 0.5rem;
+  transition: background-color 0.3s, transform 0.3s;
+  display: inline-block;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.requestContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1.6;
+  margin-top: -70px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.requestContainer p {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.requestContainer h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.requestContainer ul {
+  padding-left: 2rem;
+  font-size: 0.9rem;
+}
+
 /* Mobile view adjustments */
 @media (max-width: 768px) {
   .modal {
@@ -232,35 +245,8 @@
     width: 50px; /* Reduce width to half */
     height: 50px; /* Reduce height to half */
   }
-}
 
-.button {
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 4px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  margin: 0.5rem;
-  transition: background-color 0.3s, transform 0.3s;
-  display: inline-block;
-}
-
-.button:hover {
-  background-color: var(--secondary-color);
-  transform: translateY(-2px);
-}
-
-.button:active {
-  transform: translateY(0);
-}
-
-.requestContainer {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  .requestContainer {
+    margin-top: -30px;
+  }
 }

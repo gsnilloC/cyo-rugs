@@ -1,20 +1,23 @@
 .aboutContainer {
   max-width: 800px;
   margin: 0 auto;
-  margin-top: -10px;
-  padding: 4;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1.6;
+  margin-top: -70px;
 }
 
 .aboutContainer h1 {
-  font-weight: 500;
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 1.1rem;
+  font-weight: normal;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .aboutContainer h2 {
   font-weight: 500;
-  margin-top: 2rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 1rem;
 }
@@ -23,13 +26,6 @@
 .aboutContainer li {
   font-size: 0.9rem;
   line-height: 1.4;
-}
-
-.aboutArtist,
-.instructions,
-.rugCare,
-.deliveryInfo {
-  margin-bottom: 2rem;
 }
 
 .aboutContainer ul {
@@ -49,4 +45,10 @@
 
 .contact a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .aboutContainer {
+    margin-top: -30px;
+  }
 }
