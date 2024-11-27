@@ -5,17 +5,17 @@ import CloseIcon from "@mui/icons-material/Close";
 import styles from "../styles/loginModal.module.css";
 
 const LoginModal = ({ isOpen, onClose }) => {
-  const [password, setPassword] = useState("");
+  const [Secret, setSecret] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === "lookBOWHELLO") {
+    if (Secret === "lookBOWHELLO") {
       navigate("/list");
       onClose();
     } else {
-      setError("Incorrect password");
+      setError("Incorrect Secret");
     }
   };
 
@@ -25,17 +25,17 @@ const LoginModal = ({ isOpen, onClose }) => {
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h2>Password</h2>
+          <h2>Secret</h2>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </div>
         <form onSubmit={handleSubmit}>
           <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password"
+            type="Secret"
+            value={Secret}
+            onChange={(e) => setSecret(e.target.value)}
+            placeholder="Enter Secret"
             className={styles.input}
           />
           {error && <p className={styles.error}>{error}</p>}
