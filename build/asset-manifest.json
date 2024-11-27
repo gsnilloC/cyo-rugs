@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.c8fefba1.css",
-    "main.js": "/static/js/main.f3f51de9.js",
+    "main.css": "/static/css/main.7d8c7b27.css",
+    "main.js": "/static/js/main.681fac3e.js",
     "static/media/cyo-rugs-intro.mp4": "/static/media/cyo-rugs-intro.0ecf2ac877b95b4be370.mp4",
     "static/media/cus2.JPG": "/static/media/cus2.10ea9eefe457d421417c.JPG",
     "static/media/cus4.JPG": "/static/media/cus4.a78315bdee9db4224328.JPG",
@@ -18,11 +18,11 @@
     "static/media/frame.png": "/static/media/frame.0215f4dff4d529301775.png",
     "static/media/livingroom.png": "/static/media/livingroom.c23b4c53c55b1dd76a34.png",
     "index.html": "/index.html",
-    "main.c8fefba1.css.map": "/static/css/main.c8fefba1.css.map",
-    "main.f3f51de9.js.map": "/static/js/main.f3f51de9.js.map"
+    "main.7d8c7b27.css.map": "/static/css/main.7d8c7b27.css.map",
+    "main.681fac3e.js.map": "/static/js/main.681fac3e.js.map"
   },
   "entrypoints": [
-    "static/css/main.c8fefba1.css",
-    "static/js/main.f3f51de9.js"
+    "static/css/main.7d8c7b27.css",
+    "static/js/main.681fac3e.js"
   ]
 }

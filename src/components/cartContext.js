@@ -31,7 +31,7 @@ export const CartProvider = ({ children }) => {
           hideProgressBar: true,
         });
         return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
         );
       }
       toast.success(`${item.name} added to cart!`, {
@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
         pauseOnHover: false,
         hideProgressBar: true,
       });
-      return [...prevItems, { ...item, quantity: 1 }];
+      return [...prevItems, item];
     });
   };
 

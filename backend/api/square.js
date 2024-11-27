@@ -34,14 +34,21 @@ async function createCheckout(cartItems) {
             );
           }
 
+          const price = parseFloat(item.price);
+          const quantity = parseInt(item.quantity, 10);
+
+          if (isNaN(price) || isNaN(quantity)) {
+            throw new Error(`Invalid price or quantity for ${item.name}`);
+          }
+
           return {
             name: item.name,
-            quantity: item.quantity.toString(),
+            quantity: quantity.toString(),
             basePriceMoney: {
-              amount: Math.round(item.price * 100),
+              amount: Math.round(price * 100),
               currency: "USD",
             },
-            note: `Price: $${item.price.toFixed(2)} | Description: ${
+            note: `Price: $${price.toFixed(2)} | Description: ${
               item.description || "No description available"
             }`,
           };
@@ -241,8 +248,6 @@ const testSquareApi = async () => {
   }
 };
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 // const getInventoryCount = async (itemId) => {
 //   try {
 //     await delay(100);
@@ -375,6 +380,30 @@ const decrementInventory = async (orderId) => {
   }
 };
 
+const getPricesForItemIds = async (itemIds) => {
+  try {
+    const response = await client.catalogApi.batchRetrieveCatalogObjects({
+      objectIds: itemIds,
+    });
+
+    const items = response.result.objects;
+    const prices = items.map((item) => {
+      const variation = item.itemData.variations[0];
+      const priceMoney = variation.itemVariationData.priceMoney;
+      const price = priceMoney ? Number(priceMoney.amount) / 100 : 0;
+      return {
+        id: item.id,
+        price,
+      };
+    });
+
+    return prices;
+  } catch (error) {
+    console.error("Error fetching prices from Square:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   listItems,
   getItemById,
@@ -383,4 +412,5 @@ module.exports = {
   getInventoryCount,
   decrementInventory,
   getInventoryCounts,
+  getPricesForItemIds,
 };

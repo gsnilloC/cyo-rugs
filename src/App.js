@@ -6,7 +6,6 @@ import {
   Cart,
   Request,
   About,
-  PasswordPage,
   Product,
   RequestList,
 } from "./components";

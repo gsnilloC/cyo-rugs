@@ -27,12 +27,13 @@ const useShop = () => {
               };
             })
           );
+          rugsWithInventory.sort((a, b) => a.name.localeCompare(b.name));
           setRugs(rugsWithInventory);
         } else {
           throw new Error("Response is not an array");
         }
 
-        // Use mock products instead
+        // //Use mock products instead
         // setRugs(mockProducts);
       } catch (err) {
         console.error("Error fetching rugs from API, using mock data:", err);

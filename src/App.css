@@ -1,7 +1,7 @@
 :root {
-  --bg-color: #ffffff;
+  --bg-color: #ffffff98;
   --text-color: #333;
-  --primary-color: #4a90e2;
+  --primary-color: rgb(116, 63, 157);
   --secondary-color: #f39c12;
   --accent-color: #e74c3c;
   --card-bg: #ffffff;
@@ -13,11 +13,11 @@
 [data-theme="dark"] {
   --bg-color: #1a1a1a;
   --text-color: #f0f0f0;
-  --primary-color: #3498db;
+  --primary-color: #184565;
   --secondary-color: #f1c40f;
   --accent-color: #e74c3c;
   --card-bg: #2c2c2c;
-  --header-bg: #2c2c2c;
+  --header-bg: #1a1a1a;
   --footer-bg: #1a1a1a;
   --footer-text: #f0f0f0;
 }

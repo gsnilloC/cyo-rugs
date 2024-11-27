@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IconButton, Drawer, MenuItem } from "@mui/material";
 import { Menu, Close as CloseIcon } from "@mui/icons-material";
 import { ShoppingCart } from "lucide-react";

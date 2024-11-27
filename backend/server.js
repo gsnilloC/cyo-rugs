@@ -2,30 +2,25 @@ const cors = require("cors");
 const path = require("path");
 const morgan = require("morgan");
 const multer = require("multer");
-const { uploadImages, uploadMetadata, listOrders } = require("./api/aws");
+const { uploadImages } = require("./api/aws");
 const express = require("express");
 const {
-  listItems,
-  getItemById,
   createCheckout,
-  getInventoryCount,
-  getInventoryCounts,
   decrementInventory,
+  getPricesForItemIds,
 } = require("./api/square");
 const axios = require("axios");
 const {
   pool,
-  testConnection,
-  listTables,
-  createInventoryTable,
   getInventoryItems,
   getInventoryItemById,
-  createRequestsTable,
   createRequest,
   getRequests,
   updateRequestStatus,
+  deleteZeroQuantityItems,
+  syncInventoryFromSquare,
+  deleteInventoryItem,
 } = require("./db/config");
-
 const { Client, Environment } = require("square");
 require("dotenv").config();
 
@@ -37,113 +32,17 @@ const client = new Client({
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
 });
 
-// Force HTTPS in production
-app.use((req, res, next) => {
-  // Check if the request is over HTTP
-  if (req.headers["x-forwarded-proto"] !== "https") {
-    // Redirect to HTTPS version
-    return res.redirect("https://" + req.headers.host + req.url);
-  }
-  next();
-});
-
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, "../build")));
 
-async function syncInventoryFromSquare() {
-  console.log("Starting inventory sync from Square...");
-  const client = await pool.connect();
-
-  try {
-    // Get current items from database for comparison
-    const currentItems = await client.query(
-      "SELECT item_id, last_updated FROM inventory"
-    );
-    const currentItemsMap = new Map(
-      currentItems.rows.map((item) => [item.item_id, item])
-    );
-
-    // Get items from Square
-    const items = await listItems();
-    console.log(`Found ${items.length} items in Square`);
-
-    await client.query("BEGIN");
-
-    // Track processed items to identify deletions
-    const processedItemIds = new Set();
-
-    for (const item of items) {
-      processedItemIds.add(item.id);
-      const quantity = await getInventoryCounts(item.id);
-
-      // Check if item needs updating
-      const currentItem = currentItemsMap.get(item.id);
-      if (!currentItem) {
-        console.log(`Adding new item: ${item.name} (ID: ${item.id})`);
-      } else {
-        console.log(`Updating existing item: ${item.name} (ID: ${item.id})`);
-      }
-
-      await client.query(
-        `
-        INSERT INTO inventory (
-          item_id, 
-          catalog_object_id,
-          name, 
-          description, 
-          quantity, 
-          price, 
-          image_urls, 
-          last_updated
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
-        ON CONFLICT (item_id)
-        DO UPDATE SET
-          catalog_object_id = EXCLUDED.catalog_object_id,
-          name = EXCLUDED.name,
-          description = EXCLUDED.description,
-          quantity = EXCLUDED.quantity,
-          price = EXCLUDED.price,
-          image_urls = EXCLUDED.image_urls,
-          last_updated = NOW();
-        `,
-        [
-          item.id,
-          item.catalog_object_id,
-          item.name,
-          item.description,
-          quantity,
-          item.price,
-          item.imageUrls,
-        ]
-      );
-    }
-
-    // Remove items that no longer exist in Square
-    const itemsToDelete = [...currentItemsMap.keys()].filter(
-      (id) => !processedItemIds.has(id)
-    );
-
-    if (itemsToDelete.length > 0) {
-      console.log(`Removing ${itemsToDelete.length} deleted items`);
-      await client.query(`DELETE FROM inventory WHERE item_id = ANY($1)`, [
-        itemsToDelete,
-      ]);
-    }
-
-    await client.query("COMMIT");
-    console.log("Inventory sync completed successfully");
-  } catch (error) {
-    await client.query("ROLLBACK");
-    console.error("Error syncing inventory:", error);
-    throw error;
-  } finally {
-    client.release();
-  }
-}
+// app.use((req, res, next) => {
+//   if (req.headers["x-forwarded-proto"] !== "https") {
+//     return res.redirect("https://" + req.headers.host + req.url);
+//   }
+//   next();
+// });
 
 // Modify the items endpoint to use retry logic
 app.get("/api/items", async (req, res) => {
@@ -261,14 +160,6 @@ app.get("/api/inventory/:id", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
-
 const processedPayments = new Set();
 
 app.post("/webhook/payment", async (req, res) => {
@@ -314,46 +205,42 @@ app.post("/webhook/inventory", async (req, res) => {
   }
 });
 
-const SYNC_COOLDOWN = 60000; // 1 minute
-let lastSyncTime = 0;
-let syncInProgress = false;
+// app.post("/webhook/catalog", async (req, res) => {
+//   try {
+//     const event = req.body;
+//     console.log("Received catalog webhook event:", event.type);
 
-app.post("/webhook/catalog", async (req, res) => {
-  try {
-    const event = req.body;
-    console.log("Received catalog webhook event:", event.type);
+//     if (event.type === "catalog.version.updated") {
+//       const now = Date.now();
 
-    if (event.type === "catalog.version.updated") {
-      const now = Date.now();
+//       // Check if sync is in progress or within cooldown period
+//       if (syncInProgress) {
+//         console.log("Sync already in progress, skipping");
+//         return res.status(200).send("Sync already in progress");
+//       }
 
-      // Check if sync is in progress or within cooldown period
-      if (syncInProgress) {
-        console.log("Sync already in progress, skipping");
-        return res.status(200).send("Sync already in progress");
-      }
+//       if (now - lastSyncTime < SYNC_COOLDOWN) {
+//         console.log("Skipping sync due to cooldown period");
+//         return res.status(200).send("Sync skipped (cooldown period)");
+//       }
 
-      if (now - lastSyncTime < SYNC_COOLDOWN) {
-        console.log("Skipping sync due to cooldown period");
-        return res.status(200).send("Sync skipped (cooldown period)");
-      }
+//       try {
+//         syncInProgress = true;
+//         await syncInventoryFromSquare();
+//         lastSyncTime = Date.now();
+//         console.log("Successfully synced inventory from Square");
+//       } finally {
+//         syncInProgress = false;
+//       }
+//     }
 
-      try {
-        syncInProgress = true;
-        await syncInventoryFromSquare();
-        lastSyncTime = Date.now();
-        console.log("Successfully synced inventory from Square");
-      } finally {
-        syncInProgress = false;
-      }
-    }
-
-    res.status(200).send("Catalog webhook processed successfully");
-  } catch (error) {
-    console.error("Error processing catalog webhook:", error);
-    syncInProgress = false; // Make sure to release the lock even if there's an error
-    res.status(500).send("Error processing catalog webhook");
-  }
-});
+//     res.status(200).send("Catalog webhook processed successfully");
+//   } catch (error) {
+//     console.error("Error processing catalog webhook:", error);
+//     syncInProgress = false; // Make sure to release the lock even if there's an error
+//     res.status(500).send("Error processing catalog webhook");
+//   }
+// });
 
 async function handleInventoryUpdate(event) {
   try {
@@ -497,84 +384,6 @@ async function verifyRecaptcha(token) {
   }
 }
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-async function testInventoryAccess() {
-  try {
-    console.log("Creating inventory table if it doesn't exist...");
-    await createInventoryTable();
-
-    console.log("\nFetching inventory items...");
-    const items = await getInventoryItems();
-
-    if (items.length === 0) {
-      console.log("No items found in inventory table.");
-    } else {
-      console.log("\nInventory Items:");
-      items.forEach((item) => {
-        console.log("\n------------------------");
-        console.log(`ID: ${item.item_id}`);
-        console.log(`Name: ${item.name}`);
-        console.log(`Description: ${item.description}`);
-        console.log(`Quantity: ${item.quantity}`);
-        console.log(`Price: $${item.price}`);
-        console.log(`Last Updated: ${item.last_updated}`);
-        console.log(
-          `Image URLs: ${item.image_urls ? item.image_urls.join(", ") : "None"}`
-        );
-      });
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-async function deleteInventoryItem(itemId) {
-  const client = await pool.connect();
-
-  try {
-    await client.query("BEGIN");
-
-    const deleteQuery = `
-      DELETE FROM inventory 
-      WHERE item_id = $1
-      RETURNING name;
-    `;
-
-    const result = await client.query(deleteQuery, [itemId]);
-
-    if (result.rows.length === 0) {
-      await client.query("ROLLBACK");
-      console.log(`No item found with item_id: ${itemId}`);
-      return false;
-    }
-
-    const itemName = result.rows[0].name;
-    await client.query("COMMIT");
-
-    console.log(`Successfully deleted item: ${itemName} (ID: ${itemId})`);
-    return true;
-  } catch (error) {
-    await client.query("ROLLBACK");
-    console.error("Error deleting inventory item:", error);
-    throw error;
-  } finally {
-    client.release();
-  }
-}
-
-//deleteInventoryItem("QGATGG6URFOLPC3QCWGQ3NAA");
-
-// createInventoryTable();
-// listTables();
-// syncInventoryFromSquare();
-// testInventoryAccess();
-// createRequestsTable();
-
 app.patch("/api/orders/:id/status", async (req, res) => {
   try {
     const { id } = req.params;
@@ -599,4 +408,61 @@ app.patch("/api/orders/:id/status", async (req, res) => {
     console.error("Error updating request status:", error);
     res.status(500).json({ error: "Failed to update request status" });
   }
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build", "index.html"));
+});
+
+app.delete("/api/inventory/cleanup", async (req, res) => {
+  try {
+    const result = await deleteZeroQuantityItems();
+    res.status(200).json({
+      message: `Deleted ${result.rowCount} items with zero quantity.`,
+    });
+  } catch (error) {
+    console.error("Error deleting items with zero quantity:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to delete items with zero quantity" });
+  }
+});
+
+app.post("/api/update-prices", async (req, res) => {
+  try {
+    // Fetch all item IDs from the database
+    const client = await pool.connect();
+    const result = await client.query("SELECT item_id FROM inventory");
+    const itemIds = result.rows.map((row) => row.item_id);
+
+    // Get the latest prices from Square
+    const prices = await getPricesForItemIds(itemIds);
+
+    // Update prices in the database
+    await client.query("BEGIN");
+    for (const { id, price } of prices) {
+      const updateQuery = `
+        UPDATE inventory
+        SET price = $1
+        WHERE item_id = $2;
+      `;
+      await client.query(updateQuery, [price, id]);
+    }
+    await client.query("COMMIT");
+
+    res.status(200).json({ message: "Prices updated successfully" });
+  } catch (error) {
+    console.error("Error updating prices:", error);
+    res.status(500).json({ error: "Failed to update prices" });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -7,7 +7,7 @@
 
 @media (max-width: 768px) {
   .shopContainer {
-    margin-top: -120px;
+    margin-top: -100px;
   }
 }
 
@@ -37,7 +37,7 @@
 }
 
 .rugImage {
-  width: 80%; /* Adjust width to fit inside the frame */
+  max-width: 80%; /* Adjust width to fit inside the frame */
   height: auto;
   max-height: 170px; /* Keep the max height */
   object-fit: contain;
@@ -106,7 +106,7 @@
   }
 
   .rugInfo {
-    margin-top: -150px;
+    margin-top: -120px;
   }
 }
 
@@ -187,10 +187,10 @@
   .rugFrame {
     margin-left: 0;
     width: 100%;
-    height: 600px;
-    background-size: 150% 100%; /* Make the frame image larger */
+    height: 500px;
+    background-size: 200% 120%; /* Make the frame image larger */
     background-position: center;
-    margin-top: 20px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -200,7 +200,7 @@
     width: 80%; /* Make the rug image smaller */
     max-height: 230px; /* Reduce max height */
     margin-left: 0;
-    margin-bottom: 70px;
+    margin-bottom: 100px;
     object-fit: contain;
   }
 }
