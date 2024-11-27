@@ -381,6 +381,21 @@ async function deleteZeroQuantityItems() {
   }
 }
 
+async function deleteRequestById(id) {
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      "DELETE FROM requests WHERE id = $1",
+      [id]
+    );
+    client.release();
+    return result;
+  } catch (err) {
+    console.error("Error deleting request:", err.stack);
+    throw err;
+  }
+}
+
 module.exports = {
   pool,
   testConnection,
@@ -397,4 +412,5 @@ module.exports = {
   // syncInventoryFromSquare,
   deleteTable,
   deleteZeroQuantityItems,
+  deleteRequestById,
 };

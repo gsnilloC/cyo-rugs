@@ -92,6 +92,15 @@ function RequestList() {
     }
   };
 
+  const handleDeleteRequest = async (requestId) => {
+    try {
+      await axios.delete(`/api/orders/${requestId}`);
+      fetchRequests(); // Refresh the list after deletion
+    } catch (err) {
+      console.error("Error deleting request:", err);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -175,6 +184,13 @@ function RequestList() {
                     <div className={styles.noImages}>No images available</div>
                   )}
                 </div>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => handleDeleteRequest(request.id)}
+                >
+                  Delete
+                </Button>
               </CardContent>
             </Card>
           ))}

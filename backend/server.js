@@ -20,6 +20,7 @@ const {
   deleteZeroQuantityItems,
   syncInventoryFromSquare,
   deleteInventoryItem,
+  deleteRequestById,
 } = require("./db/config");
 const { Client, Environment } = require("square");
 require("dotenv").config();
@@ -458,6 +459,20 @@ app.post("/api/update-prices", async (req, res) => {
   } catch (error) {
     console.error("Error updating prices:", error);
     res.status(500).json({ error: "Failed to update prices" });
+  }
+});
+
+app.delete("/api/orders/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await deleteRequestById(id);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Request not found" });
+    }
+    res.json({ message: "Request deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting request:", error);
+    res.status(500).json({ error: "Failed to delete request" });
   }
 });
 

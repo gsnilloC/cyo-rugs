@@ -95,10 +95,10 @@ function Request() {
     }
 
     const data = new FormData();
-    data.append("name", `(${formData.name})`);
-    data.append("phone", `(${formData.phone})`);
-    data.append("email", `(${formData.email})`);
-    data.append("description", `(${formData.description})`);
+    data.append("name", formData.name);
+    data.append("phone", formData.phone);
+    data.append("email", formData.email);
+    data.append("description", formData.description);
     data.append("recaptchaToken", recaptchaValue);
 
     formData.images.forEach((image) => {

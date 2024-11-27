@@ -25,7 +25,7 @@ const LoginModal = ({ isOpen, onClose }) => {
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h2>Secret</h2>
+          <h2>Admin Login</h2>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
@@ -35,7 +35,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             type="Secret"
             value={Secret}
             onChange={(e) => setSecret(e.target.value)}
-            placeholder="Enter Secret"
+            placeholder="Enter Password"
             className={styles.input}
           />
           {error && <p className={styles.error}>{error}</p>}
