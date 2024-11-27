@@ -203,4 +203,7 @@
     margin-bottom: 100px;
     object-fit: contain;
   }
+  .shopTitle {
+    margin-left: 0;
+  }
 }
