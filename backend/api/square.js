@@ -148,11 +148,6 @@ const listItems = async () => {
     const validItems = await Promise.all(
       items
         .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION")
-        .filter(
-          (item) =>
-            item.id !== "XGPSDFAI4HGP5Q7EL2SKETHN" &&
-            item.id !== "QPMG56NM75BMOG3QQXECF3BA"
-        )
         .map(async (item) => {
           try {
             if (!item.itemData) {
@@ -162,30 +157,76 @@ const listItems = async () => {
 
             const { name, description, variations, imageIds } = item.itemData;
 
-            // Get the catalog_object_id from the first variation
-            const catalogObjectId = variations?.[0]?.id || null;
+            // Format variations with quantity and images
+            const formattedVariations = await Promise.all(
+              variations.map(async (variation) => {
+                const priceMoney = variation.itemVariationData.priceMoney;
+                const price = priceMoney ? Number(priceMoney.amount) / 100 : 0;
 
-            let formattedPrice = 0;
-            if (variations && variations.length > 0) {
-              const priceMoney = variations[0].itemVariationData.priceMoney;
-              if (priceMoney) {
-                formattedPrice = Number(priceMoney.amount) / 100;
-              }
-            }
+                // Fetch inventory count for the variation
+                let quantity = 0;
+                try {
+                  const inventoryResponse =
+                    await client.inventoryApi.retrieveInventoryCount(
+                      variation.id
+                    );
+                  quantity =
+                    inventoryResponse.result.counts &&
+                    inventoryResponse.result.counts.length > 0
+                      ? parseInt(
+                          inventoryResponse.result.counts[0].quantity,
+                          10
+                        )
+                      : 0;
+                } catch (error) {
+                  console.error(
+                    `Error retrieving inventory for variation ${variation.id}:`,
+                    error.message
+                  );
+                }
 
+                // Retrieve image URLs for the variation
+                const variationImageIds =
+                  variation.itemVariationData.imageIds || [];
+                const variationImageUrls =
+                  variationImageIds.length > 0
+                    ? await getImageUrls(variationImageIds)
+                    : [];
+
+                // Print variation image URLs to console
+                console.log(
+                  `Variation ID: ${variation.id}, Image URLs:`,
+                  variationImageUrls
+                );
+
+                return {
+                  v_id: variation.id,
+                  v_name: variation.itemVariationData.name,
+                  v_price: price,
+                  v_quantity: quantity,
+                  v_imageUrls: variationImageUrls,
+                };
+              })
+            );
+
+            // Retrieve image URLs for the item
             const imageUrls =
               imageIds && imageIds.length > 0
                 ? await getImageUrls(imageIds)
                 : [];
 
-            return {
+            const itemData = {
               id: item.id,
-              catalog_object_id: catalogObjectId,
               name: name || "No name available",
               description: description || "No description available",
-              price: formattedPrice,
+              variations: formattedVariations,
               imageUrls: imageUrls,
             };
+
+            // Print item data to console
+            console.log("Retrieved Item:", itemData);
+
+            return itemData;
           } catch (error) {
             console.error("Error processing item:", error.message);
             return null;
@@ -196,35 +237,6 @@ const listItems = async () => {
     return validItems.filter((item) => item !== null);
   } catch (error) {
     console.error("Error retrieving items:", error);
-    throw error;
-  }
-};
-
-const getItemById = async (id) => {
-  try {
-    const response = await client.catalogApi.retrieveCatalogObject(id);
-    const item = response.result.object;
-
-    if (!item || !item.itemData) {
-      return null;
-    }
-
-    const priceBigInt =
-      item.itemData.variations[0].itemVariationData.priceMoney.amount;
-    const formattedPrice = Number(priceBigInt) / 100;
-
-    const imageIds = item.itemData.imageIds || [];
-    const imageUrls = imageIds.length > 0 ? await getImageUrls(imageIds) : [];
-
-    return {
-      id: item.id,
-      name: item.itemData.name,
-      description: item.itemData.description,
-      price: formattedPrice,
-      imageUrls: imageUrls,
-    };
-  } catch (error) {
-    console.error("Error retrieving item by ID:", error);
     throw error;
   }
 };
@@ -406,7 +418,6 @@ const getPricesForItemIds = async (itemIds) => {
 
 module.exports = {
   listItems,
-  getItemById,
   testSquareApi,
   createCheckout,
   getInventoryCount,

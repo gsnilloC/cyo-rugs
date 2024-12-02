@@ -8,19 +8,24 @@ const {
   createCheckout,
   decrementInventory,
   getPricesForItemIds,
+  listItems,
 } = require("./api/square");
 const axios = require("axios");
 const {
   pool,
   getInventoryItems,
   getInventoryItemById,
+  listTables,
   createRequest,
   getRequests,
   updateRequestStatus,
+  createInventoryTable,
   deleteZeroQuantityItems,
   syncInventoryFromSquare,
   deleteInventoryItem,
   deleteRequestById,
+  deleteTable,
+  testInventoryAccess,
 } = require("./db/config");
 const { Client, Environment } = require("square");
 require("dotenv").config();
@@ -287,7 +292,7 @@ async function handleInventoryUpdate(event) {
           );
           const item = itemResponse.result.object;
 
-          const { name, description, imageIds } = item.itemData;
+          const { name, description, imageIds, variations } = item.itemData;
           const priceAmount = Number(
             variation.itemVariationData.priceMoney.amount
           );
@@ -304,6 +309,17 @@ async function handleInventoryUpdate(event) {
                 )
               : [];
 
+          // Format variations for storage
+          const formattedVariations = variations.map((v) => ({
+            id: v.id,
+            name: v.itemVariationData.name,
+            price: v.itemVariationData.priceMoney
+              ? Number(v.itemVariationData.priceMoney.amount) / 100
+              : 0,
+            sku: v.itemVariationData.sku,
+            quantity: v.itemVariationData.inventoryAlertType, // Assuming you want to track quantity
+          }));
+
           const insertQuery = `
             INSERT INTO inventory (
               item_id,
@@ -313,9 +329,10 @@ async function handleInventoryUpdate(event) {
               quantity,
               price,
               image_urls,
+              variations,
               last_updated
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
             RETURNING *;
           `;
 
@@ -327,6 +344,7 @@ async function handleInventoryUpdate(event) {
             quantity,
             price,
             imageUrls,
+            JSON.stringify(formattedVariations), // Store variations as JSON
           ]);
 
           console.log(
@@ -476,8 +494,122 @@ app.delete("/api/orders/:id", async (req, res) => {
   }
 });
 
+async function syncItemsFromSquare() {
+  const client = await pool.connect();
+  try {
+    console.log("Fetching items from Square...");
+    const items = await listItems();
+
+    if (!items || items.length === 0) {
+      console.log("No items found in Square.");
+      return;
+    }
+
+    console.log(`Found ${items.length} items in Square`);
+
+    await client.query("BEGIN");
+
+    for (const item of items) {
+      const { id, name, description, variations, imageUrls } = item;
+
+      // Extract variation details into arrays
+      const v_ids = variations.map((v) => v.v_id);
+      const v_names = variations.map((v) => v.v_name);
+      const v_quantities = variations.map((v) => v.v_quantity);
+      const v_imageUrls = variations.map((v) => `{${v.v_imageUrls.join(",")}}`); // Ensure each sub-array is formatted correctly
+
+      console.log(`Inserting item: ${name} (ID: ${id})`);
+      console.log(`Variations IDs: ${v_ids}`);
+      console.log(`Variations Names: ${v_names}`);
+      console.log(`Variations Quantities: ${v_quantities}`);
+      console.log(`Variations Image URLs: ${v_imageUrls}`);
+
+      const upsertQuery = `
+        INSERT INTO inventory (
+          item_id,
+          catalog_object_id,
+          name,
+          description,
+          price,
+          quantity,
+          image_urls,
+          v_ids,
+          v_names,
+          v_quantities,
+          v_imageUrls,
+          last_updated
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        ON CONFLICT (item_id)
+        DO UPDATE SET
+          catalog_object_id = EXCLUDED.catalog_object_id,
+          name = EXCLUDED.name,
+          description = EXCLUDED.description,
+          price = EXCLUDED.price,
+          quantity = EXCLUDED.quantity,
+          image_urls = EXCLUDED.image_urls,
+          v_ids = EXCLUDED.v_ids,
+          v_names = EXCLUDED.v_names,
+          v_quantities = EXCLUDED.v_quantities,
+          v_imageUrls = EXCLUDED.v_imageUrls,
+          last_updated = NOW();
+      `;
+
+      await client.query(upsertQuery, [
+        id,
+        id, // Assuming catalog_object_id is the same as item_id
+        name || "No name available",
+        description || "No description available",
+        variations[0]?.v_price || 0, // Assuming all variations have the same price
+        v_quantities.reduce((sum, q) => sum + q, 0), // Total quantity
+        imageUrls,
+        v_ids,
+        v_names,
+        v_quantities,
+        v_imageUrls,
+      ]);
+
+      console.log(`Synced item: ${name} (ID: ${id})`);
+    }
+
+    await client.query("COMMIT");
+    console.log("Inventory sync completed successfully");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error syncing items from Square:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+async function getAllInventoryEntries() {
+  try {
+    console.log("Getting all inventory entries...");
+    const client = await pool.connect();
+    const result = await client.query("SELECT * FROM inventory");
+    client.release();
+    return result.rows;
+  } catch (err) {
+    console.error("Error retrieving inventory entries:", err.stack);
+    throw err;
+  }
+}
+
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
+
+// createInventoryTable();
+// syncItemsFromSquare();
+(async () => {
+  try {
+    const entries = await getAllInventoryEntries();
+    console.log(entries);
+  } catch (error) {
+    console.error("Error fetching inventory entries:", error);
+  }
+})();
+// deleteTable("inventory");
