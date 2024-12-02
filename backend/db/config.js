@@ -105,7 +105,32 @@ async function getInventoryItemById(itemId) {
       [itemId]
     );
     client.release();
-    return result.rows[0];
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    const item = result.rows[0];
+
+    // Parse the v_imageUrls array of arrays
+    if (item.v_imageurls) {
+      // PostgreSQL returns array column names in lowercase
+      item.v_imageUrls = item.v_imageurls.map((urls) => {
+        // Remove the curly braces and split by comma
+        if (typeof urls === "string") {
+          return urls
+            .replace("{", "")
+            .replace("}", "")
+            .split(",")
+            .filter((url) => url.length > 0);
+        }
+        return urls;
+      });
+    }
+
+    console.log("Retrieved v_imageUrls:", item.v_imageUrls);
+
+    return item;
   } catch (err) {
     console.error("Error getting inventory item:", err.stack);
     throw err;

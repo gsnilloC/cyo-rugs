@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
-// import useShop from "../hooks/useShop";
 import {
   IconButton,
   TextField,
@@ -14,14 +13,6 @@ import { Add, Remove, ExpandMore } from "@mui/icons-material";
 const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
   const [quantity, setQuantity] = useState(1);
-  // const { paginatedRugs } = useShop();
-  // // const [relatedProducts, setRelatedProducts] = useState([]);
-
-  // useEffect(() => {
-  //   if (paginatedRugs.length > 0) {
-  //     setRelatedProducts(paginatedRugs.slice(0, 3));
-  //   }
-  // }, [paginatedRugs]);
 
   const handleIncrease = () => setQuantity(quantity + 1);
   const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
@@ -104,27 +95,31 @@ const Product = () => {
           </AccordionDetails>
         </Accordion>
       </div>
-      {/* 
-      <div className={styles.relatedProducts}>
-        <h2>Related Products</h2>
-        <div className={styles.relatedProductsGrid}>
-          {relatedProducts.map((product) => (
-            <Link
-              key={product.id}
-              to={`/product/${product.id}`}
-              className={styles.relatedProductItem}
-            >
-              <img
-                src={product.imageUrls[0]}
-                alt={product.name}
-                className={styles.relatedProductImage}
-              />
-              <p>{product.name}</p>
-              <p>${product.price.toFixed(2)} USD</p>
-            </Link>
-          ))}
-        </div>
-      </div> */}
+      <div className={styles.variationsContainer}>
+        <p className={styles.variationsTitle}>Variations:</p>
+        {rug.v_ids && rug.v_ids.length > 1 ? (
+          rug.v_ids.map((variationId, index) => (
+            <div key={index} className={styles.variation}>
+              <p>Name: {rug.v_names[index]}</p>
+              <p>Quantity: {rug.v_quantities[index]}</p>
+              {rug.v_imageUrls[index] && rug.v_imageUrls[index].length > 0 ? (
+                rug.v_imageUrls[index].map((url, idx) => (
+                  <img
+                    key={idx}
+                    src={url}
+                    alt={`${rug.v_names[index]} ${idx + 1}`}
+                    className={styles.variationImage}
+                  />
+                ))
+              ) : (
+                <p>No images available</p>
+              )}
+            </div>
+          ))
+        ) : (
+          <p>Item only has one variation!</p>
+        )}
+      </div>
     </div>
   );
 };

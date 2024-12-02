@@ -182,3 +182,30 @@
     margin-right: auto;
   }
 }
+
+.variationImage {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin: 5px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.variation {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.variationsContainer {
+  margin-top: 20px;
+  padding: 15px;
+}
+
+.variationsTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}

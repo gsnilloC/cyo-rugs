@@ -56,9 +56,11 @@ app.get("/api/items", async (req, res) => {
     const items = await getInventoryItems();
     const formattedItems = items.map((item) => ({
       id: item.item_id,
+      catalogObjectId: item.catalog_object_id,
       name: item.name,
       description: item.description,
       price: parseFloat(item.price),
+      quantity: item.quantity,
       imageUrls: item.image_urls || [],
     }));
     res.json(formattedItems);
@@ -81,7 +83,15 @@ app.get("/api/items/:id", async (req, res) => {
       description: item.description,
       price: parseFloat(item.price),
       imageUrls: item.image_urls || [],
+      quantity: item.quantity,
+      v_ids: item.v_ids || [],
+      v_names: item.v_names || [],
+      v_quantities: item.v_quantities || [],
+      v_imageUrls: item.v_imageUrls || [],
+      lastUpdated: item.last_updated,
     };
+
+    console.log(formattedItem);
     res.json(formattedItem);
   } catch (error) {
     console.error("Error retrieving item:", error);
@@ -598,18 +608,45 @@ async function getAllInventoryEntries() {
 
 const PORT = process.env.PORT || 3000;
 
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // createInventoryTable();
 // syncItemsFromSquare();
-(async () => {
-  try {
-    const entries = await getAllInventoryEntries();
-    console.log(entries);
-  } catch (error) {
-    console.error("Error fetching inventory entries:", error);
-  }
-})();
+// (async () => {
+//   try {
+//     const entries = await getAllInventoryEntries();
+//     console.log(entries);
+//   } catch (error) {
+//     console.error("Error fetching inventory entries:", error);
+//   }
+// })();
 // deleteTable("inventory");
+
+async function getVariationImageUrlsById(itemId) {
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      `
+      SELECT v_imageUrls FROM inventory
+      WHERE item_id = $1;
+    `,
+      [itemId]
+    );
+    client.release();
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    console.log(result.rows[0].v_imageUrls);
+
+    return result.rows[0].v_imageUrls;
+  } catch (err) {
+    console.error("Error getting variation image URLs:", err.stack);
+    throw err;
+  }
+}
+
+getVariationImageUrlsById("DAHJXHII72L7XGQVYII74NOS");
