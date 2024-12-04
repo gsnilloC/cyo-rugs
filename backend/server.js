@@ -623,30 +623,3 @@ app.listen(PORT, () => {
 //   }
 // })();
 // deleteTable("inventory");
-
-async function getVariationImageUrlsById(itemId) {
-  try {
-    const client = await pool.connect();
-    const result = await client.query(
-      `
-      SELECT v_imageUrls FROM inventory
-      WHERE item_id = $1;
-    `,
-      [itemId]
-    );
-    client.release();
-
-    if (result.rows.length === 0) {
-      return null;
-    }
-
-    console.log(result.rows[0].v_imageUrls);
-
-    return result.rows[0].v_imageUrls;
-  } catch (err) {
-    console.error("Error getting variation image URLs:", err.stack);
-    throw err;
-  }
-}
-
-getVariationImageUrlsById("DAHJXHII72L7XGQVYII74NOS");

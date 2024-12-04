@@ -3,6 +3,7 @@ import styles from "../styles/request.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
+import Button from "./otherButton";
 
 function Request() {
   const [showModal, setShowModal] = useState(false);
@@ -185,9 +186,7 @@ function Request() {
       </p>
 
       <div className={styles.buttonContainer}>
-        <button onClick={() => setShowModal(true)} className={styles.button}>
-          Upload Your Creation Here
-        </button>
+        <Button text="Upload Your Creation Here" onClick={() => setShowModal(true)} />
       </div>
 
       {showModal && (

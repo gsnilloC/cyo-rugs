@@ -62,23 +62,6 @@ const mockProducts = [
     imageUrls: [blondImage2],
     inventoryCount: 10,
   },
-  {
-    id: 2,
-    name: "Modern Geometric Rug",
-    description: "A stylish geometric rug perfect for contemporary spaces.",
-    price: 199.99,
-    imageUrls: [troupe],
-    inventoryCount: 5,
-  },
-  {
-    id: 3,
-    name: "Classic Vintage Rug",
-    description:
-      "A vintage rug with intricate patterns, ideal for traditional decor.",
-    price: 349.99,
-    imageUrls: [kobeImage],
-    inventoryCount: 0,
-  },
 ];
 
 export default mockProducts;

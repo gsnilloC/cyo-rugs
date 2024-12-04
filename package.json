@@ -33,6 +33,7 @@
     "serve": "^14.2.4",
     "sharp": "^0.33.5",
     "square": "^38.1.0",
+    "styled-components": "^6.1.13",
     "toastify": "^2.0.1",
     "web-vitals": "^2.1.4"
   },
