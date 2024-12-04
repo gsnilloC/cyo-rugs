@@ -8,9 +8,12 @@ const mockProducts = [
     price: 89.99,
     imageUrls: [
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
+      "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/f1dabcff9d9e585a9715772326e5c15ee38c8549/original.jpeg",
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/6540a20608f1cb270d21f999d3d47c403c338ea5/original.jpeg",
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/046999befaf63b986c9ba2d490f438a75f3920ae/original.jpeg",
+      "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
+      "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
     ],
     inventoryCount: 7,
     v_ids: [
@@ -22,15 +25,7 @@ const mockProducts = [
       "3JTGVOFNLY4BEBHFADNW2AJ6",
       "MGHMDGCDE3CSYA533PI5NTLU",
     ],
-    v_names: [
-      "Black",
-      "Purple",
-      "Grey",
-      "White",
-      "Red",
-      "Blue",
-      "Green",
-    ],
+    v_names: ["Black", "Purple", "Grey", "White", "Red", "Blue", "Green"],
     v_quantities: [1, 3, 3, 1, 1, 1, 1],
   },
   {

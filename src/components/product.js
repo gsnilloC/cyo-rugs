@@ -55,9 +55,9 @@ const Product = () => {
       <div className={styles.productDetails}>
         <h1 className={styles.productName}>{rug.name}</h1>
         <p className={styles.productPrice}>${rug.price.toFixed(2)} USD</p>
-        <p className={styles.productShipping}>
+        {/* <p className={styles.productShipping}>
           Shipping calculated at checkout
-        </p>
+        </p> */}
         <div className={styles.variationsContainer}>
           {rug.v_ids && rug.v_ids.length > 1 ? (
             rug.v_ids.map((variationId, index) => (
