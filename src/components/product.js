@@ -13,6 +13,7 @@ import { Add, Remove, ExpandMore } from "@mui/icons-material";
 const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
   const [quantity, setQuantity] = useState(1);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   const handleIncrease = () => setQuantity(quantity + 1);
   const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
@@ -33,32 +34,22 @@ const Product = () => {
     <div className={styles.productContainer}>
       <div className={styles.productImageContainer}>
         <img
-          src={rug.imageUrls[0]}
+          src={rug.imageUrls[selectedImageIndex]}
           alt={rug.name}
           className={styles.productImage}
         />
-        <div className={styles.variationsContainer}>
-          {rug.v_ids && rug.v_ids.length > 1 ? (
-            rug.v_ids.map((variationId, index) => (
-              <div key={index} className={styles.variation}>
-                {rug.v_imageUrls[index] && rug.v_imageUrls[index].length > 0 ? (
-                  rug.v_imageUrls[index].map((url, idx) => (
-                    <img
-                      key={idx}
-                      src={url}
-                      alt={`${rug.v_names[index]} ${idx + 1}`}
-                      className={styles.variationImage}
-                    />
-                  ))
-                ) : (
-                  <p>No images available</p>
-                )}
-                <p>{rug.v_names[index]}</p>
-              </div>
-            ))
-          ) : (
-            <p> </p>
-          )}
+        <div className={styles.imageThumbnails}>
+          {rug.imageUrls.map((url, index) => (
+            <img
+              key={index}
+              src={url}
+              alt={`Thumbnail ${index + 1}`}
+              className={`${styles.thumbnail} ${
+                index === selectedImageIndex ? styles.activeThumbnail : ""
+              }`}
+              onClick={() => setSelectedImageIndex(index)}
+            />
+          ))}
         </div>
       </div>
       <div className={styles.productDetails}>
@@ -67,6 +58,27 @@ const Product = () => {
         <p className={styles.productShipping}>
           Shipping calculated at checkout
         </p>
+        <div className={styles.variationsContainer}>
+          {rug.v_ids && rug.v_ids.length > 1 ? (
+            rug.v_ids.map((variationId, index) => (
+              <div key={index} className={styles.variation}>
+                <div
+                  className={styles.colorCircle}
+                  style={{
+                    backgroundColor: rug.v_names[index].toLowerCase(),
+                    border:
+                      rug.v_names[index].toLowerCase() === "white"
+                        ? "1px solid #ddd"
+                        : "none",
+                  }}
+                />
+                <p>{rug.v_names[index]}</p>
+              </div>
+            ))
+          ) : (
+            <p> </p>
+          )}
+        </div>
         <div className={styles.quantityContainer}>
           <IconButton onClick={handleDecrease} aria-label="decrease quantity">
             <Remove />

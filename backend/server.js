@@ -87,7 +87,6 @@ app.get("/api/items/:id", async (req, res) => {
       v_ids: item.v_ids || [],
       v_names: item.v_names || [],
       v_quantities: item.v_quantities || [],
-      v_imageUrls: item.v_imageUrls || [],
       lastUpdated: item.last_updated,
     };
 
@@ -526,13 +525,11 @@ async function syncItemsFromSquare() {
       const v_ids = variations.map((v) => v.v_id);
       const v_names = variations.map((v) => v.v_name);
       const v_quantities = variations.map((v) => v.v_quantity);
-      const v_imageUrls = variations.map((v) => `{${v.v_imageUrls.join(",")}}`); // Ensure each sub-array is formatted correctly
 
       console.log(`Inserting item: ${name} (ID: ${id})`);
       console.log(`Variations IDs: ${v_ids}`);
       console.log(`Variations Names: ${v_names}`);
       console.log(`Variations Quantities: ${v_quantities}`);
-      console.log(`Variations Image URLs: ${v_imageUrls}`);
 
       const upsertQuery = `
         INSERT INTO inventory (
@@ -546,10 +543,9 @@ async function syncItemsFromSquare() {
           v_ids,
           v_names,
           v_quantities,
-          v_imageUrls,
           last_updated
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW())
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
         ON CONFLICT (item_id)
         DO UPDATE SET
           catalog_object_id = EXCLUDED.catalog_object_id,
@@ -561,7 +557,6 @@ async function syncItemsFromSquare() {
           v_ids = EXCLUDED.v_ids,
           v_names = EXCLUDED.v_names,
           v_quantities = EXCLUDED.v_quantities,
-          v_imageUrls = EXCLUDED.v_imageUrls,
           last_updated = NOW();
       `;
 
@@ -576,7 +571,6 @@ async function syncItemsFromSquare() {
         v_ids,
         v_names,
         v_quantities,
-        v_imageUrls,
       ]);
 
       console.log(`Synced item: ${name} (ID: ${id})`);
@@ -593,33 +587,8 @@ async function syncItemsFromSquare() {
   }
 }
 
-async function getAllInventoryEntries() {
-  try {
-    console.log("Getting all inventory entries...");
-    const client = await pool.connect();
-    const result = await client.query("SELECT * FROM inventory");
-    client.release();
-    return result.rows;
-  } catch (err) {
-    console.error("Error retrieving inventory entries:", err.stack);
-    throw err;
-  }
-}
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-// createInventoryTable();
-// syncItemsFromSquare();
-// (async () => {
-//   try {
-//     const entries = await getAllInventoryEntries();
-//     console.log(entries);
-//   } catch (error) {
-//     console.error("Error fetching inventory entries:", error);
-//   }
-// })();
-// deleteTable("inventory");

@@ -67,7 +67,6 @@ async function createInventoryTable() {
   v_ids TEXT[],      -- Array to store variation IDs
   v_names TEXT[],    -- Array to store variation names
   v_quantities INTEGER[], -- Array to store variation quantities
-  v_imageUrls TEXT[][], -- Array of arrays to store variation image URLs
   last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
     `);
@@ -111,24 +110,6 @@ async function getInventoryItemById(itemId) {
     }
 
     const item = result.rows[0];
-
-    // Parse the v_imageUrls array of arrays
-    if (item.v_imageurls) {
-      // PostgreSQL returns array column names in lowercase
-      item.v_imageUrls = item.v_imageurls.map((urls) => {
-        // Remove the curly braces and split by comma
-        if (typeof urls === "string") {
-          return urls
-            .replace("{", "")
-            .replace("}", "")
-            .split(",")
-            .filter((url) => url.length > 0);
-        }
-        return urls;
-      });
-    }
-
-    console.log("Retrieved v_imageUrls:", item.v_imageUrls);
 
     return item;
   } catch (err) {

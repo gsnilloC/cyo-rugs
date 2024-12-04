@@ -204,7 +204,6 @@ const listItems = async () => {
                   v_name: variation.itemVariationData.name,
                   v_price: price,
                   v_quantity: quantity,
-                  v_imageUrls: variationImageUrls,
                 };
               })
             );

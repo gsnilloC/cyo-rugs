@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../components/cartContext";
-// import mockProducts from "../mocks/mockProducts";
+import mockProducts from "../mocks/mockProducts";
 
 const useProduct = () => {
   const { id } = useParams();
@@ -24,22 +24,22 @@ const useProduct = () => {
         setLoading(false);
       }
 
-      //   try {
-      //     // Use a mock product instead of fetching from the API
-      //     const mockRug = mockProducts.find(
-      //       (product) => product.id === parseInt(id)
-      //     );
-      //     if (mockRug) {
-      //       setRug(mockRug);
-      //     } else {
-      //       throw new Error("Product not found in mock data");
-      //     }
-      //   } catch (err) {
-      //     console.error("Error fetching rug:", err);
-      //     setError(err);
-      //   } finally {
-      //     setLoading(false);
+      // try {
+      //   // Use a mock product instead of fetching from the API
+      //   const mockRug = mockProducts.find(
+      //     (product) => product.id === parseInt(id)
+      //   );
+      //   if (mockRug) {
+      //     setRug(mockRug);
+      //   } else {
+      //     throw new Error("Product not found in mock data");
       //   }
+      // } catch (err) {
+      //   console.error("Error fetching rug:", err);
+      //   setError(err);
+      // } finally {
+      //   setLoading(false);
+      // }
     };
 
     fetchRug();
