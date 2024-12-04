@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import mockProducts from "../mocks/mockProducts";
+import mockProducts from "../mocks/mockProducts";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -13,7 +13,7 @@ const useShop = () => {
   useEffect(() => {
     const fetchRugs = async () => {
       try {
-        //Fetching from the API
+        // Fetching from the API
         const response = await axios.get("/api/items");
         if (Array.isArray(response.data)) {
           const rugsWithInventory = await Promise.all(

@@ -31,11 +31,36 @@ const Product = () => {
 
   return (
     <div className={styles.productContainer}>
-      <img
-        src={rug.imageUrls[0]}
-        alt={rug.name}
-        className={styles.productImage}
-      />
+      <div className={styles.productImageContainer}>
+        <img
+          src={rug.imageUrls[0]}
+          alt={rug.name}
+          className={styles.productImage}
+        />
+        <div className={styles.variationsContainer}>
+          {rug.v_ids && rug.v_ids.length > 1 ? (
+            rug.v_ids.map((variationId, index) => (
+              <div key={index} className={styles.variation}>
+                {rug.v_imageUrls[index] && rug.v_imageUrls[index].length > 0 ? (
+                  rug.v_imageUrls[index].map((url, idx) => (
+                    <img
+                      key={idx}
+                      src={url}
+                      alt={`${rug.v_names[index]} ${idx + 1}`}
+                      className={styles.variationImage}
+                    />
+                  ))
+                ) : (
+                  <p>No images available</p>
+                )}
+                <p>{rug.v_names[index]}</p>
+              </div>
+            ))
+          ) : (
+            <p> </p>
+          )}
+        </div>
+      </div>
       <div className={styles.productDetails}>
         <h1 className={styles.productName}>{rug.name}</h1>
         <p className={styles.productPrice}>${rug.price.toFixed(2)} USD</p>
@@ -94,31 +119,6 @@ const Product = () => {
             </p>
           </AccordionDetails>
         </Accordion>
-      </div>
-      <div className={styles.variationsContainer}>
-        <p className={styles.variationsTitle}>Variations:</p>
-        {rug.v_ids && rug.v_ids.length > 1 ? (
-          rug.v_ids.map((variationId, index) => (
-            <div key={index} className={styles.variation}>
-              <p>Name: {rug.v_names[index]}</p>
-              <p>Quantity: {rug.v_quantities[index]}</p>
-              {rug.v_imageUrls[index] && rug.v_imageUrls[index].length > 0 ? (
-                rug.v_imageUrls[index].map((url, idx) => (
-                  <img
-                    key={idx}
-                    src={url}
-                    alt={`${rug.v_names[index]} ${idx + 1}`}
-                    className={styles.variationImage}
-                  />
-                ))
-              ) : (
-                <p>No images available</p>
-              )}
-            </div>
-          ))
-        ) : (
-          <p>Item only has one variation!</p>
-        )}
       </div>
     </div>
   );

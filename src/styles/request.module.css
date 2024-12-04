@@ -23,14 +23,24 @@
   color: white;
   border: none;
   padding: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1.2rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+  box-shadow: 4px 4px 0 0 #000000;
 }
 
 .submitButton:hover {
-  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0 0 #000000;
+}
+
+.submitButton:active {
+  transform: translateY(0);
+  box-shadow: 4px 4px 0 0 #000000;
 }
 
 .instructions {

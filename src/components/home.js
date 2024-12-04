@@ -16,7 +16,6 @@ import {
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome";
 import LearnMoreButton from "./learnMoreButton";
-import Button from "./otherButton";
 
 function Home() {
   const { scrollContainerRef } = useHome();
@@ -54,8 +53,8 @@ function Home() {
             rugged designs, we bring an extra touch of style and personality to
             your space.
           </p>
-          <Link to="/shop">
-            <Button text="Shop Now" />
+          <Link to="/shop" className={styles.seeMoreButton}>
+            Shop Now
           </Link>
         </div>
       </div>
