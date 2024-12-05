@@ -2,6 +2,13 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  margin-top: -2rem;
+}
+
+.cartTitle {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .cartItem {
@@ -27,12 +34,16 @@
 .cartItemInfo {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: -2rem;
+  width: 103%;
+  position: relative;
 }
 
 .cartItemName {
   font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .cartItemName a {
@@ -52,8 +63,12 @@
 
 .quantityControl {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  justify-self: flex-end;
+  align-self: flex-end;
+  gap: 1rem;
+  padding-top: 0.5rem;
+  right: 0;
+  margin-top: -2.5rem;
 }
 
 .quantityButton {
@@ -81,7 +96,7 @@
 }
 
 .quantityButton:active {
-  transform: translateY(0);
+  transform: scale(1.05);
   box-shadow: 4px 4px 0 0 #000000;
 }
 
@@ -97,6 +112,8 @@
   transform: translateY(0);
   transition: transform 0.1s ease;
   box-shadow: 4px 4px 0 0 #000000;
+  justify-self: flex-end;
+  align-self: flex-end;
 }
 
 .removeButton:hover {
@@ -151,35 +168,57 @@
   text-align: right;
 }
 
+.cartItemColor {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--text-color);
+  text-align: right;
+}
+
 @media (max-width: 768px) {
   .cartContainer {
-    padding: 1rem;
-  }
-
-  .cartItem {
-    grid-template-columns: 1fr auto;
-    gap: 0.5rem;
-  }
-
-  .cartItemImage {
-    width: 80px;
+    padding: 0.5rem;
   }
 
   .cartItemInfo {
-    align-items: flex-start;
+    width: 100%;
+    padding-left: 0.5rem;
+  }
+
+  .cartTitle {
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cartItem {
+    grid-template-columns: 80px 1fr;
+    padding: 0.5rem;
+  }
+
+  .cartItemName {
+    font-size: 1rem;
+  }
+
+  .cartItemPrice {
+    font-size: 0.9rem;
   }
 
   .quantityControl {
-    justify-content: flex-start;
+    margin-top: -2rem;
+    padding-right: 0.5rem;
+  }
+
+  .quantityButton {
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
   }
 
   .checkoutButton {
-    font-size: 1rem;
-    padding: 0.75rem;
-  }
-
-  .removeButton {
-    padding: 0.25rem 0.5rem;
     width: 100%;
+    font-size: 0.9rem;
   }
 }

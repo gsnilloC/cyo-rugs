@@ -50,6 +50,7 @@ const Product = () => {
               onClick={() => setSelectedImageIndex(index)}
             />
           ))}
+          <div className={styles.scrollIndicator}></div>
         </div>
       </div>
       <div className={styles.productDetails}>
@@ -79,21 +80,36 @@ const Product = () => {
             <p> </p>
           )}
         </div>
-        <div className={styles.quantityContainer}>
+        <div
+          className={styles.quantityContainer}
+          style={{
+            backgroundColor: "var( --bg-color)",
+            color: "var(--text-color)",
+            borderRadius: "4px",
+            padding: "0.5rem",
+          }}
+        >
           <IconButton onClick={handleDecrease} aria-label="decrease quantity">
-            <Remove />
+            <Remove style={{ color: "var(--text-color)" }} />
           </IconButton>
           <TextField
             value={quantity}
             inputProps={{ readOnly: true }}
+            InputProps={{
+              style: {
+                color: "var(--text-color)",
+              },
+            }}
             style={{
               width: "80px",
               textAlign: "center",
-              borderRadius: 0,
+              borderRadius: "4px",
+              backgroundColor: "var(--card-bg)",
+              border: "1px solid var(--text-color)",
             }}
           />
           <IconButton onClick={handleIncrease} aria-label="increase quantity">
-            <Add />
+            <Add style={{ color: "var(--text-color)" }} />
           </IconButton>
         </div>
         <button
@@ -106,18 +122,28 @@ const Product = () => {
           <p className={styles.productDescriptionTitle}>Product Details:</p>
           <p className={styles.productDescription}>{rug.description}</p>
         </div>
-        <Accordion style={{ boxShadow: "none", marginTop: "-1rem" }}>
+        <Accordion
+          style={{
+            boxShadow: "none",
+            marginTop: "-1rem",
+            backgroundColor: "var(--bg-color)",
+          }}
+        >
           <AccordionSummary
-            expandIcon={<ExpandMore />}
+            expandIcon={<ExpandMore style={{ color: "var(--text-color)" }} />}
             aria-controls="product-care-content"
             id="product-care-header"
-            style={{ padding: 0, borderBottom: "none" }}
+            style={{
+              padding: 0,
+              borderBottom: "none",
+              color: "var(--text-color)",
+            }}
           >
             <p style={{ margin: 0, color: "inherit", fontSize: "0.8rem" }}>
               Product Care Info
             </p>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails style={{ color: "var(--text-color)" }}>
             <p className={styles.productCareInfo}>
               Vacuum regularly. Slight shedding is normal and will lessen over
               time.

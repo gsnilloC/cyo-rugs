@@ -15,7 +15,7 @@ const LoginModal = ({ isOpen, onClose }) => {
       navigate("/list");
       onClose();
     } else {
-      setError("Incorrect Secret");
+      setError("Incorrect Password GANGY");
     }
   };
 
