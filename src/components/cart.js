@@ -37,7 +37,7 @@ function Cart() {
         </Box>
       ) : (
         <>
-          <h1>Your Shopping Cart</h1>
+          <h1 className={styles.cartTitle}>Your Shopping Cart</h1>
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
           ) : (
@@ -52,6 +52,7 @@ function Cart() {
                   <p className={styles.cartItemName}>
                     <Link to={`/product/${item.id}`}>{item.name}</Link>
                   </p>
+                  <p className={styles.cartItemColor}>Item Colors</p>
                   <p className={styles.cartItemPrice}>
                     ${item.price.toFixed(2)}
                   </p>
@@ -71,12 +72,12 @@ function Cart() {
                     </button>
                   </div>
                 </div>
-                <button
+                {/* <button
                   className={styles.removeButton}
                   onClick={() => removeFromCart(item.id)}
                 >
                   Remove
-                </button>
+                </button> */}
               </div>
             ))
           )}

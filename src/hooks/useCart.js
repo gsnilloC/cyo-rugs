@@ -20,6 +20,8 @@ const useCart = () => {
     const item = cartItems.find((item) => item.id === itemId);
     if (item.quantity > 1) {
       updateQuantity(itemId, item.quantity - 1);
+    } else {
+      removeFromCart(itemId);
     }
   };
 
