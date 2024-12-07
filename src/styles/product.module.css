@@ -35,7 +35,6 @@
 
 .productCareInfo {
   font-size: 0.7rem;
-  margin-top: -1rem;
 }
 
 .productDescription {
@@ -184,6 +183,7 @@
   scrollbar-width: none; /* Firefox */
   gap: 1rem;
   margin-top: 1rem;
+  justify-content: center;
 }
 
 .imageThumbnails::-webkit-scrollbar {

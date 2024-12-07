@@ -8,6 +8,7 @@
   --header-bg: #ffffff;
   --footer-bg: #ffffff;
   --footer-text: #333333;
+  --icon-color: #333333;
 }
 
 [data-theme="dark"] {
@@ -20,6 +21,7 @@
   --header-bg: #1a1a1a;
   --footer-bg: #1a1a1a;
   --footer-text: #f0f0f0;
+  --icon-color: #f0f0f0;
 }
 
 * {

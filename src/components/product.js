@@ -106,21 +106,34 @@ const Product = () => {
           <p className={styles.productDescriptionTitle}>Product Details:</p>
           <p className={styles.productDescription}>{rug.description}</p>
         </div>
-        <Accordion style={{ boxShadow: "none", marginTop: "-1rem" }}>
+        <Accordion
+          style={{
+            boxShadow: "none",
+            marginTop: "-1rem",
+            backgroundColor: "var(--bg-color)",
+            color: "var(--text-color)",
+          }}
+        >
           <AccordionSummary
-            expandIcon={<ExpandMore />}
+            expandIcon={<ExpandMore style={{ color: "var(--text-color)" }} />}
             aria-controls="product-care-content"
             id="product-care-header"
-            style={{ padding: 0, borderBottom: "none" }}
+            style={{
+              padding: 0,
+              borderBottom: "none",
+              backgroundColor: "var(--bg-color)",
+              color: "var(--text-color)",
+            }}
           >
             <p style={{ margin: 0, color: "inherit", fontSize: "0.8rem" }}>
               Product Care Info
             </p>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails style={{ backgroundColor: "var(--bg-color)" }}>
             <p className={styles.productCareInfo}>
               Vacuum regularly. Slight shedding is normal and will lessen over
               time.
+              
               <br />
               Blot spills immediately with a clean, slightly damp cloth. Do not
               rub.
