@@ -21,8 +21,8 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
   };
 
   const iconStyle = {
-    color: 'var(--icon-color)',
-    transition: 'color 0.3s ease'
+    color: "var(--icon-color)",
+    transition: "color 0.3s ease",
   };
 
   return (
@@ -32,10 +32,11 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
           <>
             <div className="nav-left">
               <IconButton onClick={handleDrawerToggle}>
-                {isDrawerOpen ? 
-                  <CloseIcon style={iconStyle} /> : 
+                {isDrawerOpen ? (
+                  <CloseIcon style={iconStyle} />
+                ) : (
                   <Menu style={iconStyle} />
-                }
+                )}
               </IconButton>
             </div>
             <div className="logo">
