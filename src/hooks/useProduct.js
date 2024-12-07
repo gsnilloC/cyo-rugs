@@ -13,33 +13,33 @@ const useProduct = () => {
 
   useEffect(() => {
     const fetchRug = async () => {
-      try {
-        const response = await axios.get(`/api/items/${id}`);
-        console.log("Fetched Rug Data:", response.data);
-        setRug(response.data);
-      } catch (err) {
-        console.error("Error fetching rug:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-
       // try {
-      //   // Use a mock product instead of fetching from the API
-      //   const mockRug = mockProducts.find(
-      //     (product) => product.id === parseInt(id)
-      //   );
-      //   if (mockRug) {
-      //     setRug(mockRug);
-      //   } else {
-      //     throw new Error("Product not found in mock data");
-      //   }
+      //   const response = await axios.get(`/api/items/${id}`);
+      //   console.log("Fetched Rug Data:", response.data);
+      //   setRug(response.data);
       // } catch (err) {
       //   console.error("Error fetching rug:", err);
       //   setError(err);
       // } finally {
       //   setLoading(false);
       // }
+
+      try {
+        // Use a mock product instead of fetching from the API
+        const mockRug = mockProducts.find(
+          (product) => product.id === parseInt(id)
+        );
+        if (mockRug) {
+          setRug(mockRug);
+        } else {
+          throw new Error("Product not found in mock data");
+        }
+      } catch (err) {
+        console.error("Error fetching rug:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchRug();

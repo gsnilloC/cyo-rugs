@@ -26,7 +26,6 @@
 .cartItemImage {
   width: 100px;
   height: auto;
-  object-fit: contain;
   background-color: #f0f0f0;
   border-radius: 4px;
 }
@@ -55,10 +54,14 @@
   color: inherit;
 }
 
+.cartItemColor {
+  margin-top: -0.2rem;
+}
+
 .cartItemPrice {
   font-weight: bold;
   color: var(--accent-color);
-  margin-top: -0.5rem;
+  margin-top: 0.5rem;
 }
 
 .quantityControl {
@@ -220,5 +223,9 @@
   .checkoutButton {
     width: 100%;
     font-size: 0.9rem;
+  }
+
+  .checkoutButton {
+    width: 100%;
   }
 }

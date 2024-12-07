@@ -52,6 +52,7 @@ function Cart() {
                   <p className={styles.cartItemName}>
                     <Link to={`/product/${item.id}`}>{item.name}</Link>
                   </p>
+                  <p className={styles.cartItemColor}>Purple</p>
                   <p className={styles.cartItemPrice}>
                     ${item.price.toFixed(2)}
                   </p>
@@ -63,7 +64,7 @@ function Cart() {
                     >
                       -
                     </button>
-                    <span>{item.quantity}</span>
+                    <span className={styles.quantityText}>{item.quantity}</span>
                     <button
                       className={styles.quantityButton}
                       onClick={() => handleIncrease(item.id)}
