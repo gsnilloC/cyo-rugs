@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 function Cart() {
   const {
     cartItems,
-    removeFromCart,
+    // removeFromCart,
     clearCart,
     total,
     handleIncrease,
@@ -37,7 +37,7 @@ function Cart() {
         </Box>
       ) : (
         <>
-          <h1>Your Shopping Cart</h1>
+          <h1 className={styles.cartTitle}>Your Shopping Cart</h1>
           {cartItems.length === 0 ? (
             <p>Your cart is empty.</p>
           ) : (
@@ -52,9 +52,7 @@ function Cart() {
                   <p className={styles.cartItemName}>
                     <Link to={`/product/${item.id}`}>{item.name}</Link>
                   </p>
-                  <p className={styles.cartItemPrice}>
-                    ${item.price.toFixed(2)}
-                  </p>
+                  <p className={styles.cartItemColor}>{item.selectedColor}</p>
                   <div className={styles.quantityControl}>
                     <button
                       className={styles.quantityButton}
@@ -62,7 +60,7 @@ function Cart() {
                     >
                       -
                     </button>
-                    <span>{item.quantity}</span>
+                    <span className={styles.quantityText}>{item.quantity}</span>
                     <button
                       className={styles.quantityButton}
                       onClick={() => handleIncrease(item.id)}
@@ -70,13 +68,16 @@ function Cart() {
                       +
                     </button>
                   </div>
+                  <p className={styles.cartItemPrice}>
+                    ${item.price.toFixed(2)}
+                  </p>
                 </div>
-                <button
+                {/* <button
                   className={styles.removeButton}
                   onClick={() => removeFromCart(item.id)}
                 >
                   Remove
-                </button>
+                </button> */}
               </div>
             ))
           )}

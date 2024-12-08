@@ -42,6 +42,7 @@ function Shop() {
         <div className={styles.rugGrid}>
           {paginatedRugs.map((rug) => {
             if (!rug) return null;
+            console.log(`Rendering rug ${rug.name} with inventory count:`, rug.inventoryCount);
             return (
               <Link
                 to={`/product/${rug.id}`}

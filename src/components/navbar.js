@@ -20,6 +20,11 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
     handleDrawerToggle();
   };
 
+  const iconStyle = {
+    color: "var(--icon-color)",
+    transition: "color 0.3s ease",
+  };
+
   return (
     <header>
       <nav className={isMobile ? "mobile-nav" : "desktop-nav"}>
@@ -27,7 +32,11 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
           <>
             <div className="nav-left">
               <IconButton onClick={handleDrawerToggle}>
-                {isDrawerOpen ? <CloseIcon /> : <Menu />}
+                {isDrawerOpen ? (
+                  <CloseIcon style={iconStyle} />
+                ) : (
+                  <Menu style={iconStyle} />
+                )}
               </IconButton>
             </div>
             <div className="logo">
@@ -40,7 +49,7 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
                 onClick={() => navigate("/cart")}
                 style={{ position: "relative" }}
               >
-                <ShoppingCart fontSize="large" style={{ fontSize: "2rem" }} />
+                <ShoppingCart style={{ ...iconStyle }} />
                 {totalItems > 0 && (
                   <span className="cart-quantity-badge">{totalItems}</span>
                 )}
@@ -66,7 +75,7 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
                 onClick={() => navigate("/cart")}
                 style={{ position: "relative" }}
               >
-                <ShoppingCart fontSize="large" style={{ fontSize: "2rem" }} />
+                <ShoppingCart style={{ ...iconStyle, fontSize: "2rem" }} />
                 {totalItems > 0 && (
                   <span className="cart-quantity-badge">{totalItems}</span>
                 )}

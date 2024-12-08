@@ -7,6 +7,11 @@ import LoginModal from "./LoginModal";
 const Footer = ({ toggleTheme }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+  const iconStyle = {
+    color: "var(--icon-color)",
+    transition: "color 0.3s ease",
+  };
+
   return (
     <footer>
       <div className="footer-divider"></div>
@@ -16,13 +21,13 @@ const Footer = ({ toggleTheme }) => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <InstagramIcon />
+          <InstagramIcon style={iconStyle} />
         </a>
         <IconButton onClick={toggleTheme} className="theme-toggle">
-          <DarkModeIcon />
+          <DarkModeIcon style={iconStyle} />
         </IconButton>
         <IconButton onClick={() => setIsLoginModalOpen(true)}>
-          <KeyIcon />
+          <KeyIcon style={iconStyle} />
         </IconButton>
       </div>
       <div className="footer-bottom">

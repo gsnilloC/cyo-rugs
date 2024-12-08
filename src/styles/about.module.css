@@ -1,12 +1,18 @@
 .aboutContainer {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1.6;
+  margin-top: -70px;
 }
 
 .aboutContainer h1 {
-  font-weight: normal;
-  margin-bottom: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
 .aboutContainer h2 {

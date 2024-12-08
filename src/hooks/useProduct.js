@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../components/cartContext";
-// import mockProducts from "../mocks/mockProducts";
+import mockProducts from "../mocks/mockProducts";
 
 const useProduct = () => {
   const { id } = useParams();
@@ -45,9 +45,22 @@ const useProduct = () => {
     fetchRug();
   }, [id]);
 
-  const handleAddToCart = (quantity) => {
+  const handleAddToCart = (quantity, selectedColor) => {
     if (rug) {
-      addToCart({ ...rug, quantity });
+      // Find the variation ID that matches the selected color
+      const variationIndex = rug.v_names.findIndex(
+        (name) => name === selectedColor
+      );
+      const variationId = rug.v_ids[variationIndex];
+
+      const cartItemId = `${rug.id}-${selectedColor.toLowerCase()}`;
+      addToCart({
+        ...rug,
+        id: cartItemId,
+        quantity,
+        selectedColor,
+        variationId, // Add this to track the Square variation ID
+      });
     }
   };
 

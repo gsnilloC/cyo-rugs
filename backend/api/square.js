@@ -8,6 +8,8 @@ const client = new Client({
 
 const { getInventoryItemById } = require("../db/config");
 
+const processedOrders = new Set();
+
 const getInventoryCount = async (itemId) => {
   try {
     const item = await getInventoryItemById(itemId);
@@ -27,10 +29,19 @@ async function createCheckout(cartItems) {
     const lineItems = await Promise.all(
       cartItems.map(async (item) => {
         try {
-          const inventoryQuantity = await getInventoryCount(item.id);
+          // Get inventory for specific variation
+          const inventoryResponse =
+            await client.inventoryApi.retrieveInventoryCount(item.variationId);
+
+          const inventoryQuantity =
+            inventoryResponse.result.counts &&
+            inventoryResponse.result.counts.length > 0
+              ? parseInt(inventoryResponse.result.counts[0].quantity, 10)
+              : 0;
+
           if (inventoryQuantity < item.quantity) {
             throw new Error(
-              `Not enough stock for ${item.name}. Available: ${inventoryQuantity}`
+              `Not enough stock for ${item.name} (${item.selectedColor}). Available: ${inventoryQuantity}`
             );
           }
 
@@ -42,30 +53,28 @@ async function createCheckout(cartItems) {
           }
 
           return {
-            name: item.name,
+            catalogObjectId: item.variationId, // Use variation ID instead of base item
             quantity: quantity.toString(),
             basePriceMoney: {
               amount: Math.round(price * 100),
               currency: "USD",
             },
-            note: `Price: $${price.toFixed(2)} | Description: ${
+            note: `Color: ${item.selectedColor} | ${
               item.description || "No description available"
             }`,
           };
         } catch (error) {
           console.error(`Error processing item ${item.name}:`, error.message);
-          return null;
+          throw error; // Propagate error up
         }
       })
     );
-
-    const validLineItems = lineItems.filter((item) => item !== null);
 
     const orderRequest = {
       idempotency_key: Date.now().toString(),
       order: {
         locationId: process.env.SQUARE_LOCATION_ID,
-        lineItems: validLineItems,
+        lineItems: lineItems,
       },
       checkoutOptions: {
         redirectUrl: "https://www.cyorugs.com/shop",
@@ -148,11 +157,6 @@ const listItems = async () => {
     const validItems = await Promise.all(
       items
         .filter((item) => item.type !== "CUSTOM_ATTRIBUTE_DEFINITION")
-        .filter(
-          (item) =>
-            item.id !== "XGPSDFAI4HGP5Q7EL2SKETHN" &&
-            item.id !== "QPMG56NM75BMOG3QQXECF3BA"
-        )
         .map(async (item) => {
           try {
             if (!item.itemData) {
@@ -162,30 +166,75 @@ const listItems = async () => {
 
             const { name, description, variations, imageIds } = item.itemData;
 
-            // Get the catalog_object_id from the first variation
-            const catalogObjectId = variations?.[0]?.id || null;
+            // Format variations with quantity and images
+            const formattedVariations = await Promise.all(
+              variations.map(async (variation) => {
+                const priceMoney = variation.itemVariationData.priceMoney;
+                const price = priceMoney ? Number(priceMoney.amount) / 100 : 0;
 
-            let formattedPrice = 0;
-            if (variations && variations.length > 0) {
-              const priceMoney = variations[0].itemVariationData.priceMoney;
-              if (priceMoney) {
-                formattedPrice = Number(priceMoney.amount) / 100;
-              }
-            }
+                // Fetch inventory count for the variation
+                let quantity = 0;
+                try {
+                  const inventoryResponse =
+                    await client.inventoryApi.retrieveInventoryCount(
+                      variation.id
+                    );
+                  quantity =
+                    inventoryResponse.result.counts &&
+                    inventoryResponse.result.counts.length > 0
+                      ? parseInt(
+                          inventoryResponse.result.counts[0].quantity,
+                          10
+                        )
+                      : 0;
+                } catch (error) {
+                  console.error(
+                    `Error retrieving inventory for variation ${variation.id}:`,
+                    error.message
+                  );
+                }
 
+                // Retrieve image URLs for the variation
+                const variationImageIds =
+                  variation.itemVariationData.imageIds || [];
+                const variationImageUrls =
+                  variationImageIds.length > 0
+                    ? await getImageUrls(variationImageIds)
+                    : [];
+
+                // Print variation image URLs to console
+                console.log(
+                  `Variation ID: ${variation.id}, Image URLs:`,
+                  variationImageUrls
+                );
+
+                return {
+                  v_id: variation.id,
+                  v_name: variation.itemVariationData.name,
+                  v_price: price,
+                  v_quantity: quantity,
+                };
+              })
+            );
+
+            // Retrieve image URLs for the item
             const imageUrls =
               imageIds && imageIds.length > 0
                 ? await getImageUrls(imageIds)
                 : [];
 
-            return {
+            const itemData = {
               id: item.id,
-              catalog_object_id: catalogObjectId,
               name: name || "No name available",
               description: description || "No description available",
-              price: formattedPrice,
+              variations: formattedVariations,
               imageUrls: imageUrls,
             };
+
+            // Print item data to console
+            console.log("Retrieved Item:", itemData);
+
+            return itemData;
           } catch (error) {
             console.error("Error processing item:", error.message);
             return null;
@@ -196,35 +245,6 @@ const listItems = async () => {
     return validItems.filter((item) => item !== null);
   } catch (error) {
     console.error("Error retrieving items:", error);
-    throw error;
-  }
-};
-
-const getItemById = async (id) => {
-  try {
-    const response = await client.catalogApi.retrieveCatalogObject(id);
-    const item = response.result.object;
-
-    if (!item || !item.itemData) {
-      return null;
-    }
-
-    const priceBigInt =
-      item.itemData.variations[0].itemVariationData.priceMoney.amount;
-    const formattedPrice = Number(priceBigInt) / 100;
-
-    const imageIds = item.itemData.imageIds || [];
-    const imageUrls = imageIds.length > 0 ? await getImageUrls(imageIds) : [];
-
-    return {
-      id: item.id,
-      name: item.itemData.name,
-      description: item.itemData.description,
-      price: formattedPrice,
-      imageUrls: imageUrls,
-    };
-  } catch (error) {
-    console.error("Error retrieving item by ID:", error);
     throw error;
   }
 };
@@ -296,7 +316,7 @@ const testSquareApi = async () => {
 //   }
 // };
 
-const decrementInventory = async (orderId) => {
+async function decrementInventory(orderId) {
   const serializeBigInt = (obj) => {
     return JSON.parse(
       JSON.stringify(obj, (key, value) =>
@@ -306,7 +326,14 @@ const decrementInventory = async (orderId) => {
   };
 
   try {
+    // Check if order was already processed
+    if (processedOrders.has(orderId)) {
+      console.log(`Order ${orderId} was already processed, skipping...`);
+      return;
+    }
+
     console.log("Decrementing inventory for order ID:", orderId);
+    processedOrders.add(orderId);
 
     const orderResponse = await client.ordersApi.retrieveOrder(orderId);
     const lineItems = orderResponse.result.order.lineItems;
@@ -319,26 +346,20 @@ const decrementInventory = async (orderId) => {
 
     const changes = await Promise.all(
       lineItems.map(async (item) => {
-        console.log("\nProcessing item:", item.name);
-
-        const catalogResponse = await client.catalogApi.searchCatalogItems({
-          textFilter: item.name,
-          limit: 1,
-        });
-
-        const catalogItem = catalogResponse.result.items?.[0];
-        if (!catalogItem) {
-          console.warn(`Catalog item not found for: ${item.name}`);
-          return null;
-        }
-
-        const variationId = catalogItem.itemData.variations[0]?.id;
+        console.log("\nProcessing item:", item);
+        
+        const variationId = item.catalogObjectId;
         if (!variationId) {
-          console.warn(`No variation found for item: ${item.name}`);
+          console.warn(`No variation ID found for item: ${item.name}`);
           return null;
         }
 
-        const adjustment = {
+        const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
+        const currentQuantity = inventoryResponse.result.counts?.[0]?.quantity || "0";
+
+        console.log(`Current inventory for variation ${variationId}: ${currentQuantity}`);
+
+        return {
           type: "ADJUSTMENT",
           adjustment: {
             catalogObjectId: variationId,
@@ -349,8 +370,6 @@ const decrementInventory = async (orderId) => {
             occurredAt: new Date().toISOString(),
           },
         };
-
-        return adjustment;
       })
     );
 
@@ -361,15 +380,11 @@ const decrementInventory = async (orderId) => {
     }
 
     const response = await client.inventoryApi.batchChangeInventory({
-      idempotencyKey: Date.now().toString(),
+      idempotencyKey: orderId, // Use orderId as idempotency key
       changes: validChanges,
     });
 
-    console.log(
-      "Inventory adjustment response:",
-      serializeBigInt(response.result)
-    );
-
+    console.log("Inventory adjustment response:", serializeBigInt(response.result));
     return response;
   } catch (error) {
     console.error("Error decrementing inventory:", error);
@@ -378,7 +393,7 @@ const decrementInventory = async (orderId) => {
     }
     throw error;
   }
-};
+}
 
 const getPricesForItemIds = async (itemIds) => {
   try {
@@ -406,7 +421,6 @@ const getPricesForItemIds = async (itemIds) => {
 
 module.exports = {
   listItems,
-  getItemById,
   testSquareApi,
   createCheckout,
   getInventoryCount,

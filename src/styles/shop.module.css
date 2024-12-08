@@ -16,6 +16,8 @@
   overflow: hidden;
   text-decoration: none;
   transition: transform 0.3s ease;
+  width: 300px;
+  max-width: 100%;
 }
 
 .rugItem:hover .rugImage {
@@ -23,26 +25,26 @@
 }
 
 .rugFrame {
-  background-image: url("../assets/images/frame.png"); /* Adjust the path as necessary */
+  background-image: url("../assets/images/frame.png");
   background-size: cover;
   background-repeat: no-repeat;
-  width: 100%;
-  height: 475px; /* Adjust height as needed */
+  width: 450px;
+  height: 475px;
   position: relative;
   display: flex;
-  justify-content: center; /* Center the content horizontally */
-  align-items: center; /* Center the content vertically */
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
   margin-left: -78px;
 }
 
 .rugImage {
-  max-width: 80%; /* Adjust width to fit inside the frame */
+  max-width: 80%;
   height: auto;
-  max-height: 170px; /* Keep the max height */
+  max-height: 170px;
   object-fit: contain;
   transition: transform 0.3s ease;
-  margin-left: 120px; /* Move the image slightly to the right */
+  margin-left: 30px;
   margin-bottom: 70px;
 }
 
@@ -95,14 +97,27 @@
 
 .rugGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
+  justify-items: center;
 }
 
 @media (max-width: 768px) {
   .rugGrid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .rugItem {
+    width: 250px;
+  }
+
+  .rugFrame {
+    width: 100%;
+    height: 500px;
+    margin-left: 0;
+    background-size: 200% 120%;
+    background-position: center;
+    margin-top: 40px;
   }
 
   .rugInfo {
@@ -111,25 +126,24 @@
 }
 
 .rugItem.soldOut {
-  opacity: 0.5; /* Gray out the item */
-  pointer-events: none; /* Disable interaction */
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .soldOutMessage {
-  color: red; /* Change the color of the sold out message */
+  color: red;
   font-weight: bold;
   font-size: 1.5rem;
   text-align: left;
   margin-top: 1.1rem;
-  transform: rotate(35deg); /* Rotate the message 45 degrees */
+  transform: rotate(35deg);
 }
 
-/* Mobile version adjustments for soldOutMessage */
 @media (max-width: 768px) {
   .soldOutMessage {
-    font-size: 1.2rem; /* Adjust font size for mobile */
-    margin-top: 0.5rem; /* Adjust margin for mobile */
-    transform: rotate(35deg); /* Reset rotation for mobile */
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    transform: rotate(35deg);
   }
 }
 
@@ -179,31 +193,6 @@
 }
 
 .rugItem:hover .rugFrame {
-  transform: scale(1.05); /* Scale the frame slightly larger on hover */
-  transition: transform 0.3s ease; /* Smooth transition */
-}
-
-@media (max-width: 768px) {
-  .rugFrame {
-    margin-left: 0;
-    width: 100%;
-    height: 500px;
-    background-size: 200% 120%; /* Make the frame image larger */
-    background-position: center;
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .rugImage {
-    width: 80%; /* Make the rug image smaller */
-    max-height: 230px; /* Reduce max height */
-    margin-left: 0;
-    margin-bottom: 100px;
-    object-fit: contain;
-  }
-  .shopTitle {
-    margin-left: 0;
-  }
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }

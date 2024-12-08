@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/home.module.css";
+import styles from "../styles/homepage.module.css";
 import { Link } from "react-router-dom";
 import {
   cus1Image,
@@ -15,6 +15,7 @@ import {
 } from "../assets/images";
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome";
+import LearnMoreButton from "./learnMoreButton";
 
 function Home() {
   const { scrollContainerRef } = useHome();
@@ -78,8 +79,8 @@ function Home() {
       <div className={styles.customSection}>
         <h2>Need a Custom?</h2>
         <p>Transform your ideas into reality with custom orders</p>
-        <Link to="/request" className={styles.seeMoreButton}>
-          Learn More
+        <Link to="/request">
+          <LearnMoreButton />
         </Link>
       </div>
       <div className={styles.happyCustomers}>

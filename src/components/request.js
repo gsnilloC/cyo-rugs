@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "../styles/request.module.css";
+import styles from "../styles/customs.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -185,7 +185,10 @@ function Request() {
       </p>
 
       <div className={styles.buttonContainer}>
-        <button onClick={() => setShowModal(true)} className={styles.button}>
+        <button
+          onClick={() => setShowModal(true)}
+          className={styles.submitButton}
+        >
           Upload Your Creation Here
         </button>
       </div>
