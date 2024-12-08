@@ -41,8 +41,7 @@ function Shop() {
       <div className={styles.shopContainer}>
         <div className={styles.rugGrid}>
           {paginatedRugs.map((rug) => {
-            if (!rug) return null;
-            console.log(`Rendering rug ${rug.name} with inventory count:`, rug.inventoryCount);
+            if (!rug || !rug.price) return null;
             return (
               <Link
                 to={`/product/${rug.id}`}
@@ -60,7 +59,9 @@ function Shop() {
                 </div>
                 <div className={styles.rugInfo}>
                   <p className={styles.rugName}>{rug.name}</p>
-                  <p className={styles.rugPrice}>${rug.price.toFixed(2)} USD</p>
+                  <p className={styles.rugPrice}>
+                    ${(rug.price || 0).toFixed(2)} USD
+                  </p>
                   {rug.inventoryCount === 0 && (
                     <div className={styles.soldOutMessage}>Sold Out</div>
                   )}

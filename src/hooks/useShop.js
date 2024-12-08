@@ -17,20 +17,12 @@ const useShop = () => {
 
         if (Array.isArray(response.data)) {
           const rugsWithInventory = response.data.map((rug) => {
-            console.log("Processing rug:", {
-              id: rug.id,
-              name: rug.name,
-              v_quantities: rug.v_quantities,
-            });
-
             const totalInventory = Array.isArray(rug.v_quantities)
               ? rug.v_quantities.reduce(
                   (sum, qty) => sum + (Number(qty) || 0),
                   0
                 )
               : 0;
-
-            console.log(`Total inventory for ${rug.name}: ${totalInventory}`);
 
             return {
               ...rug,
