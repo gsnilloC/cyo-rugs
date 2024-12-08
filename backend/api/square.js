@@ -27,10 +27,19 @@ async function createCheckout(cartItems) {
     const lineItems = await Promise.all(
       cartItems.map(async (item) => {
         try {
-          const inventoryQuantity = await getInventoryCount(item.id);
+          // Get inventory for specific variation
+          const inventoryResponse =
+            await client.inventoryApi.retrieveInventoryCount(item.variationId);
+
+          const inventoryQuantity =
+            inventoryResponse.result.counts &&
+            inventoryResponse.result.counts.length > 0
+              ? parseInt(inventoryResponse.result.counts[0].quantity, 10)
+              : 0;
+
           if (inventoryQuantity < item.quantity) {
             throw new Error(
-              `Not enough stock for ${item.name}. Available: ${inventoryQuantity}`
+              `Not enough stock for ${item.name} (${item.selectedColor}). Available: ${inventoryQuantity}`
             );
           }
 
@@ -42,30 +51,28 @@ async function createCheckout(cartItems) {
           }
 
           return {
-            name: item.name,
+            catalogObjectId: item.variationId, // Use variation ID instead of base item
             quantity: quantity.toString(),
             basePriceMoney: {
               amount: Math.round(price * 100),
               currency: "USD",
             },
-            note: `Price: $${price.toFixed(2)} | Description: ${
+            note: `Color: ${item.selectedColor} | ${
               item.description || "No description available"
             }`,
           };
         } catch (error) {
           console.error(`Error processing item ${item.name}:`, error.message);
-          return null;
+          throw error; // Propagate error up
         }
       })
     );
-
-    const validLineItems = lineItems.filter((item) => item !== null);
 
     const orderRequest = {
       idempotency_key: Date.now().toString(),
       order: {
         locationId: process.env.SQUARE_LOCATION_ID,
-        lineItems: validLineItems,
+        lineItems: lineItems,
       },
       checkoutOptions: {
         redirectUrl: "https://www.cyorugs.com/shop",
