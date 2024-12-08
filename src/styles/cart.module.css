@@ -67,7 +67,6 @@
 .cartItemPrice {
   font-weight: bold;
   color: var(--accent-color);
-  margin-top: 0.5rem;
 }
 
 .quantityControl {

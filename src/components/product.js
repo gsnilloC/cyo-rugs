@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
 import {
@@ -14,6 +14,13 @@ const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState('');
+
+  useEffect(() => {
+    if (rug && rug.v_names && rug.v_names.length > 0) {
+      setSelectedColor(rug.v_names[0]);
+    }
+  }, [rug]);
 
   const handleIncrease = () => setQuantity(quantity + 1);
   const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
@@ -64,7 +71,9 @@ const Product = () => {
             rug.v_ids.map((variationId, index) => (
               <div key={index} className={styles.variation}>
                 <div
-                  className={styles.colorCircle}
+                  className={`${styles.colorCircle} ${
+                    rug.v_names[index] === selectedColor ? styles.activeColor : ''
+                  }`}
                   style={{
                     backgroundColor: rug.v_names[index].toLowerCase(),
                     border:
@@ -72,6 +81,7 @@ const Product = () => {
                         ? "1px solid #ddd"
                         : "none",
                   }}
+                  onClick={() => setSelectedColor(rug.v_names[index])}
                 />
                 <p>{rug.v_names[index]}</p>
               </div>
@@ -114,7 +124,7 @@ const Product = () => {
         </div>
         <button
           className={styles.addToCartButton}
-          onClick={() => handleAddToCart(quantity)}
+          onClick={() => handleAddToCart(quantity, selectedColor)}
         >
           Add to Cart
         </button>

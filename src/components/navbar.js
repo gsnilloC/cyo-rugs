@@ -49,7 +49,7 @@ const Navbar = ({ isMobile, isDrawerOpen, handleDrawerToggle, totalItems }) => {
                 onClick={() => navigate("/cart")}
                 style={{ position: "relative" }}
               >
-                <ShoppingCart style={{ ...iconStyle, fontSize: "2rem" }} />
+                <ShoppingCart style={{ ...iconStyle }} />
                 {totalItems > 0 && (
                   <span className="cart-quantity-badge">{totalItems}</span>
                 )}

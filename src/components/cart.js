@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 function Cart() {
   const {
     cartItems,
-    removeFromCart,
+    // removeFromCart,
     clearCart,
     total,
     handleIncrease,
@@ -52,7 +52,7 @@ function Cart() {
                   <p className={styles.cartItemName}>
                     <Link to={`/product/${item.id}`}>{item.name}</Link>
                   </p>
-                  <p className={styles.cartItemColor}>Purple</p>
+                  <p className={styles.cartItemColor}>{item.selectedColor}</p>
                   <div className={styles.quantityControl}>
                     <button
                       className={styles.quantityButton}

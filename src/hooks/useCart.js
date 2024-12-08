@@ -28,7 +28,14 @@ const useCart = () => {
   const handleCheckout = async (cartItems, setLoading) => {
     try {
       setLoading(true);
-      const response = await axios.post("/api/checkout", { cartItems });
+      const cartItemsWithVariations = cartItems.map(item => ({
+        ...item,
+        variation: item.selectedColor
+      }));
+      
+      const response = await axios.post("/api/checkout", { 
+        cartItems: cartItemsWithVariations 
+      });
       const { checkoutLink } = response.data;
 
       if (checkoutLink) {
@@ -39,8 +46,8 @@ const useCart = () => {
 
       localStorage.removeItem("cartItems");
     } catch (error) {
-      const errorMessage = error.response.data.error;
-      alert("Failed to initiate checkout:" + errorMessage);
+      const errorMessage = error.response?.data?.error || 'Checkout failed';
+      alert("Failed to initiate checkout: " + errorMessage);
     } finally {
       setTimeout(() => {
         setLoading(false);
