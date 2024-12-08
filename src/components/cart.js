@@ -53,10 +53,6 @@ function Cart() {
                     <Link to={`/product/${item.id}`}>{item.name}</Link>
                   </p>
                   <p className={styles.cartItemColor}>Purple</p>
-                  <p className={styles.cartItemPrice}>
-                    ${item.price.toFixed(2)}
-                  </p>
-                  <p className={styles.cartItemColor}>Item Color</p>
                   <div className={styles.quantityControl}>
                     <button
                       className={styles.quantityButton}
@@ -72,6 +68,9 @@ function Cart() {
                       +
                     </button>
                   </div>
+                  <p className={styles.cartItemPrice}>
+                    ${item.price.toFixed(2)}
+                  </p>
                 </div>
                 {/* <button
                   className={styles.removeButton}
