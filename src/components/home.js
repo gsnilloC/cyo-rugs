@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/Home.module.css";
+import styles from "../styles/homepage.module.css";
 import { Link } from "react-router-dom";
 import {
   cus1Image,
