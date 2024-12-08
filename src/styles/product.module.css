@@ -134,8 +134,24 @@
   border-radius: 50%;
   margin: 10px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
   margin-bottom: 2rem;
+}
+
+.soldOut {
+  opacity: 0.3;
+  position: relative;
+}
+
+.soldOut::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -15%;
+  width: 130%;
+  height: 2px;
+  background-color: #ff0000;
+  transform: rotate(-45deg);
 }
 
 .activeColor {

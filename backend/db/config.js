@@ -10,7 +10,7 @@ const pool = new Pool({
 
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 5000,
   allowExitOnIdle: false,
   keepAlive: true,
 });
@@ -79,17 +79,21 @@ async function createInventoryTable() {
 }
 
 async function getInventoryItems() {
+  let client;
   try {
-    const client = await pool.connect();
+    client = await pool.connect();
     const result = await client.query(`
       SELECT * FROM inventory
       ORDER BY last_updated DESC;
     `);
-    client.release();
     return result.rows;
   } catch (err) {
     console.error("Error getting inventory items:", err.stack);
     throw err;
+  } finally {
+    if (client) {
+      client.release(true); // Force release the client
+    }
   }
 }
 

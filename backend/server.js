@@ -62,7 +62,10 @@ app.get("/api/items", async (req, res) => {
       price: parseFloat(item.price),
       quantity: item.quantity,
       imageUrls: item.image_urls || [],
+      v_quantities: item.v_quantities || [],
     }));
+
+    console.log(formattedItems);
     res.json(formattedItems);
   } catch (error) {
     console.error("Error retrieving items:", error);
@@ -182,17 +185,15 @@ app.post("/webhook/payment", async (req, res) => {
     const event = req.body;
     console.log("Received payment webhook event:", event.type);
 
-    if (event.type === "payment.updated") {
-      const paymentData = event.data.object.payment;
-      if (paymentData && paymentData.status === "COMPLETED") {
-        const paymentId = paymentData.id;
-        if (!processedPayments.has(paymentId)) {
-          const orderId = paymentData.order_id;
-          if (orderId) {
-            await decrementInventory(orderId);
-            processedPayments.add(paymentId);
-          }
-        }
+    // Only process successful payments that are COMPLETED
+    if (
+      event.type === "payment.updated" &&
+      event.data?.object?.payment?.status === "COMPLETED" &&
+      !event.data?.object?.payment?.refunded
+    ) {
+      const orderId = event.data.object.payment.orderId;
+      if (orderId) {
+        await decrementInventory(orderId);
       }
     }
 
@@ -265,115 +266,94 @@ async function handleInventoryUpdate(event) {
     }
 
     const inventoryCount = event.object.inventory_counts[0];
-    const catalogObjectId = inventoryCount.catalog_object_id;
-    const quantity = inventoryCount.quantity;
+    const variationId = inventoryCount.catalog_object_id;
+    const newQuantity = inventoryCount.quantity;
 
     const dbClient = await pool.connect();
 
     try {
       await dbClient.query("BEGIN");
 
-      const updateQuery = `
-        UPDATE inventory 
-        SET quantity = $1, 
-            last_updated = NOW()
-        WHERE catalog_object_id = $2
-        RETURNING *;
+      // First, get the item details from Square
+      const variationResponse = await client.catalogApi.retrieveCatalogObject(
+        variationId
+      );
+      const variation = variationResponse.result.object;
+      const itemId = variation.itemVariationData.itemId;
+
+      // Get the current item data from database
+      const getItemQuery = `
+        SELECT * FROM inventory WHERE item_id = $1;
       `;
+      const itemResult = await dbClient.query(getItemQuery, [itemId]);
 
-      const result = await dbClient.query(updateQuery, [
-        quantity,
-        catalogObjectId,
-      ]);
-
-      if (result.rows.length === 0) {
-        console.log(
-          `New item detected with catalog_object_id: ${catalogObjectId}`
+      if (itemResult.rows.length === 0) {
+        // Handle new item case
+        const itemResponse = await client.catalogApi.retrieveCatalogObject(
+          itemId
         );
+        const item = itemResponse.result.object;
+        const { name, description, variations } = item.itemData;
 
-        try {
-          const variationResponse =
-            await client.catalogApi.retrieveCatalogObject(catalogObjectId);
-          const variation = variationResponse.result.object;
+        // Format variations
+        const v_ids = [];
+        const v_names = [];
+        const v_quantities = [];
 
-          const itemResponse = await client.catalogApi.retrieveCatalogObject(
-            variation.itemVariationData.itemId
-          );
-          const item = itemResponse.result.object;
-
-          const { name, description, imageIds, variations } = item.itemData;
-          const priceAmount = Number(
-            variation.itemVariationData.priceMoney.amount
-          );
-          const price = priceAmount / 100;
-
-          const imageUrls =
-            imageIds && imageIds.length > 0
-              ? await Promise.all(
-                  imageIds.map(async (imageId) => {
-                    const imageResponse =
-                      await client.catalogApi.retrieveCatalogObject(imageId);
-                    return imageResponse.result.object.imageData.url;
-                  })
-                )
-              : [];
-
-          // Format variations for storage
-          const formattedVariations = variations.map((v) => ({
-            id: v.id,
-            name: v.itemVariationData.name,
-            price: v.itemVariationData.priceMoney
-              ? Number(v.itemVariationData.priceMoney.amount) / 100
-              : 0,
-            sku: v.itemVariationData.sku,
-            quantity: v.itemVariationData.inventoryAlertType, // Assuming you want to track quantity
-          }));
-
-          const insertQuery = `
-            INSERT INTO inventory (
-              item_id,
-              catalog_object_id,
-              name,
-              description,
-              quantity,
-              price,
-              image_urls,
-              variations,
-              last_updated
-            )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
-            RETURNING *;
-          `;
-
-          await dbClient.query(insertQuery, [
-            variation.itemVariationData.itemId,
-            catalogObjectId,
-            name || "No name available",
-            description || "No description available",
-            quantity,
-            price,
-            imageUrls,
-            JSON.stringify(formattedVariations), // Store variations as JSON
-          ]);
-
-          console.log(
-            `Successfully added new item: ${name} (ID: ${variation.itemVariationData.itemId})`
-          );
-        } catch (error) {
-          if (error.statusCode === 404) {
-            console.log(
-              `Ignoring 404 error for catalog object ID: ${catalogObjectId}`
-            );
-            // Skip this item and continue
-            await dbClient.query("COMMIT");
-            return;
-          }
-          throw error; // Re-throw other errors
+        for (const v of variations) {
+          v_ids.push(v.id);
+          v_names.push(v.itemVariationData.name);
+          // Get quantity for each variation
+          const vInventoryResponse =
+            await client.inventoryApi.retrieveInventoryCount(v.id);
+          const vQuantity =
+            vInventoryResponse.result.counts?.[0]?.quantity || "0";
+          v_quantities.push(parseInt(vQuantity));
         }
+
+        const insertQuery = `
+          INSERT INTO inventory (
+            item_id,
+            name,
+            description,
+            v_ids,
+            v_names,
+            v_quantities,
+            last_updated
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, NOW());
+        `;
+
+        await dbClient.query(insertQuery, [
+          itemId,
+          name,
+          description,
+          v_ids,
+          v_names,
+          v_quantities,
+        ]);
       } else {
-        console.log(
-          `Successfully updated inventory for item ${result.rows[0].name} (ID: ${result.rows[0].item_id}) to quantity ${quantity}`
-        );
+        // Update existing item's variation quantity
+        const currentItem = itemResult.rows[0];
+        const variationIndex = currentItem.v_ids.indexOf(variationId);
+
+        if (variationIndex === -1) {
+          throw new Error(
+            `Variation ${variationId} not found in item ${itemId}`
+          );
+        }
+
+        const newQuantities = [...currentItem.v_quantities];
+        newQuantities[variationIndex] = parseInt(newQuantity);
+
+        const updateQuery = `
+          UPDATE inventory 
+          SET v_quantities = $1, 
+              last_updated = NOW()
+          WHERE item_id = $2;
+        `;
+
+        await dbClient.query(updateQuery, [newQuantities, itemId]);
       }
 
       await dbClient.query("COMMIT");
@@ -384,10 +364,6 @@ async function handleInventoryUpdate(event) {
       dbClient.release();
     }
   } catch (error) {
-    if (error.statusCode === 404) {
-      console.log("Ignoring 404 error for catalog object");
-      return;
-    }
     console.error("Error in handleInventoryUpdate:", error);
     throw error;
   }
@@ -503,92 +479,103 @@ app.delete("/api/orders/:id", async (req, res) => {
   }
 });
 
-async function syncItemsFromSquare() {
-  const client = await pool.connect();
-  try {
-    console.log("Fetching items from Square...");
-    const items = await listItems();
+// async function syncInventoryFromSquare() {
+//   const client = await pool.connect();
+//   try {
+//     const items = await listItems();
 
-    if (!items || items.length === 0) {
-      console.log("No items found in Square.");
-      return;
-    }
+//     await client.query("BEGIN");
 
-    console.log(`Found ${items.length} items in Square`);
+//     for (const item of items) {
+//       const { id, name, description, variations } = item;
 
-    await client.query("BEGIN");
+//       const v_ids = variations.map(v => v.v_id);
+//       const v_names = variations.map(v => v.v_name);
+//       const v_quantities = await Promise.all(
+//         v_ids.map(async (vid) => {
+//           const response = await client.inventoryApi.retrieveInventoryCount(vid);
+//           return parseInt(response.result.counts?.[0]?.quantity || "0");
+//         })
+//       );
 
-    for (const item of items) {
-      const { id, name, description, variations, imageUrls } = item;
+//       const upsertQuery = `
+//         INSERT INTO inventory (
+//           item_id,
+//           name,
+//           description,
+//           v_ids,
+//           v_names,
+//           v_quantities,
+//           last_updated
+//         )
+//         VALUES ($1, $2, $3, $4, $5, $6, NOW())
+//         ON CONFLICT (item_id)
+//         DO UPDATE SET
+//           name = EXCLUDED.name,
+//           description = EXCLUDED.description,
+//           v_ids = EXCLUDED.v_ids,
+//           v_names = EXCLUDED.v_names,
+//           v_quantities = EXCLUDED.v_quantities,
+//           last_updated = NOW();
+//       `;
 
-      // Extract variation details into arrays
-      const v_ids = variations.map((v) => v.v_id);
-      const v_names = variations.map((v) => v.v_name);
-      const v_quantities = variations.map((v) => v.v_quantity);
+//       await client.query(upsertQuery, [
+//         id,
+//         name || "No name available",
+//         description || "No description available",
+//         v_ids,
+//         v_names,
+//         v_quantities
+//       ]);
+//     }
 
-      console.log(`Inserting item: ${name} (ID: ${id})`);
-      console.log(`Variations IDs: ${v_ids}`);
-      console.log(`Variations Names: ${v_names}`);
-      console.log(`Variations Quantities: ${v_quantities}`);
-
-      const upsertQuery = `
-        INSERT INTO inventory (
-          item_id,
-          catalog_object_id,
-          name,
-          description,
-          price,
-          quantity,
-          image_urls,
-          v_ids,
-          v_names,
-          v_quantities,
-          last_updated
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW())
-        ON CONFLICT (item_id)
-        DO UPDATE SET
-          catalog_object_id = EXCLUDED.catalog_object_id,
-          name = EXCLUDED.name,
-          description = EXCLUDED.description,
-          price = EXCLUDED.price,
-          quantity = EXCLUDED.quantity,
-          image_urls = EXCLUDED.image_urls,
-          v_ids = EXCLUDED.v_ids,
-          v_names = EXCLUDED.v_names,
-          v_quantities = EXCLUDED.v_quantities,
-          last_updated = NOW();
-      `;
-
-      await client.query(upsertQuery, [
-        id,
-        id, // Assuming catalog_object_id is the same as item_id
-        name || "No name available",
-        description || "No description available",
-        variations[0]?.v_price || 0, // Assuming all variations have the same price
-        v_quantities.reduce((sum, q) => sum + q, 0), // Total quantity
-        imageUrls,
-        v_ids,
-        v_names,
-        v_quantities,
-      ]);
-
-      console.log(`Synced item: ${name} (ID: ${id})`);
-    }
-
-    await client.query("COMMIT");
-    console.log("Inventory sync completed successfully");
-  } catch (error) {
-    await client.query("ROLLBACK");
-    console.error("Error syncing items from Square:", error);
-    throw error;
-  } finally {
-    client.release();
-  }
-}
+//     await client.query("COMMIT");
+//   } catch (error) {
+//     await client.query("ROLLBACK");
+//     throw error;
+//   } finally {
+//     client.release();
+//   }
+// }
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// async function showAllInventory() {
+//   try {
+//     const client = await pool.connect();
+//     const result = await client.query(`
+//       SELECT
+//         name,
+//         description,
+//         v_names,
+//         v_quantities,
+//         last_updated
+//       FROM inventory
+//       ORDER BY name ASC;
+//     `);
+
+//     console.log("\n=== Current Inventory ===");
+//     result.rows.forEach((item) => {
+//       console.log(`\nProduct: ${item.name}`);
+//       console.log(`Description: ${item.description}`);
+//       console.log("Variations:");
+//       item.v_names.forEach((name, index) => {
+//         console.log(`  - ${name}: ${item.v_quantities[index]} units`);
+//       });
+//       console.log(`Last Updated: ${item.last_updated}`);
+//       console.log("------------------------");
+//     });
+
+//     client.release();
+//     return result.rows;
+//   } catch (err) {
+//     console.error("Error showing inventory:", err.stack);
+//     throw err;
+//   }
+// }
+
+// showAllInventory();

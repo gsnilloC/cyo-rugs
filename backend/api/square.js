@@ -8,6 +8,8 @@ const client = new Client({
 
 const { getInventoryItemById } = require("../db/config");
 
+const processedOrders = new Set();
+
 const getInventoryCount = async (itemId) => {
   try {
     const item = await getInventoryItemById(itemId);
@@ -314,7 +316,7 @@ const testSquareApi = async () => {
 //   }
 // };
 
-const decrementInventory = async (orderId) => {
+async function decrementInventory(orderId) {
   const serializeBigInt = (obj) => {
     return JSON.parse(
       JSON.stringify(obj, (key, value) =>
@@ -324,7 +326,14 @@ const decrementInventory = async (orderId) => {
   };
 
   try {
+    // Check if order was already processed
+    if (processedOrders.has(orderId)) {
+      console.log(`Order ${orderId} was already processed, skipping...`);
+      return;
+    }
+
     console.log("Decrementing inventory for order ID:", orderId);
+    processedOrders.add(orderId);
 
     const orderResponse = await client.ordersApi.retrieveOrder(orderId);
     const lineItems = orderResponse.result.order.lineItems;
@@ -337,26 +346,20 @@ const decrementInventory = async (orderId) => {
 
     const changes = await Promise.all(
       lineItems.map(async (item) => {
-        console.log("\nProcessing item:", item.name);
-
-        const catalogResponse = await client.catalogApi.searchCatalogItems({
-          textFilter: item.name,
-          limit: 1,
-        });
-
-        const catalogItem = catalogResponse.result.items?.[0];
-        if (!catalogItem) {
-          console.warn(`Catalog item not found for: ${item.name}`);
-          return null;
-        }
-
-        const variationId = catalogItem.itemData.variations[0]?.id;
+        console.log("\nProcessing item:", item);
+        
+        const variationId = item.catalogObjectId;
         if (!variationId) {
-          console.warn(`No variation found for item: ${item.name}`);
+          console.warn(`No variation ID found for item: ${item.name}`);
           return null;
         }
 
-        const adjustment = {
+        const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
+        const currentQuantity = inventoryResponse.result.counts?.[0]?.quantity || "0";
+
+        console.log(`Current inventory for variation ${variationId}: ${currentQuantity}`);
+
+        return {
           type: "ADJUSTMENT",
           adjustment: {
             catalogObjectId: variationId,
@@ -367,8 +370,6 @@ const decrementInventory = async (orderId) => {
             occurredAt: new Date().toISOString(),
           },
         };
-
-        return adjustment;
       })
     );
 
@@ -379,15 +380,11 @@ const decrementInventory = async (orderId) => {
     }
 
     const response = await client.inventoryApi.batchChangeInventory({
-      idempotencyKey: Date.now().toString(),
+      idempotencyKey: orderId, // Use orderId as idempotency key
       changes: validChanges,
     });
 
-    console.log(
-      "Inventory adjustment response:",
-      serializeBigInt(response.result)
-    );
-
+    console.log("Inventory adjustment response:", serializeBigInt(response.result));
     return response;
   } catch (error) {
     console.error("Error decrementing inventory:", error);
@@ -396,7 +393,7 @@ const decrementInventory = async (orderId) => {
     }
     throw error;
   }
-};
+}
 
 const getPricesForItemIds = async (itemIds) => {
   try {

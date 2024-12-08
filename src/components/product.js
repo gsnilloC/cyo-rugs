@@ -25,6 +25,10 @@ const Product = () => {
   const handleIncrease = () => setQuantity(quantity + 1);
   const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
+  const isVariationSoldOut = (index) => {
+    return rug.v_quantities[index] === 0;
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -73,15 +77,16 @@ const Product = () => {
                 <div
                   className={`${styles.colorCircle} ${
                     rug.v_names[index] === selectedColor ? styles.activeColor : ''
-                  }`}
+                  } ${isVariationSoldOut(index) ? styles.soldOut : ''}`}
                   style={{
                     backgroundColor: rug.v_names[index].toLowerCase(),
                     border:
                       rug.v_names[index].toLowerCase() === "white"
                         ? "1px solid #ddd"
                         : "none",
+                    cursor: isVariationSoldOut(index) ? 'not-allowed' : 'pointer',
                   }}
-                  onClick={() => setSelectedColor(rug.v_names[index])}
+                  onClick={() => !isVariationSoldOut(index) && setSelectedColor(rug.v_names[index])}
                 />
                 <p>{rug.v_names[index]}</p>
               </div>

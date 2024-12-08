@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import mockProducts from "../mocks/mockProducts";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -13,30 +12,45 @@ const useShop = () => {
   useEffect(() => {
     const fetchRugs = async () => {
       try {
-        // Fetching from the API
         const response = await axios.get("/api/items");
-        if (Array.isArray(response.data)) {
-          const rugsWithInventory = await Promise.all(
-            response.data.map(async (rug) => {
-              const inventoryResponse = await axios.get(
-                `/api/inventory/${rug.id}`
-              );
-              return {
-                ...rug,
-                inventoryCount: inventoryResponse.data.inventoryCount,
-              };
-            })
-          );
-          rugsWithInventory.sort((a, b) => a.name.localeCompare(b.name));
-          setRugs(rugsWithInventory);
-        } else {
-          throw new Error("Response is not an array");
-        }
+        console.log("API Response:", response.data);
 
-        // //Use mock products instead
-        // setRugs(mockProducts);
+        if (Array.isArray(response.data)) {
+          const rugsWithInventory = response.data.map((rug) => {
+            console.log("Processing rug:", {
+              id: rug.id,
+              name: rug.name,
+              v_quantities: rug.v_quantities,
+            });
+
+            const totalInventory = Array.isArray(rug.v_quantities)
+              ? rug.v_quantities.reduce(
+                  (sum, qty) => sum + (Number(qty) || 0),
+                  0
+                )
+              : 0;
+
+            console.log(`Total inventory for ${rug.name}: ${totalInventory}`);
+
+            return {
+              ...rug,
+              inventoryCount: totalInventory,
+            };
+          });
+
+          rugsWithInventory.sort((a, b) => a.name.localeCompare(b.name));
+          console.log(
+            "Final processed rugs:",
+            rugsWithInventory.map((rug) => ({
+              name: rug.name,
+              inventoryCount: rug.inventoryCount,
+            }))
+          );
+
+          setRugs(rugsWithInventory);
+        }
       } catch (err) {
-        console.error("Error fetching rugs from API, using mock data:", err);
+        console.error("Error fetching rugs:", err);
       } finally {
         setLoading(false);
       }
