@@ -258,6 +258,18 @@ app.post("/webhook/inventory", async (req, res) => {
 //   }
 // });
 
+const getImageUrls = async (imageIds) => {
+  const imageUrls = await Promise.all(
+    imageIds.map(async (imageId) => {
+      const imageResponse = await client.catalogApi.retrieveCatalogObject(
+        imageId
+      );
+      return imageResponse.result.object.imageData.url;
+    })
+  );
+  return imageUrls;
+};
+
 async function handleInventoryUpdate(event) {
   try {
     if (!event?.object?.inventory_counts?.[0]) {
@@ -314,20 +326,41 @@ async function handleInventoryUpdate(event) {
         const insertQuery = `
           INSERT INTO inventory (
             item_id,
+            catalog_object_id,
             name,
             description,
+            price,
+            quantity,
+            image_urls,
             v_ids,
             v_names,
             v_quantities,
             last_updated
           )
-          VALUES ($1, $2, $3, $4, $5, $6, NOW());
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW());
         `;
+
+        // Get the price from the first variation
+        const basePrice = variations[0]?.itemVariationData?.priceMoney?.amount
+          ? Number(variations[0].itemVariationData.priceMoney.amount) / 100
+          : 0;
+
+        // Calculate total quantity across all variations
+        const totalQuantity = v_quantities.reduce((sum, qty) => sum + qty, 0);
+
+        // Get image URLs if available
+        const imageUrls = item.itemData.imageIds
+          ? await getImageUrls(item.itemData.imageIds)
+          : [];
 
         await dbClient.query(insertQuery, [
           itemId,
+          item.id, // catalog_object_id
           name,
           description,
+          basePrice,
+          totalQuantity,
+          imageUrls,
           v_ids,
           v_names,
           v_quantities,
