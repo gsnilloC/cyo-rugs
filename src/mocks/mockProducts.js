@@ -4,7 +4,8 @@ const mockProducts = [
   {
     id: 1,
     name: "Chrome Hearts + CDG",
-    description: "No description available",
+    description:
+      "This is a test description that is very long and imititates what an actual product's description would look like on the product page!",
     price: 89.99,
     imageUrls: [
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
@@ -12,8 +13,8 @@ const mockProducts = [
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/f1dabcff9d9e585a9715772326e5c15ee38c8549/original.jpeg",
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/6540a20608f1cb270d21f999d3d47c403c338ea5/original.jpeg",
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/046999befaf63b986c9ba2d490f438a75f3920ae/original.jpeg",
-      "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
-      "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
+      // "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
+      // "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
     ],
     inventoryCount: 7,
     v_ids: [

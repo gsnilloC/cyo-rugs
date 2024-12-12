@@ -14,7 +14,7 @@ const Product = () => {
   const { rug, loading, error, handleAddToCart } = useProduct();
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState("");
 
   useEffect(() => {
     if (rug && rug.v_names && rug.v_names.length > 0) {
@@ -61,7 +61,6 @@ const Product = () => {
               onClick={() => setSelectedImageIndex(index)}
             />
           ))}
-          <div className={styles.scrollIndicator}></div>
         </div>
       </div>
       <div className={styles.productDetails}>
@@ -76,17 +75,24 @@ const Product = () => {
               <div key={index} className={styles.variation}>
                 <div
                   className={`${styles.colorCircle} ${
-                    rug.v_names[index] === selectedColor ? styles.activeColor : ''
-                  } ${isVariationSoldOut(index) ? styles.soldOut : ''}`}
+                    rug.v_names[index] === selectedColor
+                      ? styles.activeColor
+                      : ""
+                  } ${isVariationSoldOut(index) ? styles.soldOut : ""}`}
                   style={{
                     backgroundColor: rug.v_names[index].toLowerCase(),
                     border:
                       rug.v_names[index].toLowerCase() === "white"
                         ? "1px solid #ddd"
                         : "none",
-                    cursor: isVariationSoldOut(index) ? 'not-allowed' : 'pointer',
+                    cursor: isVariationSoldOut(index)
+                      ? "not-allowed"
+                      : "pointer",
                   }}
-                  onClick={() => !isVariationSoldOut(index) && setSelectedColor(rug.v_names[index])}
+                  onClick={() =>
+                    !isVariationSoldOut(index) &&
+                    setSelectedColor(rug.v_names[index])
+                  }
                 />
                 <p>{rug.v_names[index]}</p>
               </div>

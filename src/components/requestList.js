@@ -74,7 +74,7 @@ function RequestList() {
 
   const updatePrices = async () => {
     try {
-      await axios.post("/api/update-prices");
+      await axios.post("/api/inventory/update-prices");
       alert("Prices updated successfully!");
     } catch (error) {
       console.error("Error updating prices:", error);

@@ -1,12 +1,6 @@
-const { Client, Environment } = require("square");
 require("dotenv").config();
-
-const client = new Client({
-  environment: Environment.Production,
-  accessToken: process.env.SQUARE_ACCESS_TOKEN,
-});
-
-const { getInventoryItemById } = require("../db/config");
+const { getInventoryItemById } = require("../db");
+const client = require("./squareClient");
 
 const processedOrders = new Set();
 
@@ -347,17 +341,21 @@ async function decrementInventory(orderId) {
     const changes = await Promise.all(
       lineItems.map(async (item) => {
         console.log("\nProcessing item:", item);
-        
+
         const variationId = item.catalogObjectId;
         if (!variationId) {
           console.warn(`No variation ID found for item: ${item.name}`);
           return null;
         }
 
-        const inventoryResponse = await client.inventoryApi.retrieveInventoryCount(variationId);
-        const currentQuantity = inventoryResponse.result.counts?.[0]?.quantity || "0";
+        const inventoryResponse =
+          await client.inventoryApi.retrieveInventoryCount(variationId);
+        const currentQuantity =
+          inventoryResponse.result.counts?.[0]?.quantity || "0";
 
-        console.log(`Current inventory for variation ${variationId}: ${currentQuantity}`);
+        console.log(
+          `Current inventory for variation ${variationId}: ${currentQuantity}`
+        );
 
         return {
           type: "ADJUSTMENT",
@@ -384,7 +382,10 @@ async function decrementInventory(orderId) {
       changes: validChanges,
     });
 
-    console.log("Inventory adjustment response:", serializeBigInt(response.result));
+    console.log(
+      "Inventory adjustment response:",
+      serializeBigInt(response.result)
+    );
     return response;
   } catch (error) {
     console.error("Error decrementing inventory:", error);

@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../styles/shop.module.css";
 import { Link } from "react-router-dom";
 import useShop from "../hooks/useShop";
+import { Box, CircularProgress } from "@mui/material";
 
 function Shop() {
   const {
@@ -14,7 +15,22 @@ function Shop() {
   } = useShop();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+        width="100vw"
+        position="fixed"
+        top="0"
+        left="0"
+        bgcolor="rgba(255, 255, 255, 0.8)"
+        zIndex="9999"
+      >
+        <CircularProgress size={100} />
+      </Box>
+    );
   }
 
   if (error) {
