@@ -1,0 +1,162 @@
+.galleryWallContainer {
+  background: #f5f0e6;
+  padding: 2rem;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  height: 80vh;
+  width: 1140px;
+  margin: 0 auto;
+}
+
+.galleryFloorContainer {
+  width: 1255px;
+  border-bottom: 150px solid #8b6f4e;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) perspective(1000px) rotateX(10deg);
+}
+
+.framesContainer {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-bottom: 2rem;
+  position: relative;
+  top: 15%;
+}
+
+.frame {
+  width: 250px;
+  height: 250px;
+  border: 10px solid gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+  transform: perspective(1000px) rotateX(5deg);
+  text-align: center;
+}
+
+.frame:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+  width: 80%;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spotlight {
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8),
+    transparent 70%
+  );
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  pointer-events: none;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+  position: relative;
+  top: 20%;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.form button:hover {
+  background-color: var(--secondary-color);
+}
+
+.nameplate {
+  background-color: #e0e0e0;
+  border: 1px solid #333;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-family: "Times New Roman", serif;
+  font-size: 0.9rem;
+}
+
+.uploadInput {
+  margin-top: 20px;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+.requestContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1.6;
+  margin-top: -70px;
+  z-index: 1000;
+  position: fixed;
+  top: 250px;
+  left: 325px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.requestContainer p {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.requestContainer h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.requestContainer ul {
+  padding-left: 2rem;
+  font-size: 0.9rem;
+}
