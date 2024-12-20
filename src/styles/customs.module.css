@@ -16,6 +16,13 @@
   border-radius: 4px;
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.formInput:focus {
+  border-color: var(--primary-color);
+  outline: none;
 }
 
 .submitButton {
@@ -126,6 +133,7 @@
 .descriptionTextarea {
   height: 150px;
   font-family: inherit;
+  resize: vertical;
 }
 
 .imagePreviewContainer {
