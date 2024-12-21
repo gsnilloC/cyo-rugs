@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.fb2c0ec1.css",
-    "main.js": "/static/js/main.b52dc825.js",
+    "main.css": "/static/css/main.a8226636.css",
+    "main.js": "/static/js/main.4203e269.js",
     "static/media/cyo-rugs-intro.mp4": "/static/media/cyo-rugs-intro.0ecf2ac877b95b4be370.mp4",
     "static/media/cus2.JPG": "/static/media/cus2.10ea9eefe457d421417c.JPG",
     "static/media/cus4.JPG": "/static/media/cus4.a78315bdee9db4224328.JPG",
@@ -16,13 +16,14 @@
     "static/media/koberemoved.png": "/static/media/koberemoved.d4baa7ad1a4c7daa2cd6.png",
     "static/media/phantomremoved.png": "/static/media/phantomremoved.d20cfd8b7bbaa35bd0f1.png",
     "static/media/frame.png": "/static/media/frame.0215f4dff4d529301775.png",
+    "static/media/questionmark.png": "/static/media/questionmark.5625981cc6a16a273a3d.png",
     "static/media/livingroom.png": "/static/media/livingroom.c23b4c53c55b1dd76a34.png",
     "index.html": "/index.html",
-    "main.fb2c0ec1.css.map": "/static/css/main.fb2c0ec1.css.map",
-    "main.b52dc825.js.map": "/static/js/main.b52dc825.js.map"
+    "main.a8226636.css.map": "/static/css/main.a8226636.css.map",
+    "main.4203e269.js.map": "/static/js/main.4203e269.js.map"
   },
   "entrypoints": [
-    "static/css/main.fb2c0ec1.css",
-    "static/js/main.b52dc825.js"
+    "static/css/main.a8226636.css",
+    "static/js/main.4203e269.js"
   ]
 }

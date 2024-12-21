@@ -16,6 +16,13 @@
   border-radius: 4px;
   background-color: var(--bg-color);
   color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.formInput:focus {
+  border-color: var(--primary-color);
+  outline: none;
 }
 
 .submitButton {
@@ -126,6 +133,7 @@
 .descriptionTextarea {
   height: 150px;
   font-family: inherit;
+  resize: vertical;
 }
 
 .imagePreviewContainer {
@@ -186,14 +194,13 @@
 }
 
 .requestContainer {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 3rem;
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  line-height: 1.6;
-  margin-top: -70px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .buttonContainer {

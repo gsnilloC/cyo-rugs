@@ -1,0 +1,328 @@
+.galleryWallContainer {
+  background: #f5f0e6;
+  padding: 2rem;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+  height: 550px;
+  width: 1125px;
+  margin: 0 auto;
+  z-index: 1000;
+}
+
+.floorContainer {
+  width: 1300px;
+  display: flex;
+  border-bottom: 300px solid #8b6f4e;
+  border-left: 90px solid transparent;
+  border-right: 90px solid transparent;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+}
+
+.framesContainer {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  position: relative;
+  margin: 4rem;
+}
+
+.frame {
+  width: 250px;
+  height: 250px;
+  border: 10px solid gold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+  transform: perspective(1000px) rotateX(5deg);
+  text-align: center;
+}
+
+.frame:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+  width: 80%;
+  object-fit: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1100;
+}
+
+.form input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.form button:hover {
+  background-color: var(--secondary-color);
+}
+
+.nameplate {
+  background-color: #e0e0e0;
+  border: 1px solid #333;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-family: "Times New Roman", serif;
+  font-size: 0.9rem;
+}
+
+.uploadInput {
+  margin-top: 20px;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+.requestContainer p {
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.requestContainer h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.requestContainer ul {
+  padding-left: 2rem;
+  font-size: 0.9rem;
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--text-color);
+  border-radius: 4px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.formInput:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.descriptionTextarea {
+  height: 150px; /* Adjust height as needed */
+  resize: vertical; /* Allow vertical resizing */
+}
+
+.requestForm {
+  display: grid;
+  gap: 1rem;
+  max-width: 75%;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.buttonContainer {
+  margin-top: -4rem;
+}
+
+.upload {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+  box-shadow: 4px 4px 0 0 #000000;
+  text-decoration: none;
+  margin: 1.5rem;
+}
+
+.button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+  box-shadow: 4px 4px 0 0 #000000;
+  text-decoration: none;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0 0 #000000;
+}
+
+.button:active {
+  transform: translateY(0);
+  box-shadow: 4px 4px 0 0 #000000;
+}
+
+.readFirstButton {
+  background-color: red; /* Make the Read First button red */
+}
+
+.seeMoreButton {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+  box-shadow: 4px 4px 0 0 #000000;
+  text-decoration: none;
+  margin-top: 1rem;
+}
+
+.seeMoreButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0 0 #000000;
+}
+
+.seeMoreButton:active {
+  transform: translateY(0);
+  box-shadow: 4px 4px 0 0 #000000;
+}
+
+.trashIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: red;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .galleryWallContainer {
+    width: 100%;
+    padding: 1rem;
+    height: 100%;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  .framesContainer {
+    overflow-x: auto;
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .frame {
+    max-width: 90%;
+    height: auto;
+    border: 5px solid gold;
+  }
+
+  .form {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .floorContainer {
+    display: none;
+  }
+
+  .image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin: 1rem;
+  }
+
+  .upload {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin: 1.5rem;
+    margin-top: 5rem;
+  }
+
+  .readFirstButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.5rem;
+    margin-top: -0.2rem;
+    margin-right: -0.05rem;
+  }
+}
+
+.feedbackMessage {
+  background-color: var(--primary-color); /* or another color that matches your theme */
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

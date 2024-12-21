@@ -1,278 +1,274 @@
-import React, { useState, useEffect } from "react";
-import styles from "../styles/customs.module.css";
-import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
+import styles from "../styles/galleryWall.module.css";
+import { placeholder } from "../assets/images";
+import { IconButton, Modal, Box } from "@mui/material";
+import axios from "axios";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Request() {
-  const [showModal, setShowModal] = useState(false);
+  const [images, setImages] = useState([null, null, null]);
+  const [showTip, setShowTip] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     description: "",
-    images: [],
   });
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (showModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
+  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
+
+  const handleImageUpload = (event) => {
+    const files = event.target.files;
+    const newImages = [...images];
+    for (let i = 0; i < files.length && i < 3; i++) {
+      newImages[i] = files[i];
     }
+    setImages(newImages);
+  };
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [showModal]);
+  const handleRemoveImage = (index) => {
+    const newImages = [...images];
+    newImages[index] = null;
+    setImages(newImages);
+  };
+
+  const handleTipClick = () => {
+    setShowTip(!showTip);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (name === "phone") {
+      const cleaned = ('' + value).replace(/\D/g, '');
+      const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
 
-    const validFiles = files.filter((file) => {
-      if (!allowedTypes.includes(file.type)) {
-        alert(`File ${file.name} is not a supported image type`);
-        return false;
+      if (match) {
+        const formattedNumber = [match[1], match[2], match[3]]
+          .filter(Boolean)
+          .join('-');
+        setFormData({ ...formData, [name]: formattedNumber });
       }
-      if (file.size > maxSize) {
-        alert(`File ${file.name} is too large. Maximum size is 5MB`);
-        return false;
-      }
-      return true;
-    });
-
-    if (validFiles.length + formData.images.length <= 3) {
-      setFormData({ ...formData, images: [...formData.images, ...validFiles] });
     } else {
-      alert("You can only upload up to 3 images.");
+      setFormData({ ...formData, [name]: value });
     }
   };
 
-  const validateForm = (formData) => {
-    const errors = [];
-
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      errors.push("Please enter a valid email address");
-    }
-
-    // Phone validation
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      errors.push("Please enter a valid phone number");
-    }
-
-    // Description length
-    if (formData.description.length < 10) {
-      errors.push("Description must be at least 10 characters long");
-    }
-
-    return errors;
-  };
-
-  const handleFormSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validateForm(formData);
-    if (validationErrors.length > 0) {
-      alert(validationErrors.join("\n"));
-      return;
-    }
+    const formDataToSend = new FormData();
+    formDataToSend.append("name", formData.name);
+    formDataToSend.append("phone", formData.phone);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("description", formData.description);
+    formDataToSend.append("recaptchaToken", recaptchaToken);
 
-    if (!recaptchaValue) {
-      alert("Please verify that you are human");
-      return;
-    }
-
-    const data = new FormData();
-    data.append("name", formData.name);
-    data.append("phone", formData.phone);
-    data.append("email", formData.email);
-    data.append("description", formData.description);
-    data.append("recaptchaToken", recaptchaValue);
-
-    formData.images.forEach((image) => {
-      data.append("images", image);
+    images.forEach((image, index) => {
+      if (image) {
+        formDataToSend.append(`images`, image);
+      }
     });
 
     try {
-      const response = await axios.post("/api/upload", data, {
+      const response = await axios.post("/api/upload", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("Upload successful:", response.data);
-      setUploadSuccess(true);
+      toast.success("Upload successful!");
+      navigate("/");
     } catch (error) {
-      console.error("Error uploading data:", error);
-      alert("Upload failed. Please try again.");
+      toast.error("Error uploading form data. Please try again.");
     }
   };
 
-  const handleRemoveImage = (index) => {
-    setFormData({
-      ...formData,
-      images: formData.images.filter((_, i) => i !== index),
-    });
-  };
-
-  const handleRecaptchaChange = (value) => {
-    console.log("reCAPTCHA value:", value);
-    setRecaptchaValue(value);
-  };
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => setIsModalOpen(false);
 
   return (
-    <div className={styles.requestContainer}>
-      <h1>Bring Your Vision to Life!</h1>
-      <p>
-        Grab a personalized rug tailored to your vision. Whether it's a specific
-        design, size, color scheme, or theme, we bring your ideas to life.
-      </p>
-      <p>
-        To ensure your custom rug is everything you’ve dreamed of, please
-        provide detailed and accurate information in your request. Include
-        specifics such as:
-      </p>
-      <ul>
-        <li>
-          <strong>Size</strong>: Exact dimensions (in feet or inches) to fit
-          your space perfectly.
-        </li>
-        <li>
-          <strong>Design</strong>: Attach clear references, sketches, or
-          describe your design as vividly as possible.
-        </li>
-        <li>
-          <strong>Colors</strong>: Mention preferred color schemes or specific
-          shades.
-        </li>
-        <li>
-          <strong>Material Preferences</strong>: If applicable, let us know your
-          preferred texture or type of material (e.g., wool, cotton, etc.).
-        </li>
-      </ul>
-      <p>
-        💡 <strong>Tip</strong>: The more precise your details, the better we
-        can meet your expectations!
-      </p>
-      <p>
-        <strong>Important:</strong>
-      </p>
-      <ul>
-        <li>
-          Double-check your contact information (email and phone number) to
-          avoid delays.
-        </li>
-        <li>
-          If you have any questions or special requirements, don’t hesitate to
-          include them in your request.
-        </li>
-      </ul>
-      <p>
-        We’re excited to collaborate with you and create a rug that’s as unique
-        as you are! Start your custom rug request today, and let’s turn your
-        idea into a masterpiece.
-      </p>
-
-      <div className={styles.buttonContainer}>
+    <div>
+      <ToastContainer />
+      <div className={styles.galleryWallContainer}>
+        <h1>Customs Gallery</h1>
         <button
-          onClick={() => setShowModal(true)}
-          className={styles.submitButton}
+          onClick={handleModalOpen}
+          className={`${styles.button} ${styles.readFirstButton}`}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+          }}
         >
-          Upload Your Creation Here
+          Read First
         </button>
-      </div>
-
-      {showModal && (
-        <div className={styles.modal}>
-          <div className={styles.modalHeader}>
-            {uploadSuccess ? (
-              <p>Successfully Uploaded! We will reach out soon!</p>
-            ) : (
-              <p>Customs. Please be specific about any details!</p>
-            )}
-            <CloseIcon
-              className={styles.closeIcon}
-              onClick={() => setShowModal(false)}
-            />
-          </div>
-          {!uploadSuccess && (
-            <form onSubmit={handleFormSubmit} className={styles.requestForm}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                value={formData.phone}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-              <textarea
-                name="description"
-                placeholder="Description"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-                className={styles.descriptionTextarea}
-              ></textarea>
-              <input
-                type="file"
-                onChange={handleImageUpload}
-                multiple
-                accept="image/png, image/jpeg, image/jpg, image/gif"
-              />
-              <p>{formData.images.length}/3 images uploaded</p>
-              <div className={styles.imagePreviewContainer}>
-                {formData.images.map((image, index) => (
-                  <div key={index} className={styles.imageWrapper}>
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`Upload Preview ${index + 1}`}
-                      className={styles.imagePreview}
-                    />
-                    <span
-                      className={styles.removeImage}
-                      onClick={() => handleRemoveImage(index)}
-                    >
-                      &times;
-                    </span>
-                  </div>
-                ))}
+        <div className={styles.framesContainer}>
+          {images.map((image, index) => (
+            <div className={styles.outerFrame} key={index}>
+              <div className={styles.frame}>
+                <div className={styles.spotlight}></div>
+                <img
+                  src={image ? URL.createObjectURL(image) : placeholder}
+                  alt={`Frame ${index + 1}`}
+                  className={styles.image}
+                />
+                {image && (
+                  <IconButton
+                    className={styles.trashIcon}
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )}
               </div>
-              <ReCAPTCHA
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                onChange={handleRecaptchaChange}
-              />
-              <button type="submit">Upload</button>
-            </form>
-          )}
+            </div>
+          ))}
         </div>
-      )}
+        <div className={styles.buttonContainer}>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            style={{ display: "none" }}
+            ref={fileInputRef}
+            id="upload-button"
+          />
+          <div className="upload-button">
+            <button
+              className={styles.upload}
+              onClick={() => fileInputRef.current.click()}
+            >
+              Add Photos
+            </button>
+          </div>
+        </div>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleInputChange}
+            required
+          />
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone (e.g., 123-456-7890)"
+            value={formData.phone}
+            onChange={handleInputChange}
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={formData.description}
+            onChange={handleInputChange}
+            required
+          />
+          <button className={styles.button} type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+      <div className={styles.floorContainer}></div>
+
+      <Modal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        className={styles.requestContainer}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 900,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            padding: 4,
+            borderRadius: 2,
+          }}
+        >
+          <IconButton
+            onClick={handleModalClose}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              color: "var(--text-color)",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <h2>Tips!</h2>
+          <p>Bring Your Vision to Life!</p>
+          <p>
+            Grab a personalized rug tailored to your vision. Whether it's a
+            specific design, size, color scheme, or theme, we bring your ideas
+            to life.
+          </p>
+          <p>
+            To ensure your custom rug is everything you’ve dreamed of, please
+            provide detailed and accurate information in your request. Include
+            specifics such as:
+          </p>
+          <ul>
+            <li>
+              Size: Exact dimensions (in feet or inches) to fit your space
+              perfectly.
+            </li>
+            <li>
+              Design: Attach clear references, sketches, or describe your design
+              as vividly as possible.
+            </li>
+            <li>Colors: Mention preferred color schemes or specific shades.</li>
+            <li>
+              Material Preferences: If applicable, let us know your preferred
+              texture or type of material (e.g., wool, cotton, etc.).
+            </li>
+          </ul>
+          <p>
+            💡 Tip: The more precise your details, the better we can meet your
+            expectations!
+          </p>
+          <h3>Important:</h3>
+          <ul>
+            <li>
+              Double-check your contact information (email and phone number) to
+              avoid delays.
+            </li>
+            <li>
+              If you have any questions or special requirements, don’t hesitate
+              to include them in your request.
+            </li>
+          </ul>
+          <p>
+            We’re excited to collaborate with you and create a rug that’s as
+            unique as you are! Start your custom rug request today, and let’s
+            turn your idea into a masterpiece.
+          </p>
+        </Box>
+      </Modal>
     </div>
   );
 }
