@@ -1,10 +1,14 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import styles from "../styles/galleryWall.module.css";
 import { placeholder } from "../assets/images";
-import { IconButton, Button } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import { IconButton, Modal, Box } from "@mui/material";
 import axios from "axios";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Request() {
   const [images, setImages] = useState([null, null, null]);
@@ -16,9 +20,10 @@ function Request() {
     description: "",
   });
   const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -29,21 +34,36 @@ function Request() {
     setImages(newImages);
   };
 
+  const handleRemoveImage = (index) => {
+    const newImages = [...images];
+    newImages[index] = null;
+    setImages(newImages);
+  };
+
   const handleTipClick = () => {
     setShowTip(!showTip);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    if (name === "phone") {
+      const cleaned = ('' + value).replace(/\D/g, '');
+      const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+
+      if (match) {
+        const formattedNumber = [match[1], match[2], match[3]]
+          .filter(Boolean)
+          .join('-');
+        setFormData({ ...formData, [name]: formattedNumber });
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!recaptchaToken) {
-    //   alert("Please complete the reCAPTCHA");
-    //   return;
-    // }
 
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
@@ -64,16 +84,32 @@ function Request() {
           "Content-Type": "multipart/form-data",
         },
       });
-      setFeedbackMessage("Upload successful!");
+      toast.success("Upload successful!");
+      navigate("/");
     } catch (error) {
-      setFeedbackMessage("Error uploading form data. Please try again.");
+      toast.error("Error uploading form data. Please try again.");
     }
   };
 
+  const handleModalOpen = () => setIsModalOpen(true);
+  const handleModalClose = () => setIsModalOpen(false);
+
   return (
     <div>
+      <ToastContainer />
       <div className={styles.galleryWallContainer}>
         <h1>Customs Gallery</h1>
+        <button
+          onClick={handleModalOpen}
+          className={`${styles.button} ${styles.readFirstButton}`}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+          }}
+        >
+          Read First
+        </button>
         <div className={styles.framesContainer}>
           {images.map((image, index) => (
             <div className={styles.outerFrame} key={index}>
@@ -84,14 +120,19 @@ function Request() {
                   alt={`Frame ${index + 1}`}
                   className={styles.image}
                 />
+                {image && (
+                  <IconButton
+                    className={styles.trashIcon}
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )}
               </div>
             </div>
           ))}
         </div>
-        <div
-          className={styles.buttonContainer}
-          style={{ marginTop: "-30px", marginBottom: "30px" }}
-        >
+        <div className={styles.buttonContainer}>
           <input
             type="file"
             multiple
@@ -102,14 +143,12 @@ function Request() {
             id="upload-button"
           />
           <div className="upload-button">
-            <Button
-              variant="contained"
-              color="primary"
-              component="span"
+            <button
+              className={styles.upload}
               onClick={() => fileInputRef.current.click()}
             >
               Add Photos
-            </Button>
+            </button>
           </div>
         </div>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -145,86 +184,91 @@ function Request() {
             onChange={handleInputChange}
             required
           />
-          {/* <ReCAPTCHA
-            sitekey="YOUR_RECAPTCHA_SITE_KEY"
-            onChange={(token) => setRecaptchaToken(token)}
-          /> */}
-          <Button variant="contained" color="primary" type="submit">
+          <button className={styles.button} type="submit">
             Submit
-          </Button>
+          </button>
         </form>
-        {feedbackMessage && <p>{feedbackMessage}</p>}
-        <IconButton
-          onClick={handleTipClick}
-          style={{
-            position: "absolute",
-            bottom: "-70px",
-            right: "20px",
-            backgroundColor: "var(--primary-color)",
-            color: "white",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-          }}
-        >
-          <InfoIcon />
-        </IconButton>
-        {showTip && (
-          <div className={styles.requestContainer}>
-            <h1>Bring Your Vision to Life!</h1>
-            <p>
-              Grab a personalized rug tailored to your vision. Whether it's a
-              specific design, size, color scheme, or theme, we bring your ideas
-              to life.
-            </p>
-            <p>
-              To ensure your custom rug is everything you’ve dreamed of, please
-              provide detailed and accurate information in your request. Include
-              specifics such as:
-            </p>
-            <ul>
-              <li>
-                <strong>Size</strong>: Exact dimensions (in feet or inches) to
-                fit your space perfectly.
-              </li>
-              <li>
-                <strong>Design</strong>: Attach clear references, sketches, or
-                describe your design as vividly as possible.
-              </li>
-              <li>
-                <strong>Colors</strong>: Mention preferred color schemes or
-                specific shades.
-              </li>
-              <li>
-                <strong>Material Preferences</strong>: If applicable, let us
-                know your preferred texture or type of material (e.g., wool,
-                cotton, etc.).
-              </li>
-            </ul>
-            <p>
-              💡 <strong>Tip</strong>: The more precise your details, the better
-              we can meet your expectations!
-            </p>
-            <p>
-              <strong>Important:</strong>
-            </p>
-            <ul>
-              <li>
-                Double-check your contact information (email and phone number)
-                to avoid delays.
-              </li>
-              <li>
-                If you have any questions or special requirements, don’t
-                hesitate to include them in your request.
-              </li>
-            </ul>
-            <p>
-              We’re excited to collaborate with you and create a rug that’s as
-              unique as you are! Start your custom rug request today, and let’s
-              turn your idea into a masterpiece.
-            </p>
-          </div>
-        )}
       </div>
       <div className={styles.floorContainer}></div>
+
+      <Modal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        className={styles.requestContainer}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 900,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            padding: 4,
+            borderRadius: 2,
+          }}
+        >
+          <IconButton
+            onClick={handleModalClose}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              color: "var(--text-color)",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <h2>Tips!</h2>
+          <p>Bring Your Vision to Life!</p>
+          <p>
+            Grab a personalized rug tailored to your vision. Whether it's a
+            specific design, size, color scheme, or theme, we bring your ideas
+            to life.
+          </p>
+          <p>
+            To ensure your custom rug is everything you’ve dreamed of, please
+            provide detailed and accurate information in your request. Include
+            specifics such as:
+          </p>
+          <ul>
+            <li>
+              Size: Exact dimensions (in feet or inches) to fit your space
+              perfectly.
+            </li>
+            <li>
+              Design: Attach clear references, sketches, or describe your design
+              as vividly as possible.
+            </li>
+            <li>Colors: Mention preferred color schemes or specific shades.</li>
+            <li>
+              Material Preferences: If applicable, let us know your preferred
+              texture or type of material (e.g., wool, cotton, etc.).
+            </li>
+          </ul>
+          <p>
+            💡 Tip: The more precise your details, the better we can meet your
+            expectations!
+          </p>
+          <h3>Important:</h3>
+          <ul>
+            <li>
+              Double-check your contact information (email and phone number) to
+              avoid delays.
+            </li>
+            <li>
+              If you have any questions or special requirements, don’t hesitate
+              to include them in your request.
+            </li>
+          </ul>
+          <p>
+            We’re excited to collaborate with you and create a rug that’s as
+            unique as you are! Start your custom rug request today, and let’s
+            turn your idea into a masterpiece.
+          </p>
+        </Box>
+      </Modal>
     </div>
   );
 }
