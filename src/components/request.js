@@ -8,7 +8,7 @@ import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 function Request() {
   const [images, setImages] = useState([null, null, null]);
@@ -48,13 +48,13 @@ function Request() {
     const { name, value } = e.target;
 
     if (name === "phone") {
-      const cleaned = ('' + value).replace(/\D/g, '');
+      const cleaned = ("" + value).replace(/\D/g, "");
       const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
 
       if (match) {
         const formattedNumber = [match[1], match[2], match[3]]
           .filter(Boolean)
-          .join('-');
+          .join("-");
         setFormData({ ...formData, [name]: formattedNumber });
       }
     } else {
@@ -202,11 +202,15 @@ function Request() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 900,
+            width: { xs: "90%", sm: 900 },
+            height: { xs: "95%", sm: "auto" },
+            maxHeight: { xs: "80vh", sm: "none" },
+            overflowY: { xs: "auto", sm: "visible" },
             bgcolor: "background.paper",
             boxShadow: 24,
-            padding: 4,
             borderRadius: 2,
+            padding: { xs: 3, sm: 4 },
+            typography: { xs: "body2", sm: "body1" },
           }}
         >
           <IconButton
