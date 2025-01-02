@@ -10,14 +10,16 @@ function About() {
         <h2>Delivery Information</h2>
         <ul>
           <li>Main page orders: 2-3 weeks delivery</li>
-          <li>Custom page orders: 3-4 weeks delivery</li>
           <li>
-            For main page orders once the payment has been credited, orders are
-            prepared and
+            Custom page orders: 3-4 weeks delivery(4+ weeks depending on design)
           </li>
           <li>
-            If we are experiencing a high volume of orders resulting in
-            shipments being delayed, we will contact you via email.
+            Shipping price will be a calculated after rug is made and weighed
+            for shipment
+          </li>
+          <li>
+            If high volume of orders are resulting in shipments being delayed, you
+            will be contacted via email.
           </li>
         </ul>
       </section>

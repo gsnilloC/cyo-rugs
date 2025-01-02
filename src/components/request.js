@@ -228,8 +228,8 @@ function Request() {
           <p>Bring Your Vision to Life!</p>
           <p>
             Grab a personalized rug tailored to your vision. Whether it's a
-            specific design, size, color scheme, or theme, we bring your ideas
-            to life.
+            specific design, size, color scheme, or theme, I bring your ideas to
+            life.
           </p>
           <p>
             To ensure your custom rug is everything you’ve dreamed of, please
@@ -252,7 +252,7 @@ function Request() {
             </li>
           </ul>
           <p>
-            💡 Tip: The more precise your details, the better we can meet your
+            💡 Tip: The more precise your details, the better I can meet your
             expectations!
           </p>
           <h3>Important:</h3>

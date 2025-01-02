@@ -48,7 +48,7 @@ function Home() {
           <p>
             Create your own world by transforming your space with a CYO piece
             crafted from your imagination. From rugs and wall art to unique,
-            rugged designs, we bring an extra touch of style and personality to
+            rugged designs, bring an extra touch of style and personality to
             your space.
           </p>
           <Link to="/shop" className={styles.seeMoreButton}>

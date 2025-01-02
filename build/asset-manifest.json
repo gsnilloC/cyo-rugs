@@ -1,7 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.0119502c.css",
-    "main.js": "/static/js/main.2763987d.js",
+    "main.css": "/static/css/main.45856c0a.css",
+    "main.js": "/static/js/main.45082005.js",
+    "static/media/akira.png": "/static/media/akira.67e804f7b875e4e1565d.png",
+    "static/media/boo.png": "/static/media/boo.079830e6295809577cf0.png",
+    "static/media/ganger.png": "/static/media/ganger.802666eb27268ce86d74.png",
     "static/media/cyo-rugs-intro.mp4": "/static/media/cyo-rugs-intro.0ecf2ac877b95b4be370.mp4",
     "static/media/cus2.JPG": "/static/media/cus2.10ea9eefe457d421417c.JPG",
     "static/media/cus4.JPG": "/static/media/cus4.a78315bdee9db4224328.JPG",
@@ -19,11 +22,11 @@
     "static/media/questionmark.png": "/static/media/questionmark.5625981cc6a16a273a3d.png",
     "static/media/livingroom.png": "/static/media/livingroom.c23b4c53c55b1dd76a34.png",
     "index.html": "/index.html",
-    "main.0119502c.css.map": "/static/css/main.0119502c.css.map",
-    "main.2763987d.js.map": "/static/js/main.2763987d.js.map"
+    "main.45856c0a.css.map": "/static/css/main.45856c0a.css.map",
+    "main.45082005.js.map": "/static/js/main.45082005.js.map"
   },
   "entrypoints": [
-    "static/css/main.0119502c.css",
-    "static/js/main.2763987d.js"
+    "static/css/main.45856c0a.css",
+    "static/js/main.45082005.js"
   ]
 }
