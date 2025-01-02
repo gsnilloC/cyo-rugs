@@ -11,3 +11,6 @@ export { default as cus6Image } from "./cus6.JPG";
 export { default as livingroom } from "./livingroom.png";
 export { default as quasi } from "./quasi.png";
 export { default as placeholder } from "./questionmark.png";
+export { default as ganger } from "./ganger.png";
+export { default as boo } from "./boo.png";
+export { default as akira } from "./akira.png";

@@ -265,8 +265,13 @@ function Request() {
               If you have any questions or special requirements, don’t hesitate
               to include them in your request.
             </li>
+            <li>
+              Shipping price will be calculated after rug is finished and
+              weighed for shipment. I’ll provide you with a quote for you to
+              place an order.
+            </li>
           </ul>
-          <p>
+          <p className="pgh" style={{ marginTop: "1rem" }}>
             We’re excited to collaborate with you and create a rug that’s as
             unique as you are! Start your custom rug request today, and let’s
             turn your idea into a masterpiece.

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../components/cartContext";
-import mockProducts from "../mocks/mockProducts";
+// import mockProducts from "../mocks/mockProducts";
 
 const useProduct = () => {
   const { id } = useParams();

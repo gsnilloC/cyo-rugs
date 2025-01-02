@@ -8,10 +8,9 @@ import {
   cus4Image,
   cus5Image,
   cus6Image,
-  kobeImage,
-  troupe,
-  blondImage2,
-  quasi,
+  boo,
+  akira,
+  ganger,
 } from "../assets/images";
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome";
@@ -21,10 +20,9 @@ function Home() {
   const { scrollContainerRef } = useHome();
 
   const featuredRugs = [
-    { id: 1, name: "Kobe Bryant", image: kobeImage },
-    { id: 2, name: "Phantom Troupe", image: troupe },
-    { id: 3, name: "Blond", image: blondImage2 },
-    { id: 4, name: "Quasimoto", image: quasi },
+    { id: 1, name: "Ganger", image: ganger },
+    { id: 2, name: "Akira", image: akira },
+    { id: 3, name: "Boo", image: boo },
   ];
 
   const customerPhotos = [
@@ -77,7 +75,7 @@ function Home() {
         <div className={styles.scrollIndicator}></div>
       </div>
       <div className={styles.customSection}>
-        <h2>Need a Custom?</h2>
+        <h2>Create a 1 of 1</h2>
         <p>Transform your ideas into reality with custom orders</p>
         <Link to="/request">
           <LearnMoreButton />
