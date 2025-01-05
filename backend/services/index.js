@@ -1,4 +1,9 @@
-const { uploadImages } = require("./aws");
+const {
+  uploadImages,
+  fetchHomepageImages,
+  uploadHomepageImages,
+  deleteImagesInFolder,
+} = require("./aws");
 const squareClient = require("./squareClient");
 const {
   listItems,
@@ -14,6 +19,8 @@ const verifyRecaptcha = require("./recaptcha");
 module.exports = {
   uploadImages,
   listItems,
+  fetchHomepageImages,
+  uploadHomepageImages,
   testSquareApi,
   createCheckout,
   getInventoryCount,
@@ -21,5 +28,6 @@ module.exports = {
   getInventoryCounts,
   getPricesForItemIds,
   verifyRecaptcha,
+  deleteImagesInFolder,
   client: squareClient,
 };

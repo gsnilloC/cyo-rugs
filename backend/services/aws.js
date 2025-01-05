@@ -38,14 +38,24 @@ const uploadImages = async (files, customerData, uniqueIdentifier) => {
 
 const fetchHomepageImages = async () => {
   try {
-    const response = await s3.listObjectsV2({
+    const listParams = {
       Bucket: process.env.AWS_S3_BUCKET,
       Prefix: "homepage/",
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams);
+
+    if (!listedObjects.Contents || !Array.isArray(listedObjects.Contents)) {
+      console.error(
+        "S3 response does not contain 'Contents' or it's not an array"
+      );
+      return [];
+    }
+
+    const imageUrls = listedObjects.Contents.map(({ Key }) => {
+      return `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${Key}`;
     });
-    const imageKeys = response.Contents.map((item) => item.Key);
-    const imageUrls = imageKeys.map(
-      (key) => `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${key}`
-    );
+
     return imageUrls;
   } catch (error) {
     console.error("Error fetching homepage images:", error);
@@ -53,7 +63,71 @@ const fetchHomepageImages = async () => {
   }
 };
 
+const uploadHomepageImages = async (files) => {
+  console.log("Uploading homepage images:", files);
+  const imageUrls = [];
+  let i = 1;
+
+  for (const file of files) {
+    const imageKey = `homepage/image${i}`;
+    i++;
+    const params = {
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: imageKey,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    };
+
+    try {
+      await s3.putObject(params);
+      imageUrls.push(
+        `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${imageKey}`
+      );
+    } catch (error) {
+      console.error("Error uploading homepage image: ", error);
+      throw error;
+    }
+  }
+
+  return imageUrls;
+};
+
+const deleteImagesInFolder = async (folder) => {
+  try {
+    const listParams = {
+      Bucket: process.env.AWS_S3_BUCKET,
+      Prefix: folder,
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams);
+
+    if (
+      !listedObjects.Contents ||
+      !Array.isArray(listedObjects.Contents) ||
+      listedObjects.Contents.length === 0
+    )
+      return;
+
+    const deleteParams = {
+      Bucket: process.env.AWS_S3_BUCKET,
+      Delete: { Objects: [] },
+    };
+
+    listedObjects.Contents.forEach(({ Key }) => {
+      deleteParams.Delete.Objects.push({ Key });
+    });
+
+    await s3.deleteObjects(deleteParams);
+  } catch (error) {
+    console.error("Error deleting images in folder:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   uploadImages,
   fetchHomepageImages,
+  uploadHomepageImages,
+
+  deleteImagesInFolder,
 };

@@ -5,6 +5,9 @@ const {
   uploadImages,
   createCheckout,
   verifyRecaptcha,
+  uploadHomepageImages,
+  deleteImagesInFolder,
+  fetchHomepageImages,
 } = require("../../services");
 const { createRequest } = require("../../db");
 const upload = multer();
@@ -55,6 +58,46 @@ router.post("/checkout", async (req, res) => {
     console.error("Error during checkout:", error);
     const errorMessage = error.message;
     res.status(500).json({ error: errorMessage });
+  }
+});
+
+router.post(
+  "/upload-homepage-images",
+  upload.array("images"),
+  async (req, res) => {
+    console.log("Received files:", req.files);
+    try {
+      const imageNames = req.body.names; // Assuming names are sent as an array
+      await deleteImagesInFolder("homepage/");
+
+      const imageUrls = await uploadHomepageImages(req.files);
+
+      const imagesWithNames = imageUrls.map((url, index) => ({
+        url,
+        name:
+          imageNames && imageNames[index]
+            ? imageNames[index]
+            : `Image ${index + 1}`,
+      }));
+
+      res.status(200).json({
+        message: "Images uploaded and replaced successfully",
+        images: imagesWithNames,
+      });
+    } catch (error) {
+      console.error("Error uploading homepage images:", error);
+      res.status(500).json({ error: "Failed to upload images" });
+    }
+  }
+);
+
+router.get("/homepage-images", async (req, res) => {
+  try {
+    const imageUrls = await fetchHomepageImages();
+    res.status(200).json({ imageUrls });
+  } catch (error) {
+    console.error("Error fetching homepage images:", error);
+    res.status(500).json({ error: "Failed to fetch homepage images" });
   }
 });
 
