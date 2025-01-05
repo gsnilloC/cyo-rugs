@@ -9,7 +9,7 @@ const PasswordModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password === "yourPassword") {
+    if (password === "lookBOWHELLO") {
       onClose();
     } else {
       setError("Incorrect Password");
