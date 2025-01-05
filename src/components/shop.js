@@ -66,7 +66,7 @@ function Shop() {
                   rug.inventoryCount === 0 ? styles.soldOut : ""
                 }`}
               >
-                <div className={styles.rugFrame}>
+                <div>
                   <img
                     src={rug.imageUrls[0]}
                     alt={rug.name}

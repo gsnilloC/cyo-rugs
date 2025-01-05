@@ -18,6 +18,15 @@ app.use("/webhook", webhookRouter);
 app.use("/api", apiRouter);
 app.use("/", pagesRouter);
 
+// function requireHTTPS(req, res, next) {
+//   if (!req.secure && req.get("x-forwarded-proto") !== "https") {
+//     return res.redirect("https://" + req.get("host") + req.url);
+//   }
+//   next();
+// }
+
+// app.use(requireHTTPS);
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

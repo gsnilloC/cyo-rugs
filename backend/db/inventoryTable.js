@@ -290,6 +290,39 @@ async function deleteZeroQuantityItems() {
   }
 }
 
+async function deleteInventoryItemByName(itemName) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    const deleteQuery = `
+      DELETE FROM inventory 
+      WHERE name = $1
+      RETURNING name;
+    `;
+
+    const result = await client.query(deleteQuery, [itemName]);
+
+    if (result.rows.length === 0) {
+      await client.query("ROLLBACK");
+      console.log(`No item found with name: ${itemName}`);
+      return false;
+    }
+
+    const deletedItemName = result.rows[0].name;
+    await client.query("COMMIT");
+
+    console.log(`Successfully deleted item: ${deletedItemName}`);
+    return true;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error deleting inventory item by name:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   createInventoryTable,
   getInventoryItems,
@@ -298,4 +331,5 @@ module.exports = {
   handleInventoryUpdate,
   deleteInventoryItem,
   deleteZeroQuantityItems,
+  deleteInventoryItemByName,
 };

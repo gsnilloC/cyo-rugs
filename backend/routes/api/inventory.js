@@ -4,6 +4,7 @@ const {
   pool,
   getInventoryItemById,
   deleteZeroQuantityItems,
+  deleteInventoryItemByName,
 } = require("../../db");
 const { getPricesForItemIds } = require("../../services");
 
@@ -58,6 +59,20 @@ router.post("/update-prices", async (req, res) => {
   } catch (error) {
     console.error("Error updating prices:", error);
     res.status(500).json({ error: "Failed to update prices" });
+  }
+});
+
+router.delete("/by-name/:name", async (req, res) => {
+  const { name } = req.params;
+  try {
+    const result = await deleteInventoryItemByName(name);
+    if (!result) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.json({ message: "Item deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting item by name:", error);
+    res.status(500).json({ error: "Failed to delete item" });
   }
 });
 

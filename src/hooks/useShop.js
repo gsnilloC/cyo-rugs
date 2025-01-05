@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import mockProducts from "../mocks/mockProducts";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -47,6 +48,44 @@ const useShop = () => {
         setLoading(false);
       }
     };
+
+    // try {
+    //   // Use mock products instead of fetching from the API
+    //   const response = { data: mockProducts };
+    //   console.log("Mock Response:", response.data);
+
+    //   if (Array.isArray(response.data)) {
+    //     const rugsWithInventory = response.data.map((rug) => {
+    //       const totalInventory = Array.isArray(rug.v_quantities)
+    //         ? rug.v_quantities.reduce(
+    //             (sum, qty) => sum + (Number(qty) || 0),
+    //             0
+    //           )
+    //         : 0;
+
+    //       return {
+    //         ...rug,
+    //         inventoryCount: totalInventory,
+    //       };
+    //     });
+
+    //     rugsWithInventory.sort((a, b) => a.name.localeCompare(b.name));
+    //     console.log(
+    //       "Final processed rugs:",
+    //       rugsWithInventory.map((rug) => ({
+    //         name: rug.name,
+    //         inventoryCount: rug.inventoryCount,
+    //       }))
+    //     );
+
+    //     setRugs(rugsWithInventory);
+    //   }
+    // } catch (err) {
+    //   console.error("Error fetching rugs:", err);
+    // } finally {
+    //   setLoading(false);
+    // }
+    // };
 
     fetchRugs();
   }, []);

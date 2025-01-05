@@ -36,6 +36,24 @@ const uploadImages = async (files, customerData, uniqueIdentifier) => {
   return imageUrls;
 };
 
+const fetchHomepageImages = async () => {
+  try {
+    const response = await s3.listObjectsV2({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Prefix: "homepage/",
+    });
+    const imageKeys = response.Contents.map((item) => item.Key);
+    const imageUrls = imageKeys.map(
+      (key) => `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/${key}`
+    );
+    return imageUrls;
+  } catch (error) {
+    console.error("Error fetching homepage images:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   uploadImages,
+  fetchHomepageImages,
 };

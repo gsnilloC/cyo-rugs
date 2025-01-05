@@ -7,6 +7,7 @@ const {
   deleteTable,
   handleInventoryUpdate,
   deleteZeroQuantityItems,
+  deleteInventoryItemByName,
 } = require("./inventoryTable");
 
 const {
@@ -28,6 +29,7 @@ module.exports = {
   deleteTable,
   handleInventoryUpdate,
   deleteZeroQuantityItems,
+  deleteInventoryItemByName,
 
   createRequestsTable,
   createRequest,

@@ -16,6 +16,7 @@ function RequestList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [nameToDelete, setNameToDelete] = useState("");
 
   useEffect(() => {
     fetchRequests();
@@ -98,6 +99,35 @@ function RequestList() {
       fetchRequests(); // Refresh the list after deletion
     } catch (err) {
       console.error("Error deleting request:", err);
+    }
+  };
+
+  const handleDeleteRequestByName = async (requestName) => {
+    const requestToDelete = requests.find(
+      (request) => request.name === requestName
+    );
+    if (!requestToDelete) {
+      alert("Request not found");
+      return;
+    }
+
+    try {
+      await axios.delete(`/api/orders/${requestToDelete.id}`);
+      fetchRequests(); // Refresh the list after deletion
+    } catch (err) {
+      console.error("Error deleting request:", err);
+    }
+  };
+
+  const handleDeleteInventoryByName = async () => {
+    try {
+      const response = await axios.delete(
+        `/api/inventory/by-name/${nameToDelete}`
+      );
+      alert(response.data.message);
+    } catch (error) {
+      console.error("Error deleting inventory item by name:", error);
+      alert("Failed to delete item.");
     }
   };
 
@@ -194,6 +224,22 @@ function RequestList() {
               </CardContent>
             </Card>
           ))}
+      </div>
+
+      <div className={styles.requestListContainer}>
+        <input
+          type="text"
+          placeholder="Enter item name to delete"
+          value={nameToDelete}
+          onChange={(e) => setNameToDelete(e.target.value)}
+          className={styles.nameInput}
+        />
+        <button
+          onClick={handleDeleteInventoryByName}
+          className={styles.deleteButton}
+        >
+          Delete Item
+        </button>
       </div>
     </div>
   );
