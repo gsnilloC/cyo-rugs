@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import styles from "../styles/passwordModal.module.css";
+import logo from "../assets/images/logo.JPG";
 
 const PasswordModal = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState("");
@@ -22,10 +21,8 @@ const PasswordModal = ({ isOpen, onClose }) => {
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h2>Under Construction</h2>
-          <IconButton onClick={onClose}>
-            <CloseIcon />
-          </IconButton>
+          <img src={logo} alt="CYO Rugs Logo" className={styles.logo} />
+          <h2>Under Construction 🚧</h2>
         </div>
         <form onSubmit={handleSubmit}>
           <input
