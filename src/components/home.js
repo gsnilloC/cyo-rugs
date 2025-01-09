@@ -6,12 +6,9 @@ import {
   cus1Image,
   cus2Image,
   cus3Image,
-  cus4Image,
-  cus5Image,
-  cus6Image,
-  boo,
-  akira,
-  ganger,
+  ig1,
+  ig2,
+  ig3,
 } from "../assets/images";
 import videoSource from "../assets/images/cyo-rugs-intro.mp4";
 import useHome from "../hooks/useHome";
@@ -37,9 +34,9 @@ function Home() {
   }, []);
 
   const featuredRugs = [
-    { id: 1, name: "Ganger", image: ganger },
-    { id: 2, name: "Akira", image: akira },
-    { id: 3, name: "Boo", image: boo },
+    // { id: 1, name: "Ganger", image: ganger },
+    // { id: 2, name: "Akira", image: akira },
+    // { id: 3, name: "Boo", image: boo },
     ...homepageImages.map((url, index) => ({
       id: `homepage-${index}`,
       name: `Homepage Image ${index + 1}`,
@@ -51,9 +48,9 @@ function Home() {
     { id: 1, image: cus1Image },
     { id: 2, image: cus2Image },
     { id: 3, image: cus3Image },
-    { id: 4, image: cus4Image },
-    { id: 5, image: cus5Image },
-    { id: 6, image: cus6Image },
+    { id: 4, image: ig1 },
+    { id: 5, image: ig2 },
+    { id: 6, image: ig3 },
   ];
 
   return (

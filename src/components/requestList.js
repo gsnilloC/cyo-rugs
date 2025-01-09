@@ -8,8 +8,11 @@ import {
   Select,
   MenuItem,
   Button,
+  IconButton,
 } from "@mui/material";
 import styles from "../styles/requestList.module.css";
+import DownloadIcon from "@mui/icons-material/Download";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 function RequestList() {
   const [requests, setRequests] = useState([]);
@@ -17,11 +20,17 @@ function RequestList() {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [nameToDelete, setNameToDelete] = useState("");
-  const [selectedHomepageImages, setSelectedHomepageImages] = useState([]);
+  const [selectedHomepageImages, setSelectedHomepageImages] = useState(
+    Array(5).fill(null)
+  );
   const [homepageImages, setHomepageImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const fileInputRef = useRef(null);
+  const fileInputRefs = useRef(
+    Array(5)
+      .fill()
+      .map(() => React.createRef())
+  );
 
   useEffect(() => {
     fetchRequests();
@@ -126,15 +135,20 @@ function RequestList() {
     }
   };
 
-  const handleFileChange = (event) => {
-    setSelectedHomepageImages(Array.from(event.target.files));
+  const handleFileChange = (index, event) => {
+    const file = event.target.files[0];
+    const newImages = [...selectedHomepageImages];
+    newImages[index] = file;
+    setSelectedHomepageImages(newImages);
   };
 
   const handleUploadToHomepage = async () => {
     const formData = new FormData();
-    for (let i = 0; i < selectedHomepageImages.length; i++) {
-      formData.append("images", selectedHomepageImages[i]);
-    }
+    selectedHomepageImages.forEach((image, index) => {
+      if (image) {
+        formData.append(`images[${index}]`, image);
+      }
+    });
 
     try {
       const response = await axios.post(
@@ -152,6 +166,12 @@ function RequestList() {
     } catch (error) {
       console.error("Error uploading images:", error);
     }
+  };
+
+  const handleRemoveImage = (index) => {
+    const newImages = [...selectedHomepageImages];
+    newImages[index] = null; // Set the selected image to null
+    setSelectedHomepageImages(newImages);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -182,46 +202,63 @@ function RequestList() {
           onClose={() => setIsModalOpen(false)}
           className={styles.modal}
         >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: { xs: "90%", sm: 500 },
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              borderRadius: 2,
-              p: 4,
-            }}
-          >
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleFileChange}
-              ref={fileInputRef}
-              style={{ display: "none" }}
-            />
-            <Button
-              onClick={() => fileInputRef.current.click()}
-              className={styles.button}
-            >
-              Upload Images
-            </Button>
+          <Box className={styles.modalContent}>
             <div className={styles.previewContainer}>
               {selectedHomepageImages.map((file, index) => (
-                <img
+                <div
                   key={index}
-                  src={URL.createObjectURL(file)}
-                  alt={`Preview ${index + 1}`}
-                  className={styles.previewImage}
-                />
+                  className={styles.imageSlot}
+                  onClick={() => fileInputRefs.current[index].current.click()}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(index, e)}
+                    ref={fileInputRefs.current[index]}
+                    style={{ display: "none" }}
+                  />
+                  {file ? (
+                    <div style={{ position: "relative" }}>
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index + 1}`}
+                        className={styles.previewImage}
+                      />
+                      <IconButton
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          color: "red",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent triggering the file input
+                          handleRemoveImage(index);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
+                  ) : (
+                    <DownloadIcon />
+                  )}
+                </div>
               ))}
             </div>
-            <Button className={styles.button} onClick={handleUploadToHomepage}>
-              Set New Homepage Images
-            </Button>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                className={styles.setButton}
+                onClick={handleUploadToHomepage}
+              >
+                Set New Homepage Images
+              </Button>
+            </div>
           </Box>
         </Modal>
         <Button
