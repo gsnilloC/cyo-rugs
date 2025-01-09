@@ -14,3 +14,6 @@ export { default as placeholder } from "./questionmark.png";
 export { default as ganger } from "./ganger.png";
 export { default as boo } from "./boo.png";
 export { default as akira } from "./akira.png";
+export { default as ig1 } from "./ig1.JPG";
+export { default as ig2 } from "./ig2.JPG";
+export { default as ig3 } from "./ig3.JPG";

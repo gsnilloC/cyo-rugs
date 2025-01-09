@@ -15,7 +15,7 @@ const LoginModal = ({ isOpen, onClose }) => {
       navigate("/list");
       onClose();
     } else {
-      setError("Incorrect Password GANGY");
+      setError("Incorrect Password");
     }
   };
 
@@ -32,7 +32,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         </div>
         <form onSubmit={handleSubmit}>
           <input
-            type="Secret"
+            type="password"
             value={Secret}
             onChange={(e) => setSecret(e.target.value)}
             placeholder="Enter Password"

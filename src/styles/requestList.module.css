@@ -90,6 +90,16 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 900;
+  padding: 20px;
+}
+
+.modalContent {
+  width: 80%;
+  max-width: 800px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .modalImage {
@@ -142,6 +152,7 @@
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 65%;
 }
 
 .deleteByNameContainer {
@@ -153,7 +164,7 @@
 .deleteButton {
   padding: 0.5rem 1rem;
   background-color: #f44336;
-  color: white;
+  color: red;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -163,27 +174,18 @@
   background-color: #d32f2f;
 }
 
-.button {
-  background-color: var(--primary-color);
-  color: white;
+.setButton {
+  background-color: purple;
+  color: purple;
+  padding: 0.5rem 1rem;
   border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.3s;
-  box-shadow: 4px 4px 0 0 #000000;
-  margin: 1rem;
+  transition: background-color 0.3s ease;
 }
 
-.button:hover {
-  background-color: var(--secondary-color);
-  transform: translateY(-2px);
-}
-
-.button:active {
-  transform: translateY(0);
+.setButton:hover {
+  background-color: darkviolet;
 }
 
 .previewContainer {
@@ -193,9 +195,60 @@
 }
 
 .previewImage {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid #ddd;
+}
+
+.uploadButton {
+  margin: 0.5rem;
+}
+
+.imageSlot {
+  width: 150px;
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.previewContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    width: 75%; /* Adjust width for mobile */
+    padding: 1rem; /* Adjust padding for mobile */
+  }
+
+  .imageSlot {
+    width: 70px;
+    height: 70px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .previewImage {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
 }
