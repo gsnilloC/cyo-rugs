@@ -69,7 +69,7 @@ const Product = () => {
         {/* <p className={styles.productShipping}>
           Shipping calculated at checkout
         </p> */}
-        <div className={styles.variationsContainer}>
+        {/* <div className={styles.variationsContainer}>
           {rug.v_ids && rug.v_ids.length > 1 ? (
             rug.v_ids.map((variationId, index) => (
               <div key={index} className={styles.variation}>
@@ -100,8 +100,8 @@ const Product = () => {
           ) : (
             <p> </p>
           )}
-        </div>
-        <div
+        </div> */}
+        {/* <div
           className={styles.quantityContainer}
           style={{
             backgroundColor: "var( --bg-color)",
@@ -132,7 +132,7 @@ const Product = () => {
           <IconButton onClick={handleIncrease} aria-label="increase quantity">
             <Add style={{ color: "var(--text-color)" }} />
           </IconButton>
-        </div>
+        </div> */}
         <button
           className={styles.addToCartButton}
           onClick={() => handleAddToCart(quantity, selectedColor)}
