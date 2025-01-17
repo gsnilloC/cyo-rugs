@@ -26,6 +26,13 @@ function RequestList() {
   const [homepageImages, setHomepageImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [emailData, setEmailData] = useState({
+    email: "",
+    name: "",
+    trackingNumber: "",
+  });
+
   const fileInputRefs = useRef(
     Array(5)
       .fill()
@@ -37,7 +44,6 @@ function RequestList() {
     const loadHomepageImages = async () => {
       try {
         const response = await axios.get("/api/homepage-images");
-        console.log("Homepage Images Response:", response.data.imageUrls);
         setHomepageImages(response.data.imageUrls);
       } catch (error) {
         console.error("Error loading homepage images:", error);
@@ -50,7 +56,6 @@ function RequestList() {
   const fetchRequests = async () => {
     try {
       const response = await axios.get("/api/orders");
-      console.log(response.data);
       const data = Array.isArray(response.data)
         ? response.data
         : [response.data];
@@ -172,6 +177,25 @@ function RequestList() {
     const newImages = [...selectedHomepageImages];
     newImages[index] = null; // Set the selected image to null
     setSelectedHomepageImages(newImages);
+  };
+
+  const handleSendEmail = async (requestId) => {
+    try {
+      await axios.post(`/api/send-confirmation-email`, {
+        ...emailData,
+        requestId,
+      });
+      alert("Email sent successfully!");
+      setIsEmailModalOpen(false);
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email.");
+    }
+  };
+
+  const handleEmailInputChange = (e) => {
+    const { name, value } = e.target;
+    setEmailData({ ...emailData, [name]: value });
   };
 
   if (loading) return <div>Loading...</div>;
@@ -302,6 +326,13 @@ function RequestList() {
             </Button>
           </Box>
         </Modal>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setIsEmailModalOpen(true)}
+        >
+          SEND EMAIL
+        </Button>
       </div>
       <div className={styles.requestListContainer}>
         <Modal
@@ -388,6 +419,40 @@ function RequestList() {
             </Card>
           ))}
       </div>
+      <Modal
+        open={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+        className={styles.modal}
+      >
+        <Box className={styles.modalContent}>
+          <h2>Send Confirmation Email</h2>
+          <input
+            type="text"
+            name="name"
+            placeholder="Customer Name"
+            value={emailData.name}
+            onChange={handleEmailInputChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Customer Email"
+            value={emailData.email}
+            onChange={handleEmailInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="trackingNumber"
+            placeholder="Tracking Number"
+            value={emailData.trackingNumber}
+            onChange={handleEmailInputChange}
+            required
+          />
+          <Button onClick={() => handleSendEmail(requests)}>Send Email</Button>
+        </Box>
+      </Modal>
     </div>
   );
 }

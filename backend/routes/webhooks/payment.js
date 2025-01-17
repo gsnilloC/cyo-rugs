@@ -1,4 +1,4 @@
-const { decrementInventory } = require("../../services");
+const { confirmationEmail, decrementInventory } = require("../../services");
 
 const handlePaymentWebhook = async (req, res) => {
   try {
@@ -11,7 +11,12 @@ const handlePaymentWebhook = async (req, res) => {
       !event.data?.object?.payment?.refunded
     ) {
       const orderId = event.data.object.payment.orderId;
-      if (orderId) {
+      const customerEmail = event.data.object.payment.customerEmail;
+      const lineItems = event.data.object.payment.lineItems;
+
+      if (orderId && customerEmail) {
+        // Send confirmation email with dynamic values
+        // await confirmationEmail(lineItems, customerEmail);
         await decrementInventory(orderId);
       }
     }

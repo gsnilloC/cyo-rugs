@@ -8,6 +8,7 @@ const {
   uploadHomepageImages,
   deleteImagesInFolder,
   fetchHomepageImages,
+  confirmationEmail,
 } = require("../../services");
 const { createRequest } = require("../../db");
 const upload = multer();
@@ -90,6 +91,18 @@ router.post(
     }
   }
 );
+
+router.post("/send-confirmation-email", async (req, res) => {
+  const { email, name, trackingNumber } = req.body;
+
+  try {
+    await confirmationEmail(email, name, trackingNumber); // Adjust as necessary for cartItems
+    res.status(200).json({ message: "Confirmation email sent successfully" });
+  } catch (error) {
+    console.error("Error sending confirmation email:", error);
+    res.status(500).json({ error: "Failed to send confirmation email" });
+  }
+});
 
 router.get("/homepage-images", async (req, res) => {
   try {
