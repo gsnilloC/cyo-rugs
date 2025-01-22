@@ -51,9 +51,9 @@ router.post("/upload", upload.array("images"), async (req, res) => {
 });
 
 router.post("/checkout", async (req, res) => {
-  const { cartItems } = req.body;
+  const { cartItems, discountApplied } = req.body;
   try {
-    const checkoutLink = await createCheckout(cartItems);
+    const checkoutLink = await createCheckout(cartItems, discountApplied);
     res.json({ checkoutLink });
   } catch (error) {
     console.error("Error during checkout:", error);

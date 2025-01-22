@@ -18,7 +18,7 @@ const getInventoryCount = async (itemId) => {
   }
 };
 
-async function createCheckout(cartItems) {
+async function createCheckout(cartItems, discountApplied) {
   try {
     const lineItems = await Promise.all(
       cartItems.map(async (item) => {
@@ -46,11 +46,14 @@ async function createCheckout(cartItems) {
             throw new Error(`Invalid price or quantity for ${item.name}`);
           }
 
+          // Apply discount to the price if applicable
+          const discountedPrice = discountApplied ? price * 0.9 : price;
+
           return {
-            catalogObjectId: item.variationId, // Use variation ID instead of base item
+            catalogObjectId: item.variationId,
             quantity: quantity.toString(),
             basePriceMoney: {
-              amount: Math.round(price * 100),
+              amount: Math.round(discountedPrice * 100),
               currency: "USD",
             },
             note: `Color: ${item.selectedColor} | ${
@@ -64,6 +67,14 @@ async function createCheckout(cartItems) {
       })
     );
 
+    // Calculate total amount
+    const totalAmount = lineItems.reduce((sum, item) => {
+      return (
+        sum + parseInt(item.basePriceMoney.amount) * parseInt(item.quantity)
+      );
+    }, 0);
+
+    // Set the total amount in the order request
     const orderRequest = {
       idempotency_key: Date.now().toString(),
       order: {
@@ -84,6 +95,9 @@ async function createCheckout(cartItems) {
         ],
       },
     };
+
+    // Set the total amount in the order request
+    orderRequest.order.totalAmount = totalAmount;
 
     const response = await client.checkoutApi.createPaymentLink(orderRequest);
     return response.result.paymentLink?.url || null;

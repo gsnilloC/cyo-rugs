@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import styles from "../styles/galleryWall.module.css";
 import { placeholder } from "../assets/images";
-import { IconButton, Modal, Box } from "@mui/material";
+import { IconButton, Modal, Box, Switch } from "@mui/material";
 import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import closedSign from "../assets/images/closed-sign-illustration-transparent-png.png";
 
 function Request() {
   const [images, setImages] = useState([null, null, null]);
@@ -21,6 +22,7 @@ function Request() {
   });
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClosedSignVisible, setIsClosedSignVisible] = useState(false);
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -97,6 +99,9 @@ function Request() {
   return (
     <div>
       <ToastContainer />
+      {isClosedSignVisible && (
+        <img src={closedSign} alt="Closed Sign" className={styles.closedSign} />
+      )}
       <div className={styles.galleryWallContainer}>
         <h1>Customs Gallery</h1>
         <button
@@ -190,7 +195,14 @@ function Request() {
         </form>
       </div>
       <div className={styles.floorContainer}></div>
-
+      <div>
+        {/* <span>Toggle Closed Sign</span> */}
+        <Switch
+          checked={isClosedSignVisible}
+          onChange={() => setIsClosedSignVisible(!isClosedSignVisible)}
+          color="primary"
+        />
+      </div>
       <Modal
         open={isModalOpen}
         onClose={handleModalClose}
@@ -232,7 +244,7 @@ function Request() {
             life.
           </p>
           <p>
-            To ensure your custom rug is everything you’ve dreamed of, please
+            To ensure your custom rug is everything you've dreamed of, please
             provide detailed and accurate information in your request. Include
             specifics such as:
           </p>
@@ -262,18 +274,18 @@ function Request() {
               avoid delays.
             </li>
             <li>
-              If you have any questions or special requirements, don’t hesitate
+              If you have any questions or special requirements, don't hesitate
               to include them in your request.
             </li>
             <li>
               Shipping price will be calculated after rug is finished and
-              weighed for shipment. I’ll provide you with a quote for you to
+              weighed for shipment. I'll provide you with a quote for you to
               place an order.
             </li>
           </ul>
           <p className="pgh" style={{ marginTop: "1rem" }}>
-            We’re excited to collaborate with you and create a rug that’s as
-            unique as you are! Start your custom rug request today, and let’s
+            We're excited to collaborate with you and create a rug that's as
+            unique as you are! Start your custom rug request today, and let's
             turn your idea into a masterpiece.
           </p>
         </Box>
