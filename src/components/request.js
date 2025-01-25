@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import styles from "../styles/galleryWall.module.css";
@@ -23,9 +23,35 @@ function Request() {
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClosedSignVisible, setIsClosedSignVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRequestStatus = async () => {
+      try {
+        const response = await axios.get("/api/settings/requests-status");
+        setIsClosedSignVisible(!response.data.is_requests_open);
+      } catch (error) {
+        console.error("Error fetching requests status:", error);
+      }
+    };
+
+    fetchRequestStatus();
+  }, []);
+
+  const toggleRequestsStatus = async () => {
+    try {
+      const newStatus = !isClosedSignVisible;
+      await axios.patch("/api/settings/requests-status", {
+        isOpen: !newStatus,
+      });
+      setIsClosedSignVisible(newStatus);
+    } catch (error) {
+      console.error("Error updating requests status:", error);
+    }
+  };
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -66,6 +92,19 @@ function Request() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    // Check for missing fields
+    if (
+      !formData.name ||
+      !formData.phone ||
+      !formData.email ||
+      !formData.description
+    ) {
+      toast.error("Please fill in all required fields.");
+      setIsLoading(false);
+      return;
+    }
 
     const formDataToSend = new FormData();
     formDataToSend.append("name", formData.name);
@@ -86,10 +125,18 @@ function Request() {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("Upload successful!");
-      navigate("/");
+
+      if (response.status === 200) {
+        toast.success("Upload successful!");
+        // Delay navigation to allow the toast to appear
+        setTimeout(() => {
+          navigate("/");
+        }, 2000); // Adjust time as needed
+      }
     } catch (error) {
       toast.error("Error uploading form data. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,7 +147,14 @@ function Request() {
     <div>
       <ToastContainer />
       {isClosedSignVisible && (
-        <img src={closedSign} alt="Closed Sign" className={styles.closedSign} />
+        <>
+          <img
+            src={closedSign}
+            alt="Closed Sign"
+            className={styles.closedSign}
+          />
+          <div className={styles.overlay}></div>
+        </>
       )}
       <div className={styles.galleryWallContainer}>
         <h1>Customs Gallery</h1>
@@ -189,17 +243,16 @@ function Request() {
             onChange={handleInputChange}
             required
           />
-          <button className={styles.button} type="submit">
-            Submit
+          <button className={styles.button} type="submit" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit"}
           </button>
         </form>
       </div>
       <div className={styles.floorContainer}></div>
       <div>
-        {/* <span>Toggle Closed Sign</span> */}
         <Switch
           checked={isClosedSignVisible}
-          onChange={() => setIsClosedSignVisible(!isClosedSignVisible)}
+          onChange={toggleRequestsStatus}
           color="primary"
         />
       </div>

@@ -11,6 +11,12 @@ const {
 } = require("./inventoryTable");
 
 const {
+  createSettingsTable,
+  updateRequestsStatus,
+  getRequestsStatus,
+} = require("./settingsTable");
+
+const {
   createRequestsTable,
   createRequest,
   getRequests,
@@ -22,6 +28,10 @@ module.exports = {
   pool,
   testConnection,
   listTables,
+
+  createSettingsTable,
+  updateRequestsStatus,
+  getRequestsStatus,
 
   createInventoryTable,
   getInventoryItems,
