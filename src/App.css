@@ -331,3 +331,22 @@ footer a {
   font-size: 0.8rem;
   font-weight: bold;
 }
+
+.music-button {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .music-button {
+    bottom: 20px;
+    right: 20px;
+    z-index: 4000;
+  }
+}

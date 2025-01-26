@@ -1,4 +1,4 @@
-import { blondImage2, star, kobeImage, troupe } from "../assets/images";
+import { kobeImage,  } from "../assets/images";
 
 const mockProducts = [
   {
@@ -51,7 +51,7 @@ const mockProducts = [
     description:
       "A beautiful handwoven Persian rug that adds elegance to any room.",
     price: 299.99,
-    imageUrls: [star],
+    imageUrls: [kobeImage],
     inventoryCount: 10,
   },
   {
@@ -59,7 +59,7 @@ const mockProducts = [
     name: "Modern Geometric Rug",
     description: "A stylish geometric rug perfect for contemporary spaces.",
     price: 199.99,
-    imageUrls: [troupe],
+    imageUrls: [kobeImage],
     inventoryCount: 5,
   },
   {

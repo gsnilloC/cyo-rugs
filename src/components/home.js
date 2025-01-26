@@ -2,15 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../styles/homepage.module.css";
 import { Link } from "react-router-dom";
-import {
-  cus1Image,
-  cus2Image,
-  cus3Image,
-  ig1,
-  ig2,
-  ig3,
-} from "../assets/images";
-import videoSource from "../assets/images/cyo-rugs-intro.mp4";
+import { cus1Image, cus4Image, phantom, ig1, ig2, ig3 } from "../assets/images";
+import videoSource from "../assets/images/cyo-rugs-introv2.mp4";
 import useHome from "../hooks/useHome";
 import LearnMoreButton from "./learnMoreButton";
 import PasswordModal from "./PasswordModal";
@@ -46,8 +39,8 @@ function Home() {
 
   const customerPhotos = [
     { id: 1, image: cus1Image },
-    { id: 2, image: cus2Image },
-    { id: 3, image: cus3Image },
+    { id: 2, image: cus4Image },
+    { id: 3, image: phantom },
     { id: 4, image: ig1 },
     { id: 5, image: ig2 },
     { id: 6, image: ig3 },

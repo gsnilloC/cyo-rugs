@@ -255,6 +255,39 @@ h1 {
   z-index: 10;
 }
 
+.feedbackMessage {
+  background-color: var(
+    --primary-color
+  ); /* or another color that matches your theme */
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.closedSign {
+  position: absolute;
+  top: 200px;
+  right: 40px;
+  width: 90%;
+  height: auto;
+  justify-content: center;
+  transform: rotate(-20deg); /* Tilt the image */
+  z-index: 2000; /* Ensure it appears on top of everything */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3000; /* Ensure it is above other elements */
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
 @media (max-width: 768px) {
   .galleryWallContainer {
     width: 100%;
@@ -333,37 +366,15 @@ h1 {
     width: 50px;
     height: 50px;
   }
-}
 
-.feedbackMessage {
-  background-color: var(
-    --primary-color
-  ); /* or another color that matches your theme */
-  color: white;
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
-  margin-top: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.closedSign {
-  position: absolute;
-  top: 200px;
-  right: 40px;
-  width: 90%;
-  height: auto;
-  justify-content: center;
-  transform: rotate(-20deg); /* Tilt the image */
-  z-index: 2000; /* Ensure it appears on top of everything */
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3000; /* Ensure it is above other elements */
-  pointer-events: none; /* Allow clicks to pass through */
+  .closedSign {
+    position: absolute;
+    top: 550px;
+    right: -20px;
+    width: 110%;
+    height: auto;
+    justify-content: center;
+    transform: rotate(-25deg); /* Tilt the image */
+    z-index: 2000; /* Ensure it appears on top of everything */
+  }
 }

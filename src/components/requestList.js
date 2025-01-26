@@ -9,6 +9,7 @@ import {
   MenuItem,
   Button,
   IconButton,
+  Switch,
 } from "@mui/material";
 import styles from "../styles/requestList.module.css";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -32,6 +33,7 @@ function RequestList() {
     name: "",
     trackingNumber: "",
   });
+  const [isClosedSignVisible, setIsClosedSignVisible] = useState(false);
 
   const fileInputRefs = useRef(
     Array(5)
@@ -51,6 +53,19 @@ function RequestList() {
     };
 
     loadHomepageImages();
+  }, []);
+
+  useEffect(() => {
+    const fetchRequestStatus = async () => {
+      try {
+        const response = await axios.get("/api/settings/requests-status");
+        setIsClosedSignVisible(!response.data.is_requests_open);
+      } catch (error) {
+        console.error("Error fetching requests status:", error);
+      }
+    };
+
+    fetchRequestStatus();
   }, []);
 
   const fetchRequests = async () => {
@@ -151,10 +166,9 @@ function RequestList() {
     const formData = new FormData();
     selectedHomepageImages.forEach((image, index) => {
       if (image) {
-        formData.append(`images[${index}]`, image);
+        formData.append("images", image); // Ensure this matches the expected field name
       }
     });
-
     try {
       const response = await axios.post(
         "/api/upload-homepage-images",
@@ -196,6 +210,18 @@ function RequestList() {
   const handleEmailInputChange = (e) => {
     const { name, value } = e.target;
     setEmailData({ ...emailData, [name]: value });
+  };
+
+  const toggleRequestsStatus = async () => {
+    try {
+      const newStatus = !isClosedSignVisible;
+      await axios.patch("/api/settings/requests-status", {
+        isOpen: !newStatus,
+      });
+      setIsClosedSignVisible(newStatus);
+    } catch (error) {
+      console.error("Error updating requests status:", error);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -333,6 +359,11 @@ function RequestList() {
         >
           SEND EMAIL
         </Button>
+        <Switch
+          checked={isClosedSignVisible}
+          onChange={toggleRequestsStatus}
+          color="primary"
+        />
       </div>
       <div className={styles.requestListContainer}>
         <Modal

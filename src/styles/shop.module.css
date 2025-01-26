@@ -32,7 +32,7 @@
 .rugImage {
   max-width: 100%;
   height: auto;
-  max-height: 250px;
+  max-height: 275px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
@@ -163,7 +163,7 @@
 
   .rugItem {
     width: 100%;
-    min-height: 500px;
+    min-height: 425px;
     align-items: left;
   }
 
@@ -177,7 +177,6 @@
   }
 
   .rugInfo {
-    margin-top: 50px;
     margin-left: -5rem;
   }
 

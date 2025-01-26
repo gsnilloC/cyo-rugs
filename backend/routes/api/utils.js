@@ -66,7 +66,6 @@ router.post(
   "/upload-homepage-images",
   upload.array("images"),
   async (req, res) => {
-    console.log("Received files:", req.files);
     try {
       const imageNames = req.body.names; // Assuming names are sent as an array
       await deleteImagesInFolder("homepage/");
