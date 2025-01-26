@@ -9,13 +9,27 @@ const LoginModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (Secret === "lookBOWHELLO") {
-      navigate("/list");
-      onClose();
-    } else {
-      setError("Incorrect Password");
+    try {
+      const response = await fetch("/api/verify/verify-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password: Secret }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        navigate("/list");
+        onClose();
+      } else {
+        setError("Incorrect Password");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
     }
   };
 

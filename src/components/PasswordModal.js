@@ -6,12 +6,26 @@ const PasswordModal = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === "lookBOWHELLO") {
-      onClose();
-    } else {
-      setError("Incorrect Password");
+    try {
+      const response = await fetch("/api/verify/verify-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        onClose();
+      } else {
+        setError("Incorrect Password");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
     }
   };
 
