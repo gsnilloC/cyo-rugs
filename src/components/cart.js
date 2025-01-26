@@ -36,6 +36,12 @@ function Cart() {
     }
   };
 
+  const handleRemoveDiscount = () => {
+    setDiscountApplied(false);
+    setDiscountCode("");
+    setErrorMessage("");
+  };
+
   const discountedTotal = discountApplied ? total * 0.9 : total;
 
   return (
@@ -95,30 +101,53 @@ function Cart() {
                       ${item.price.toFixed(2)}
                     </p>
                   </div>
-                  {/* <button
-                    className={styles.removeButton}
-                    onClick={() => removeFromCart(item.id)}
-                  >
-                    Remove
-                  </button> */}
                 </div>
               ))}
               <p className={styles.cartTotal}>
-                Subtotal: ${discountedTotal.toFixed(2)}
+                Subtotal:
+                {discountApplied ? (
+                  <>
+                    <span className={styles.oldPrice}>${total.toFixed(2)}</span>
+                    <span className={styles.newPrice}>
+                      ${discountedTotal.toFixed(2)}
+                    </span>
+                  </>
+                ) : (
+                  <>${discountedTotal.toFixed(2)}</>
+                )}
               </p>
-              <input
-                type="text"
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value)}
-                placeholder="Enter discount code"
-              />
-              <button onClick={handleApplyDiscount}>Apply Discount</button>
-              {errorMessage && (
-                <p className={styles.errorMessage}>{errorMessage}</p>
-              )}
-              <p className={styles.shippingMessage}>
+              <div className={styles.discount}>
+                <input
+                  type="text"
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                  placeholder="Enter discount code"
+                  className={styles.discountInput}
+                />
+                <button
+                  className={styles.discountButton}
+                  onClick={handleApplyDiscount}
+                >
+                  Apply Discount
+                </button>
+                {discountApplied && (
+                  <div className={styles.appliedDiscount}>
+                    <span className={styles.codeFeedback}>{discountCode}</span>
+                    <button
+                      onClick={handleRemoveDiscount}
+                      className={styles.removeDiscountButton}
+                    >
+                      x
+                    </button>
+                  </div>
+                )}
+                {errorMessage && (
+                  <p className={styles.errorMessage}>{errorMessage}</p>
+                )}
+              </div>
+              {/* <p className={styles.shippingMessage}>
                 Shipping to be calculated
-              </p>
+              </p> */}
               <button
                 className={styles.checkoutButton}
                 onClick={() =>
@@ -127,9 +156,9 @@ function Cart() {
               >
                 Checkout
               </button>
-              <button className={styles.checkoutButton} onClick={clearCart}>
+              {/* <button className={styles.checkoutButton} onClick={clearCart}>
                 Clear Cart
-              </button>
+              </button> */}
             </>
           )}
         </>

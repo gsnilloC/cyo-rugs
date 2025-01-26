@@ -10,10 +10,10 @@ const squareClient = new Client({
   environment: "production",
 });
 
-// Verify client initialization
-squareClient.catalogApi
-  .listCatalog()
-  .then(() => console.log("Square client initialized successfully"))
-  .catch((err) => console.error("Failed to initialize Square client:", err));
+// // Verify client initialization
+// squareClient.catalogApi
+//   .listCatalog()
+//   .then(() => console.log("Square client initialized successfully"))
+//   .catch((err) => console.error("Failed to initialize Square client:", err));
 
 module.exports = squareClient;

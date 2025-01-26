@@ -25,7 +25,7 @@
 
 .productPrice {
   font-size: 1.2rem;
-  margin: 0.75rem 0;
+  margin: 1rem 0;
 }
 
 .productShipping {
@@ -53,7 +53,6 @@
 .quantityContainer {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
   width: 60%;
 }
 
@@ -68,7 +67,7 @@
   color: white;
   border: none;
   padding: 0.8rem;
-  margin-top: 40px;
+  margin-top: 30px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
@@ -94,7 +93,7 @@
 }
 
 .productDescriptionContainer {
-  margin-top: 1rem;
+  margin-top: 2rem;
   font-size: 0.8rem;
 }
 

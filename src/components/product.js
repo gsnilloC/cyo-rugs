@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
 import {
@@ -22,12 +24,24 @@ const Product = () => {
     }
   }, [rug]);
 
-  const handleIncrease = () => setQuantity(quantity + 1);
+  const handleIncrease = () => {
+    const variationIndex = rug.v_names.findIndex(
+      (name) => name === selectedColor
+    );
+    const availableStock = rug.v_quantities[variationIndex];
+
+    if (quantity < availableStock) {
+      setQuantity(quantity + 1);
+    } else {
+      toast.info("That's the MAX!");
+    }
+  };
+
   const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
 
-  const isVariationSoldOut = (index) => {
-    return rug.v_quantities[index] === 0;
-  };
+  // const isVariationSoldOut = (index) => {
+  //   return rug.v_quantities[index] === 0;
+  // };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -101,7 +115,7 @@ const Product = () => {
             <p> </p>
           )}
         </div> */}
-        {/* <div
+        <div
           className={styles.quantityContainer}
           style={{
             backgroundColor: "var( --bg-color)",
@@ -129,10 +143,11 @@ const Product = () => {
               border: "1px solid var(--text-color)",
             }}
           />
+
           <IconButton onClick={handleIncrease} aria-label="increase quantity">
             <Add style={{ color: "var(--text-color)" }} />
           </IconButton>
-        </div> */}
+        </div>
         <button
           className={styles.addToCartButton}
           onClick={() => handleAddToCart(quantity, selectedColor)}
@@ -179,6 +194,7 @@ const Product = () => {
           </AccordionDetails>
         </Accordion>
       </div>
+      <ToastContainer />
     </div>
   );
 };

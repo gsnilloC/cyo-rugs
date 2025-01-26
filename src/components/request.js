@@ -157,7 +157,7 @@ function Request() {
         </>
       )}
       <div className={styles.galleryWallContainer}>
-        <h1>Customs Gallery</h1>
+        <h1 className={styles.reqTitle}>Customs Gallery</h1>
         <button
           onClick={handleModalOpen}
           className={`${styles.button} ${styles.readFirstButton}`}
@@ -249,13 +249,13 @@ function Request() {
         </form>
       </div>
       <div className={styles.floorContainer}></div>
-      <div>
+      {/* <div>
         <Switch
           checked={isClosedSignVisible}
           onChange={toggleRequestsStatus}
           color="primary"
         />
-      </div>
+      </div> */}
       <Modal
         open={isModalOpen}
         onClose={handleModalClose}
@@ -331,9 +331,9 @@ function Request() {
               to include them in your request.
             </li>
             <li>
-              Shipping price will be calculated after rug is finished and
-              weighed for shipment. I'll provide you with a quote for you to
-              place an order.
+              I'll provide you with a quote for you to place an order. The shipping
+              price will then be calculated after rug is finished and weighed for
+              shipment.
             </li>
           </ul>
           <p className="pgh" style={{ marginTop: "1rem" }}>

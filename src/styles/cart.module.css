@@ -131,7 +131,7 @@
 }
 
 .cartTotal {
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-align: right;
   margin-top: 1rem;
 }
@@ -148,12 +148,13 @@
   font-weight: bold;
   cursor: pointer;
   margin-top: 1rem;
-  margin-left: auto;
+  /* margin-left: auto; */
   margin-right: 0;
   position: relative;
   transform: translateY(0);
   transition: transform 0.1s ease;
   box-shadow: 4px 4px 0 0 #000000;
+  float: right;
 }
 
 .checkoutButton:hover {
@@ -178,6 +179,85 @@
   text-transform: uppercase;
   color: var(--text-color);
   text-align: right;
+}
+
+.discount {
+  text-align: left;
+  width: 50%;
+}
+
+.discountButton {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 20px;
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+  box-shadow: 4px 4px 0 0 #000000;
+}
+
+.discountButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0 0 #000000;
+}
+
+.discountButton:active {
+  transform: translateY(0);
+  box-shadow: 4px 4px 0 0 #000000;
+}
+
+.discountInput {
+  width: 60%;
+  height: 30px;
+  padding: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: border-color 0.3s ease;
+}
+
+.discountInput:focus {
+  border-color: var(--secondary-color);
+  outline: none;
+}
+
+.oldPrice {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 0.5rem;
+}
+
+.newPrice {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.appliedDiscount {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.removeDiscountButton {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.codeFeedback {
+  font-size: 0.7rem;
+  color: gray;
 }
 
 @media (max-width: 768px) {
@@ -228,5 +308,40 @@
 
   .checkoutButton {
     width: 100%;
+  }
+
+  .discount {
+    width: 100%;
+    text-align: right;
+    margin-top: 10px;
+  }
+
+  .discountInput {
+    width: 40%;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+  }
+
+  .discountButton {
+    font-size: 0.6rem;
+    padding: 0.4rem;
+    margin-left: 10px;
+    margin-bottom: -10px;
+  }
+
+  .appliedDiscount {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .codeFeedback {
+    font-size: 0.6rem;
+  }
+
+  .removeDiscountButton {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
   }
 }
