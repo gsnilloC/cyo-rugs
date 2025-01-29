@@ -48,10 +48,10 @@ function Home() {
 
   return (
     <div className={styles.homeContainer}>
-      <PasswordModal
+      {/* <PasswordModal
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
-      />
+      /> */}
       <div className={styles.introSection}>
         <div className={styles.videoContainer}>
           <video autoPlay loop muted playsInline className={styles.video}>
