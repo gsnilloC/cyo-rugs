@@ -15,3 +15,4 @@ export { default as akira } from "./akira.png";
 export { default as ig1 } from "./ig1.JPG";
 export { default as ig2 } from "./ig2.JPG";
 export { default as ig3 } from "./ig3.JPG";
+export { default as arkyve } from "./arkyve.JPG";

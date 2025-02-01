@@ -22,7 +22,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [theme, setTheme] = useState("light");
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null); // Ref to persist the audio instance
+  const audioRef = useRef(null);
 
   const navigate = useNavigate();
   const { cartItems } = useCart();
@@ -47,10 +47,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Initialize the audio instance
     if (!audioRef.current) {
       audioRef.current = new Audio(audioFile);
-      audioRef.current.loop = true; // Ensure looping
+      audioRef.current.loop = true;
     }
   }, []);
 
@@ -92,20 +91,7 @@ function App() {
         </Routes>
       </main>
       <Footer toggleTheme={toggleTheme} />
-      <button
-        className="music-button"
-        onClick={toggleAudio}
-        // style={{
-        //   position: "fixed",
-        //   bottom: "40px",
-        //   right: "40px",
-        //   backgroundColor: "var(--primary-color)",
-        //   border: "none",
-        //   borderRadius: "50%",
-        //   padding: "10px",
-        //   cursor: "pointer",
-        // }}
-      >
+      <button className="music-button" onClick={toggleAudio}>
         {isPlaying ? (
           <MusicNoteIcon style={{ color: "white" }} />
         ) : (

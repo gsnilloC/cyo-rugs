@@ -27,7 +27,6 @@ const useCart = () => {
 
   const handleCheckout = async (cartItems, setLoading, discountApplied) => {
     try {
-      console.log("WHAT DA FREAK!");
       setLoading(true);
       const cartItemsWithVariations = cartItems.map((item) => ({
         ...item,
@@ -56,6 +55,8 @@ const useCart = () => {
       }, 3500);
     }
   };
+
+  
 
   return {
     cartItems,

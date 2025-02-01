@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useCart } from "../components/cartContext";
-import mockProducts from "../mocks/mockProducts";
+// import mockProducts from "../mocks/mockProducts";
+import { toast } from "react-toastify";
 
 const useProduct = () => {
   const { id } = useParams();
@@ -10,6 +11,8 @@ const useProduct = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState("");
 
   useEffect(() => {
     const fetchRug = async () => {
@@ -17,6 +20,9 @@ const useProduct = () => {
         const response = await axios.get(`/api/items/${id}`);
         console.log("Fetched Rug Data:", response.data);
         setRug(response.data);
+        if (response.data.v_names && response.data.v_names.length > 0) {
+          setSelectedColor(response.data.v_names[0]);
+        }
       } catch (err) {
         console.error("Error fetching rug:", err);
         setError(err);
@@ -45,6 +51,21 @@ const useProduct = () => {
     fetchRug();
   }, [id]);
 
+  const handleIncrease = () => {
+    const variationIndex = rug.v_names.findIndex(
+      (name) => name === selectedColor
+    );
+    const availableStock = rug.v_quantities[variationIndex];
+
+    if (quantity < availableStock) {
+      setQuantity(quantity + 1);
+    } else {
+      toast.info("That's the MAX!");
+    }
+  };
+
+  const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+
   const handleAddToCart = (quantity, selectedColor) => {
     if (rug) {
       // Find the variation ID that matches the selected color
@@ -64,7 +85,16 @@ const useProduct = () => {
     }
   };
 
-  return { rug, loading, error, handleAddToCart };
+  return {
+    rug,
+    loading,
+    error,
+    quantity,
+    selectedColor,
+    handleIncrease,
+    handleDecrease,
+    handleAddToCart,
+  };
 };
 
 export default useProduct;

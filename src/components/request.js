@@ -1,147 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
+import React from "react";
+// import ReCAPTCHA from "react-google-recaptcha";
 import styles from "../styles/galleryWall.module.css";
 import { placeholder } from "../assets/images";
-import { IconButton, Modal, Box, Switch } from "@mui/material";
-import axios from "axios";
+import { IconButton, Modal, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import closedSign from "../assets/images/closed-sign-illustration-transparent-png.png";
+import useRequestForm from "../hooks/useRequestForm";
 
 function Request() {
-  const [images, setImages] = useState([null, null, null]);
-  const [showTip, setShowTip] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    description: "",
-  });
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isClosedSignVisible, setIsClosedSignVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const fileInputRef = useRef(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchRequestStatus = async () => {
-      try {
-        const response = await axios.get("/api/settings/requests-status");
-        setIsClosedSignVisible(!response.data.is_requests_open);
-      } catch (error) {
-        console.error("Error fetching requests status:", error);
-      }
-    };
-
-    fetchRequestStatus();
-  }, []);
-
-  const toggleRequestsStatus = async () => {
-    try {
-      const newStatus = !isClosedSignVisible;
-      await axios.patch("/api/settings/requests-status", {
-        isOpen: !newStatus,
-      });
-      setIsClosedSignVisible(newStatus);
-    } catch (error) {
-      console.error("Error updating requests status:", error);
-    }
-  };
-
-  const handleImageUpload = (event) => {
-    const files = event.target.files;
-    const newImages = [...images];
-    for (let i = 0; i < files.length && i < 3; i++) {
-      newImages[i] = files[i];
-    }
-    setImages(newImages);
-  };
-
-  const handleRemoveImage = (index) => {
-    const newImages = [...images];
-    newImages[index] = null;
-    setImages(newImages);
-  };
-
-  const handleTipClick = () => {
-    setShowTip(!showTip);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "phone") {
-      const cleaned = ("" + value).replace(/\D/g, "");
-      const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
-
-      if (match) {
-        const formattedNumber = [match[1], match[2], match[3]]
-          .filter(Boolean)
-          .join("-");
-        setFormData({ ...formData, [name]: formattedNumber });
-      }
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Check for missing fields
-    if (
-      !formData.name ||
-      !formData.phone ||
-      !formData.email ||
-      !formData.description
-    ) {
-      toast.error("Please fill in all required fields.");
-      setIsLoading(false);
-      return;
-    }
-
-    const formDataToSend = new FormData();
-    formDataToSend.append("name", formData.name);
-    formDataToSend.append("phone", formData.phone);
-    formDataToSend.append("email", formData.email);
-    formDataToSend.append("description", formData.description);
-    formDataToSend.append("recaptchaToken", recaptchaToken);
-
-    images.forEach((image, index) => {
-      if (image) {
-        formDataToSend.append(`images`, image);
-      }
-    });
-
-    try {
-      const response = await axios.post("/api/upload", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      if (response.status === 200) {
-        toast.success("Upload successful!");
-        // Delay navigation to allow the toast to appear
-        setTimeout(() => {
-          navigate("/");
-        }, 2000); // Adjust time as needed
-      }
-    } catch (error) {
-      toast.error("Error uploading form data. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleModalOpen = () => setIsModalOpen(true);
-  const handleModalClose = () => setIsModalOpen(false);
+  const {
+    images,
+    formData,
+    isModalOpen,
+    isClosedSignVisible,
+    isLoading,
+    fileInputRef,
+    handleImageUpload,
+    handleRemoveImage,
+    setIsModalOpen,
+    handleInputChange,
+    handleSubmit,
+  } = useRequestForm();
 
   return (
     <div>
@@ -159,7 +41,7 @@ function Request() {
       <div className={styles.galleryWallContainer}>
         <h1 className={styles.reqTitle}>Customs Gallery</h1>
         <button
-          onClick={handleModalOpen}
+          onClick={() => setIsModalOpen(true)}
           className={`${styles.button} ${styles.readFirstButton}`}
           style={{
             position: "absolute",
@@ -249,16 +131,9 @@ function Request() {
         </form>
       </div>
       <div className={styles.floorContainer}></div>
-      {/* <div>
-        <Switch
-          checked={isClosedSignVisible}
-          onChange={toggleRequestsStatus}
-          color="primary"
-        />
-      </div> */}
       <Modal
         open={isModalOpen}
-        onClose={handleModalClose}
+        onClose={() => setIsModalOpen(false)}
         className={styles.requestContainer}
       >
         <Box
@@ -279,7 +154,7 @@ function Request() {
           }}
         >
           <IconButton
-            onClick={handleModalClose}
+            onClick={() => setIsModalOpen(false)}
             style={{
               position: "absolute",
               top: "10px",
@@ -304,7 +179,7 @@ function Request() {
           <ul>
             <li>
               Size: Exact dimensions (in feet or inches) to fit your space
-              perfectly.
+              perfectly. (UP to 5 FEET❗)
             </li>
             <li>
               Design: Attach clear references, sketches, or describe your design
@@ -331,13 +206,17 @@ function Request() {
               to include them in your request.
             </li>
             <li>
-              I'll provide you with a quote for you to place an order. The shipping
-              price will then be calculated after rug is finished and weighed for
-              shipment.
+              I'll provide you with a quote for you to place an order. The
+              shipping price will then be calculated after rug is finished and
+              weighed for shipment.
+            </li>
+            <li>
+              A deposit of half the item's price will be made upon acceptance of
+              order, paying the remaining amount once complete.
             </li>
           </ul>
           <p className="pgh" style={{ marginTop: "1rem" }}>
-            We're excited to collaborate with you and create a rug that's as
+            excited to collaborate with you and create a rug that's as
             unique as you are! Start your custom rug request today, and let's
             turn your idea into a masterpiece.
           </p>

@@ -16,7 +16,7 @@ function About() {
         <h4>Custom Page orders</h4>
         <ul>
           <li>3-4 weeks delivery (4+ weeks depending on design)</li>
-        <li>Will be quoted before rug is created.</li>
+          <li>Will be quoted before rug is created.</li>
           <li>
             Shipping price will be calculated after the rug is made and weighed
             for shipment.

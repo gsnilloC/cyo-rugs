@@ -8,8 +8,7 @@ import Box from "@mui/material/Box";
 function Cart() {
   const {
     cartItems,
-    // removeFromCart,
-    clearCart,
+    // clearCart,
     total,
     handleIncrease,
     handleDecrease,
@@ -23,7 +22,7 @@ function Cart() {
 
   const handleApplyDiscount = () => {
     console.log("Attempting to apply discount code:", discountCode); // Log the discount code being applied
-    if (discountCode === "LOOKBOWHELLO" && !discountApplied) {
+    if (discountCode === "CYO1OF1" && !discountApplied) {
       setDiscountApplied(true);
       setErrorMessage("");
       console.log("Discount code applied successfully."); // Log success

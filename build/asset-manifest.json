@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.d7c6ae64.css",
-    "main.js": "/static/js/main.648c4bf8.js",
+    "main.css": "/static/css/main.78054fc8.css",
+    "main.js": "/static/js/main.fddd4471.js",
     "static/media/akira.png": "/static/media/akira.67e804f7b875e4e1565d.png",
     "static/media/boo.png": "/static/media/boo.079830e6295809577cf0.png",
     "static/media/cyo-rugs-introv2.mp4": "/static/media/cyo-rugs-introv2.66701769f95cc1eb1d5c.mp4",
@@ -10,6 +10,7 @@
     "static/media/ig2.JPG": "/static/media/ig2.d2657af5614fcc2b39b0.JPG",
     "static/media/phantom.JPG": "/static/media/phantom.0762f884cf4d5352cb94.JPG",
     "static/media/ig3.JPG": "/static/media/ig3.70fd11b73f082a3f0737.JPG",
+    "static/media/arkyve.JPG": "/static/media/arkyve.d32b05aff68cb1d5376d.JPG",
     "static/media/cus2.JPG": "/static/media/cus2.10ea9eefe457d421417c.JPG",
     "static/media/ig1.JPG": "/static/media/ig1.9f9ad31c00ebd48e8b10.JPG",
     "static/media/cus4.JPG": "/static/media/cus4.a78315bdee9db4224328.JPG",
@@ -24,11 +25,11 @@
     "static/media/koberemoved.png": "/static/media/koberemoved.d4baa7ad1a4c7daa2cd6.png",
     "static/media/questionmark.png": "/static/media/questionmark.5625981cc6a16a273a3d.png",
     "index.html": "/index.html",
-    "main.d7c6ae64.css.map": "/static/css/main.d7c6ae64.css.map",
-    "main.648c4bf8.js.map": "/static/js/main.648c4bf8.js.map"
+    "main.78054fc8.css.map": "/static/css/main.78054fc8.css.map",
+    "main.fddd4471.js.map": "/static/js/main.fddd4471.js.map"
   },
   "entrypoints": [
-    "static/css/main.d7c6ae64.css",
-    "static/js/main.648c4bf8.js"
+    "static/css/main.78054fc8.css",
+    "static/js/main.fddd4471.js"
   ]
 }

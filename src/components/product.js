@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../styles/product.module.css";
 import useProduct from "../hooks/useProduct";
@@ -13,35 +13,18 @@ import {
 import { Add, Remove, ExpandMore } from "@mui/icons-material";
 
 const Product = () => {
-  const { rug, loading, error, handleAddToCart } = useProduct();
-  const [quantity, setQuantity] = useState(1);
+  const {
+    rug,
+    loading,
+    error,
+    quantity,
+    selectedColor,
+    handleAddToCart,
+    handleIncrease,
+    handleDecrease,
+  } = useProduct();
+
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState("");
-
-  useEffect(() => {
-    if (rug && rug.v_names && rug.v_names.length > 0) {
-      setSelectedColor(rug.v_names[0]);
-    }
-  }, [rug]);
-
-  const handleIncrease = () => {
-    const variationIndex = rug.v_names.findIndex(
-      (name) => name === selectedColor
-    );
-    const availableStock = rug.v_quantities[variationIndex];
-
-    if (quantity < availableStock) {
-      setQuantity(quantity + 1);
-    } else {
-      toast.info("That's the MAX!");
-    }
-  };
-
-  const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
-
-  // const isVariationSoldOut = (index) => {
-  //   return rug.v_quantities[index] === 0;
-  // };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -54,7 +37,6 @@ const Product = () => {
   if (!rug) {
     return <div>Product not found</div>;
   }
-
   return (
     <div className={styles.productContainer}>
       <div className={styles.productImageContainer}>
