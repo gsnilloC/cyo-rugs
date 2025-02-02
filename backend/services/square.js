@@ -82,9 +82,15 @@ async function createCheckout(cartItems, discountApplied) {
         lineItems: lineItems,
       },
       checkoutOptions: {
+        discounts: [],
         redirectUrl: "https://www.cyorugs.com/shop",
         shippingAddressCollection: {
-          allowedCountries: ["US"],
+          allowedCountries: ["US", "CA"],
+        },
+        acceptedPaymentMethods: {
+          applePay: true, // Enable Apple Pay
+          googlePay: true, // Enable Google Pay
+          afterpayClearpay: true, // Enable Afterpay
         },
         customFields: [
           {
