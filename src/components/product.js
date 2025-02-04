@@ -37,6 +37,12 @@ const Product = () => {
   if (!rug) {
     return <div>Product not found</div>;
   }
+
+  // Split the description into an array and trim whitespace
+  const descriptionItems = rug.description
+    .split(",")
+    .map((item) => item.trim());
+
   return (
     <div className={styles.productContainer}>
       <div className={styles.productImageContainer}>
@@ -138,7 +144,11 @@ const Product = () => {
         </button>
         <div className={styles.productDescriptionContainer}>
           <p className={styles.productDescriptionTitle}>Product Details:</p>
-          <p className={styles.productDescription}>{rug.description}</p>
+          <ul>
+            {descriptionItems.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
         </div>
         <Accordion
           style={{

@@ -3,6 +3,7 @@ import styles from "../styles/shop.module.css";
 import { Link } from "react-router-dom";
 import useShop from "../hooks/useShop";
 import { Box, CircularProgress } from "@mui/material";
+import stickerImage from "../assets/images/1of1.JPG";
 
 function Shop() {
   const {
@@ -66,7 +67,14 @@ function Shop() {
                   rug.inventoryCount === 0 ? styles.soldOut : ""
                 }`}
               >
-                <div>
+                <div className={styles.rugImageContainer}>
+                  {rug.name.startsWith("1:1") && (
+                    <img
+                      src={stickerImage}
+                      alt="1 of 1 sticker"
+                      className={styles.sticker}
+                    />
+                  )}
                   <img
                     src={rug.imageUrls[0]}
                     alt={rug.name}

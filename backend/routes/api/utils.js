@@ -18,12 +18,12 @@ router.post("/upload", upload.array("images"), async (req, res) => {
     const recaptchaToken = req.body.recaptchaToken;
     const isHuman = await verifyRecaptcha(recaptchaToken);
 
-    // if (!isHuman) {
-    //   console.log("reCAPTCHA verification failed");
-    //   return res.status(400).json({
-    //     error: "reCAPTCHA verification failed. Please try again.",
-    //   });
-    // }
+    if (!isHuman) {
+      console.log("reCAPTCHA verification failed");
+      return res.status(400).json({
+        error: "reCAPTCHA verification failed. Please try again.",
+      });
+    }
 
     const customerData = {
       name: req.body.name,

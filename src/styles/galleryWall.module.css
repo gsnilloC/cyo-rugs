@@ -13,7 +13,7 @@
 .floorContainer {
   width: 1300px;
   display: flex;
-  border-bottom: 300px solid #8b6f4e;
+  border-bottom: 350px solid #8b6f4e;
   border-left: 90px solid transparent;
   border-right: 90px solid transparent;
   position: relative;
@@ -27,7 +27,8 @@
   justify-content: center;
   gap: 4rem;
   position: relative;
-  margin: 4rem;
+  margin: 2rem;
+  margin-bottom: 4rem;
 }
 
 .frame {
@@ -41,7 +42,6 @@
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
-  transform: perspective(1000px) rotateX(5deg);
   text-align: center;
 }
 
@@ -52,10 +52,12 @@
 
 .image {
   width: 80%;
+  height: auto;
   object-fit: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 40px;
 }
 
 .form {
@@ -249,10 +251,9 @@ h1 {
 
 .trashIcon {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -85px;
+  right: 25px;
   color: red;
-  background-color: white;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -301,6 +302,10 @@ h1 {
 
   h1 {
     font-size: 1.2rem;
+  }
+
+  .image {
+    width: 50px;
   }
 
   .framesContainer {

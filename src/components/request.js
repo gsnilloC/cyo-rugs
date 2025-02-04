@@ -1,5 +1,5 @@
-import React from "react";
-// import ReCAPTCHA from "react-google-recaptcha";
+import React, { useEffect } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import styles from "../styles/galleryWall.module.css";
 import { placeholder } from "../assets/images";
 import { IconButton, Modal, Box } from "@mui/material";
@@ -23,7 +23,12 @@ function Request() {
     setIsModalOpen,
     handleInputChange,
     handleSubmit,
+    setRecaptchaToken,
   } = useRequestForm();
+
+  const onRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+  };
 
   return (
     <div>
@@ -65,6 +70,7 @@ function Request() {
                   <IconButton
                     className={styles.trashIcon}
                     onClick={() => handleRemoveImage(index)}
+                    style={{ color: "red" }}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -124,6 +130,10 @@ function Request() {
             value={formData.description}
             onChange={handleInputChange}
             required
+          />
+          <ReCAPTCHA
+            sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+            onChange={onRecaptchaChange}
           />
           <button className={styles.button} type="submit" disabled={isLoading}>
             {isLoading ? "Submitting..." : "Submit"}
@@ -216,9 +226,9 @@ function Request() {
             </li>
           </ul>
           <p className="pgh" style={{ marginTop: "1rem" }}>
-            excited to collaborate with you and create a rug that's as
-            unique as you are! Start your custom rug request today, and let's
-            turn your idea into a masterpiece.
+            excited to collaborate with you and create a rug that's as unique as
+            you are! Start your custom rug request today, and let's turn your
+            idea into a masterpiece.
           </p>
         </Box>
       </Modal>

@@ -16,6 +16,8 @@ const useRequestForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClosedSignVisible, setIsClosedSignVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [lastSubmissionTime, setLastSubmissionTime] = useState(0);
+  const submissionInterval = 60000; // 1 minute
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -84,7 +86,16 @@ const useRequestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentTime = Date.now();
+
+    // Check if the user is trying to submit too quickly
+    if (currentTime - lastSubmissionTime < submissionInterval) {
+      toast.error("Please wait before submitting another request.");
+      return;
+    }
+
     setIsLoading(true);
+    setLastSubmissionTime(currentTime); // Update the last submission time
 
     if (
       !formData.name ||

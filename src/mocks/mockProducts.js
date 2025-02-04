@@ -1,11 +1,11 @@
-import { kobeImage,  } from "../assets/images";
+import { kobeImage } from "../assets/images";
 
 const mockProducts = [
   {
     id: 1,
-    name: "Chrome Hearts + CDG",
+    name: "1:1 Chrome Hearts + CDG",
     description:
-      "This is a test description that is very long and imititates what an actual product's description would look like on the product page!",
+      "Sign length 2.5ft, Puddle length 2ft, Free Shipping Included",
     price: 89.99,
     imageUrls: [
       "https://items-images-production.s3.us-west-2.amazonaws.com/files/4a07965364b3b0fbf93a7c5f7ea9de1d82dd27a1/original.jpeg",
@@ -53,10 +53,12 @@ const mockProducts = [
     price: 299.99,
     imageUrls: [kobeImage],
     inventoryCount: 10,
+    v_names: ["Black", "Purple", "Grey", "White", "Red", "Blue", "Green"],
+    v_quantities: [1, 3, 3, 1, 1, 1, 1],
   },
   {
     id: 3,
-    name: "Modern Geometric Rug",
+    name: "1:1 Modern Geometric Rug",
     description: "A stylish geometric rug perfect for contemporary spaces.",
     price: 199.99,
     imageUrls: [kobeImage],

@@ -148,6 +148,22 @@
   transition: transform 0.3s ease;
 }
 
+.rugItem:hover .sticker {
+  transform: scale(1.2) rotate(-15deg);
+  transition: transform 0.3s ease;
+}
+
+.sticker {
+  position: absolute;
+  top: 2px;
+  left: 45px; /* Adjust as needed */
+  width: 90px; /* Adjust size as needed */
+  height: auto; /* Maintain aspect ratio */
+  z-index: 10; /* Ensure it appears above other elements */
+  transform: rotate(-20deg); /* Rotate the sticker to the left */
+  transition: transform 0.3s ease; /* Smooth transition for scaling */
+}
+
 @media (max-width: 768px) {
   .shopContainer {
     margin-top: -50px;

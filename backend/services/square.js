@@ -81,6 +81,10 @@ async function createCheckout(cartItems, discountApplied) {
         locationId: process.env.SQUARE_LOCATION_ID,
         lineItems: lineItems,
       },
+      fulfillmentDetails: {
+        // Set fulfillment method to shipping
+        fulfillmentMethod: "SHIPMENT",
+      },
       checkoutOptions: {
         discounts: [],
         redirectUrl: "https://www.cyorugs.com/shop",
