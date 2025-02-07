@@ -52,4 +52,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/checkout-success", (req, res) => {
+  res.json({ message: "Checkout was successful!"});
+})
 module.exports = router;

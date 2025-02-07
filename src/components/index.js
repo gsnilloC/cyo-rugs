@@ -6,4 +6,5 @@ export { default as About } from "./about";
 export { default as Product } from "./product";
 export { default as RequestList } from "./requestList";
 export { default as Navbar } from "./navbar";
+export { default as Checkout } from "./checkoutSuccess";
 export { default as Footer } from "./footer";

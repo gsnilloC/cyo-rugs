@@ -87,7 +87,7 @@ async function createCheckout(cartItems, discountApplied) {
       },
       checkoutOptions: {
         discounts: [],
-        redirectUrl: "https://www.cyorugs.com/shop",
+        redirectUrl: "https://www.cyorugs.com/checkout-success",
         shippingAddressCollection: {
           allowedCountries: ["US", "CA"],
         },

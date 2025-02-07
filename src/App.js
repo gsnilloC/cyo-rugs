@@ -8,11 +8,12 @@ import {
   About,
   Product,
   RequestList,
+  Navbar,
+  Footer,
+  Checkout,
 } from "./components";
 import "./App.css";
 import { useCart } from "./components/cartContext";
-import Navbar from "./components/navbar";
-import Footer from "./components/footer";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import audioFile from "./assets/audio/tayK.mp3";
@@ -88,6 +89,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/list" element={<RequestList />} />
+          <Route path="/checkout-success" element={<Checkout />} />
         </Routes>
       </main>
       <Footer toggleTheme={toggleTheme} />
