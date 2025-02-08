@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../styles/product.module.css";
@@ -18,13 +18,23 @@ const Product = () => {
     loading,
     error,
     quantity,
-    selectedColor,
     handleAddToCart,
     handleIncrease,
     handleDecrease,
   } = useProduct();
 
+  const [selectedColor, setSelectedColor] = useState("");
+
+  useEffect(() => {
+    if (rug && rug.v_names && rug.v_names.length > 0) {
+      setSelectedColor(rug.v_names[0]);
+    }
+  }, [rug]);
+
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const isVariationSoldOut = (index) => {
+    return rug.v_quantities[index] === 0;
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -40,8 +50,8 @@ const Product = () => {
 
   // Split the description into an array and trim whitespace
   const descriptionItems = rug.description
-    .split(",")
-    .map((item) => item.trim());
+    ? rug.description.split(",").map((item) => item.trim())
+    : [];
 
   return (
     <div className={styles.productContainer}>
@@ -71,7 +81,7 @@ const Product = () => {
         {/* <p className={styles.productShipping}>
           Shipping calculated at checkout
         </p> */}
-        {/* <div className={styles.variationsContainer}>
+        <div className={styles.variationsContainer}>
           {rug.v_ids && rug.v_ids.length > 1 ? (
             rug.v_ids.map((variationId, index) => (
               <div key={index} className={styles.variation}>
@@ -102,7 +112,7 @@ const Product = () => {
           ) : (
             <p> </p>
           )}
-        </div> */}
+        </div>
         <div
           className={styles.quantityContainer}
           style={{
@@ -145,9 +155,11 @@ const Product = () => {
         <div className={styles.productDescriptionContainer}>
           <p className={styles.productDescriptionTitle}>Product Details:</p>
           <ul>
-            {descriptionItems.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
+            {descriptionItems.length > 0 ? (
+              descriptionItems.map((item, index) => <li key={index}>{item}</li>)
+            ) : (
+              <li>No description available.</li>
+            )}
           </ul>
         </div>
         <Accordion

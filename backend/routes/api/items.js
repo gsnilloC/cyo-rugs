@@ -11,7 +11,10 @@ router.get("/", async (req, res) => {
       catalogObjectId: item.catalog_object_id,
       name: item.name,
       description: item.description,
-      price: parseFloat(item.price),
+      price:
+        item.variations?.length > 0
+          ? parseFloat(item.variations[0].price)
+          : parseFloat(item.price),
       quantity: item.quantity,
       imageUrls: item.image_urls || [],
       v_quantities: item.v_quantities || [],
@@ -36,7 +39,10 @@ router.get("/:id", async (req, res) => {
       id: item.item_id,
       name: item.name,
       description: item.description,
-      price: parseFloat(item.price),
+      price:
+        item.variations?.length > 0
+          ? parseFloat(item.variations[0].price)
+          : parseFloat(item.price),
       imageUrls: item.image_urls || [],
       quantity: item.quantity,
       v_ids: item.v_ids || [],
@@ -53,6 +59,6 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/checkout-success", (req, res) => {
-  res.json({ message: "Checkout was successful!"});
-})
+  res.json({ message: "Checkout was successful!" });
+});
 module.exports = router;
