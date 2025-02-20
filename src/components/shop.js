@@ -38,6 +38,14 @@ function Shop() {
     return <div>Error fetching items: {error.message}</div>;
   }
 
+  if (paginatedRugs.length === 0) {
+    return (
+      <div className={styles.noRugsMessage}>
+        <h2>No rugs available in stock. Please check back later!</h2>
+      </div>
+    );
+  }
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);

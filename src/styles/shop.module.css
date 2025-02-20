@@ -164,6 +164,14 @@
   transition: transform 0.3s ease; /* Smooth transition for scaling */
 }
 
+.noRugsMessage {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  text-decoration: none;
+}
+
 @media (max-width: 768px) {
   .shopContainer {
     margin-top: -50px;
