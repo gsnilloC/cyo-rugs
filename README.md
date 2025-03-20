@@ -11,3 +11,30 @@ https://www.cyorugs.com
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+
+### Customer Purchase Flow
+```mermaid
+sequenceDiagram
+    participant Customer
+    participant Shop Page
+    participant Backend
+    participant Square
+    participant Database
+    participant SendGrid
+
+    Customer->>Shop Page: 1. Select rug from inventory
+    Shop Page->>Square: 2. Initiate checkout
+    Note over Square: Create payment checkout session
+
+    Square-->>Customer: 3. Display checkout form
+    Customer->>Square: 4. Complete payment
+
+    Square-->>Backend: 5. Payment webhook
+    Note over Backend: Verify payment status
+
+    Backend->>Database: 6. Update inventory
+    Note over Database: - Decrease stock count<br>- Record sale
+
+    Backend->>SendGrid: 7. Send order confirmation
+    SendGrid-->>Customer: Receive confirmation email
+    Note over Customer: Order details & tracking info
