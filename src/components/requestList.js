@@ -28,10 +28,16 @@ function RequestList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
   const [emailData, setEmailData] = useState({
     email: "",
     name: "",
     trackingNumber: "",
+  });
+  const [couponData, setCouponData] = useState({
+    email: "",
+    name: "",
+    couponCode: "",
   });
   const [isClosedSignVisible, setIsClosedSignVisible] = useState(false);
 
@@ -207,9 +213,28 @@ function RequestList() {
     }
   };
 
+  const handleSendCouponEmail = async (requestId) => {
+    try {
+      await axios.post(`/api/send-coupon-email`, {
+        ...couponData,
+        requestId,
+      });
+      alert("Coupon email sent successfully!");
+      setIsCouponModalOpen(false);
+    } catch (error) {
+      console.error("Error sending coupon email:", error);
+      alert("Failed to send coupon email.");
+    }
+  };
+
   const handleEmailInputChange = (e) => {
     const { name, value } = e.target;
     setEmailData({ ...emailData, [name]: value });
+  };
+
+  const handleCouponInputChange = (e) => {
+    const { name, value } = e.target;
+    setCouponData({ ...couponData, [name]: value });
   };
 
   const toggleRequestsStatus = async () => {
@@ -359,6 +384,13 @@ function RequestList() {
         >
           SEND EMAIL
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setIsCouponModalOpen(true)}
+        >
+          SEND COUPON EMAIL
+        </Button>
         <Switch
           checked={isClosedSignVisible}
           onChange={toggleRequestsStatus}
@@ -482,6 +514,43 @@ function RequestList() {
             required
           />
           <Button onClick={() => handleSendEmail(requests)}>Send Email</Button>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={isCouponModalOpen}
+        onClose={() => setIsCouponModalOpen(false)}
+        className={styles.modal}
+      >
+        <Box className={styles.modalContent}>
+          <h2>Send Coupon Email</h2>
+          <input
+            type="text"
+            name="name"
+            placeholder="Customer Name"
+            value={couponData.name}
+            onChange={handleCouponInputChange}
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Customer Email"
+            value={couponData.email}
+            onChange={handleCouponInputChange}
+            required
+          />
+          <input
+            type="text"
+            name="couponCode"
+            placeholder="Coupon Code"
+            value={couponData.couponCode}
+            onChange={handleCouponInputChange}
+            required
+          />
+          <Button onClick={() => handleSendCouponEmail(requests)}>
+            Send Coupon Email
+          </Button>
         </Box>
       </Modal>
     </div>

@@ -94,12 +94,22 @@
 }
 
 .modalContent {
-  width: 80%;
+  width: 50%;
   max-width: 800px;
   background-color: white;
   border-radius: 8px;
   padding: 2rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modalContent input {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .modalImage {

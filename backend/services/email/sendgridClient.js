@@ -1,6 +1,5 @@
 require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
-const fs = require("fs");
 
 if (!process.env.SENDGRID_API_KEY) {
   throw new Error("SENDGRID_API_KEY is not set in environment variables");
@@ -8,15 +7,14 @@ if (!process.env.SENDGRID_API_KEY) {
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Function to send an email
 const sendEmail = async (to, subject, text, html) => {
   console.log(`Sending email to: ${to}, Subject: ${subject}`);
   const msg = {
     to,
-    from: "orders@cyorugs.com", // Replace with your verified sender
+    from: "orders@cyorugs.com",
     subject,
-    text, // This is the plain text version
-    html, // This is the HTML version
+    text,
+    html,
   };
 
   try {

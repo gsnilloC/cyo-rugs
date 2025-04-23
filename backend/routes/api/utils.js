@@ -9,6 +9,7 @@ const {
   deleteImagesInFolder,
   fetchHomepageImages,
   confirmationEmail,
+  couponEmail,
 } = require("../../services");
 const { createRequest } = require("../../db");
 const upload = multer();
@@ -100,6 +101,18 @@ router.post("/send-confirmation-email", async (req, res) => {
   } catch (error) {
     console.error("Error sending confirmation email:", error);
     res.status(500).json({ error: "Failed to send confirmation email" });
+  }
+});
+
+router.post("/send-coupon-email", async (req, res) => {
+  const { email, name, couponCode } = req.body;
+
+  try {
+    await couponEmail(email, name, couponCode);
+    res.status(200).json({ message: "Coupon email sent successfully" });
+  } catch (error) {
+    console.error("Error sending coupon email:", error);
+    res.status(500).json({ error: "Failed to send coupon email" });
   }
 });
 
