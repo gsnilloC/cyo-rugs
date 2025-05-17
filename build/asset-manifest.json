@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.e644df52.css",
-    "main.js": "/static/js/main.393b960b.js",
+    "main.js": "/static/js/main.b311e809.js",
     "static/media/akira.png": "/static/media/akira.67e804f7b875e4e1565d.png",
     "static/media/boo.png": "/static/media/boo.079830e6295809577cf0.png",
     "static/media/cyo-rugs-introv2.mp4": "/static/media/cyo-rugs-introv2.66701769f95cc1eb1d5c.mp4",
@@ -27,10 +27,10 @@
     "static/media/1of1.JPG": "/static/media/1of1.5cad375557c3741c686b.JPG",
     "index.html": "/index.html",
     "main.e644df52.css.map": "/static/css/main.e644df52.css.map",
-    "main.393b960b.js.map": "/static/js/main.393b960b.js.map"
+    "main.b311e809.js.map": "/static/js/main.b311e809.js.map"
   },
   "entrypoints": [
     "static/css/main.e644df52.css",
-    "static/js/main.393b960b.js"
+    "static/js/main.b311e809.js"
   ]
 }

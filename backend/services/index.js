@@ -17,6 +17,7 @@ const {
 const verifyRecaptcha = require("./recaptcha");
 const confirmationEmail = require("./email/confirmationEmail");
 const couponEmail = require("./email/couponEmail");
+const adminNotificationEmail = require("./email/adminNotificationEmail");
 
 module.exports = {
   uploadImages,
@@ -34,4 +35,5 @@ module.exports = {
   client: squareClient,
   confirmationEmail,
   couponEmail,
+  adminNotificationEmail,
 };

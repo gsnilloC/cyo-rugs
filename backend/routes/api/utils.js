@@ -10,6 +10,7 @@ const {
   fetchHomepageImages,
   confirmationEmail,
   couponEmail,
+  adminNotificationEmail,
 } = require("../../services");
 const { createRequest } = require("../../db");
 const upload = multer();
@@ -40,6 +41,17 @@ router.post("/upload", upload.array("images"), async (req, res) => {
     );
 
     const createdRequest = await createRequest(customerData, imageUrls);
+
+    // Send admin notification
+    try {
+      await adminNotificationEmail({
+        ...customerData,
+        image_urls: imageUrls,
+      });
+    } catch (emailError) {
+      console.error("Failed to send admin notification:", emailError);
+      // Don't fail the request if email fails
+    }
 
     res.status(200).json({
       request: createdRequest,
