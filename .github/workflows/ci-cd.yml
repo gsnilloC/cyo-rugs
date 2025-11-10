@@ -30,23 +30,21 @@ jobs:
       - name: Configure npm registry
         run: npm config set registry https://registry.npmjs.org/
       
-      - name: Delete package-lock if exists
-        run: rm -f package-lock.json
-        continue-on-error: true
-      
       - name: Install dependencies
-        run: npm install --registry=https://registry.npmjs.org/ --legacy-peer-deps
+        run: |
+          npm install --registry=https://registry.npmjs.org/
+          npm install ajv@^8.0.0 --save-dev --registry=https://registry.npmjs.org/
       
       - name: Run ESLint
         run: npx eslint src/ --ext .js,.jsx --max-warnings 100
         continue-on-error: true
       
-      - name: Run frontend unit tests
+      - name: Run Unit Tests
         run: npm run test -- --watchAll=false --passWithNoTests
         env:
           CI: true
       
-      - name: Build application
+      - name: Build React application
         run: npm run build
         env:
           CI: false

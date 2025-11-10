@@ -51,7 +51,11 @@
     ],
     "overrides": [
       {
-        "files": ["**/*.test.js", "**/*.test.jsx", "**/setupTests.js"],
+        "files": [
+          "**/*.test.js",
+          "**/*.test.jsx",
+          "**/setupTests.js"
+        ],
         "rules": {
           "testing-library/no-container": "off",
           "testing-library/no-node-access": "off",
@@ -89,6 +93,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.6.1",
+    "ajv": "^8.12.0",
     "identity-obj-proxy": "^3.0.0"
   },
   "engines": {
