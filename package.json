@@ -48,6 +48,17 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": ["**/*.test.js", "**/*.test.jsx", "**/setupTests.js"],
+        "rules": {
+          "testing-library/no-container": "off",
+          "testing-library/no-node-access": "off",
+          "no-unused-vars": "warn",
+          "no-useless-constructor": "off"
+        }
+      }
     ]
   },
   "jest": {
@@ -74,8 +85,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.6.1",
     "identity-obj-proxy": "^3.0.0"
   },
