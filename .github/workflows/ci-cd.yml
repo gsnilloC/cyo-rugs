@@ -29,6 +29,10 @@ jobs:
       
       - name: Configure npm registry
         run: npm config set registry https://registry.npmjs.org/
+        
+      - name: Delete package-lock if exists
+        run: rm -f package-lock.json
+        continue-on-error: true
       
       - name: Install dependencies
         run: |
