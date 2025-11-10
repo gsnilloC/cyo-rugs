@@ -44,7 +44,7 @@ jobs:
         continue-on-error: true
       
       - name: Run Unit Tests
-        run: npm run test -- --watchAll=false --passWithNoTests
+        run: npm run test -- --watchAll=false --coverage --passWithNoTests
         env:
           CI: true
       
@@ -53,12 +53,12 @@ jobs:
         env:
           CI: false
       
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-files
-          path: build/
-          retention-days: 7
+      # - name: Upload build artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build-files
+      #     path: build/
+      #     retention-days: 7
       
       # Placeholder for backend tests (will add when created)
       # - name: Run backend integration tests
