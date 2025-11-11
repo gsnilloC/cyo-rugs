@@ -1,6 +1,7 @@
 # CYO Rugs 🧶 | Create Your Own Rugs
 
 [![CI/CD Pipeline](https://github.com/gsnilloC/cyo-rugs/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/gsnilloC/cyo-rugs/actions/workflows/ci-cd.yml)
+[![codecov](https://codecov.io/gh/gsnilloC/cyo-rugs/branch/main/graph/badge.svg)](https://codecov.io/gh/gsnilloC/cyo-rugs)
 
 https://www.cyorugs.com
 
@@ -63,44 +64,6 @@ See [CICD_QUICKSTART.md](CICD_QUICKSTART.md) for setup instructions.
 See [.github/CICD_SETUP.md](.github/CICD_SETUP.md) for complete CI/CD documentation.
 
 ---
-
-## 🧪 Testing
-
-![Tests](https://img.shields.io/badge/tests-177%20passing-brightgreen?style=for-the-badge&logo=jest)
-![Frontend](https://img.shields.io/badge/frontend-100%20tests-blue?style=for-the-badge)
-![Backend](https://img.shields.io/badge/backend-77%20tests-blue?style=for-the-badge)
-![Coverage](https://img.shields.io/badge/coverage-critical%20paths-green?style=for-the-badge)
-
-### 📊 Test Coverage Summary
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  Component/API          │  Tests  │  Status             │
-├─────────────────────────────────────────────────────────┤
-│  🎨 Frontend Tests                                      │
-│  ├─ App Component        │   25    │  ✅ Complete       │
-│  ├─ Cart Component       │   27    │  ✅ Complete       │
-│  └─ Product Component    │   48    │  ✅ Complete       │
-│                                                          │
-│  🔧 Backend API Tests                                   │
-│  ├─ Items API            │   41    │  ✅ Complete       │
-│  └─ Orders API           │   36    │  ✅ Complete       │
-│                                                          │
-│  📊 TOTAL                │  177    │  ✅ All Passing    │
-└─────────────────────────────────────────────────────────┘
-```
-
-### 🎯 What's Tested
-
-**Frontend Components:**
-- ✅ App routing, theme, audio controls (25 tests)
-- ✅ Shopping cart, discounts, checkout (27 tests)
-- ✅ Product display, variations, add to cart (48 tests)
-
-**Backend APIs:**
-- ✅ Product catalog endpoints (41 tests)
-- ✅ Custom orders CRUD operations (36 tests)
-
 ### 🚀 Quick Test Commands
 
 ```bash
