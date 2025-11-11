@@ -1,3 +1,12 @@
+// Set up environment variables before any imports
+process.env.SQUARE_ACCESS_TOKEN = 'test-square-token';
+process.env.SQUARE_LOCATION_ID = 'test-location-id';
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
+process.env.AWS_ACCESS_KEY_ID = 'test-aws-key';
+process.env.AWS_SECRET_ACCESS_KEY = 'test-aws-secret';
+process.env.SENDGRID_API_KEY = 'test-sendgrid-key';
+process.env.RECAPTCHA_SECRET_KEY = 'test-recaptcha-key';
+
 const request = require('supertest');
 const createTestApp = require('./testApp');
 const db = require('../../../backend/db');
