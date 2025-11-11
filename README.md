@@ -66,29 +66,74 @@ See [.github/CICD_SETUP.md](.github/CICD_SETUP.md) for complete CI/CD documentat
 
 ## 🧪 Testing
 
-### Available Test Commands
-```bash
-# Run all tests
-npm test
+![Tests](https://img.shields.io/badge/tests-177%20passing-brightgreen?style=for-the-badge&logo=jest)
+![Frontend](https://img.shields.io/badge/frontend-100%20tests-blue?style=for-the-badge)
+![Backend](https://img.shields.io/badge/backend-77%20tests-blue?style=for-the-badge)
+![Coverage](https://img.shields.io/badge/coverage-critical%20paths-green?style=for-the-badge)
 
-# Run tests without watch mode
-npm test -- --watchAll=false
+### 📊 Test Coverage Summary
 
-# Run with coverage
-npm test -- --coverage
-
-# Future commands (as tests are added):
-# npm run test:unit       # Frontend unit tests
-# npm run test:backend    # Backend API tests
-# npm run test:e2e        # End-to-end tests
-# npm run test:all        # Run all test suites
+```
+┌─────────────────────────────────────────────────────────┐
+│  Component/API          │  Tests  │  Status             │
+├─────────────────────────────────────────────────────────┤
+│  🎨 Frontend Tests                                      │
+│  ├─ App Component        │   25    │  ✅ Complete       │
+│  ├─ Cart Component       │   27    │  ✅ Complete       │
+│  └─ Product Component    │   48    │  ✅ Complete       │
+│                                                          │
+│  🔧 Backend API Tests                                   │
+│  ├─ Items API            │   41    │  ✅ Complete       │
+│  └─ Orders API           │   36    │  ✅ Complete       │
+│                                                          │
+│  📊 TOTAL                │  177    │  ✅ All Passing    │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Testing Strategy
-- **Unit Tests**: React component testing with Jest & React Testing Library
-- **Integration Tests**: Backend API endpoint testing with Supertest
-- **E2E Tests**: Full user flow testing with Playwright
-- **Health Checks**: Production deployment verification
+### 🎯 What's Tested
+
+**Frontend Components:**
+- ✅ App routing, theme, audio controls (25 tests)
+- ✅ Shopping cart, discounts, checkout (27 tests)
+- ✅ Product display, variations, add to cart (48 tests)
+
+**Backend APIs:**
+- ✅ Product catalog endpoints (41 tests)
+- ✅ Custom orders CRUD operations (36 tests)
+
+### 🚀 Quick Test Commands
+
+```bash
+# Run all 177 tests
+npm test -- --watchAll=false
+
+# Run frontend tests only
+npm test -- App Cart Product
+
+# Run backend tests only
+npm test -- backend/
+
+# Run with coverage report
+npm test -- --coverage --watchAll=false
+
+# Test specific component
+npm test -- Cart.test.js
+```
+
+### 📁 Test Files
+
+- [`src/spec/App.test.js`](src/spec/App.test.js) - Main app component tests
+- [`src/spec/Cart.test.js`](src/spec/Cart.test.js) - Shopping cart tests
+- [`src/spec/Product.test.js`](src/spec/Product.test.js) - Product page tests
+- [`src/spec/backend/items.test.js`](src/spec/backend/items.test.js) - Items API tests
+- [`src/spec/backend/orders.test.js`](src/spec/backend/orders.test.js) - Orders API tests
+
+### 📈 Testing Tools
+
+- **Jest** - Test runner and assertions
+- **React Testing Library** - Component testing
+- **Supertest** - API endpoint testing
+- **GitHub Actions** - Automated CI/CD testing
 
 ---
 

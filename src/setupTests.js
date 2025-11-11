@@ -1,3 +1,8 @@
+// Add Node.js globals for backend tests
+const { TextEncoder, TextDecoder } = require('util');
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
 // Suppress console output during tests for cleaner output
 const originalError = console.error;
 const originalWarn = console.warn;

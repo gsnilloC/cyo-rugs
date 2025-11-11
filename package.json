@@ -94,7 +94,8 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.6.1",
     "ajv": "^8.12.0",
-    "identity-obj-proxy": "^3.0.0"
+    "identity-obj-proxy": "^3.0.0",
+    "supertest": "^6.3.4"
   },
   "engines": {
     "node": "18.x"
