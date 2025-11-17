@@ -4,7 +4,7 @@ process.env.SQUARE_LOCATION_ID = 'test-location-id';
 process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
 process.env.AWS_ACCESS_KEY_ID = 'test-aws-key';
 process.env.AWS_SECRET_ACCESS_KEY = 'test-aws-secret';
-process.env.SENDGRID_API_KEY = 'SG-test-sendgrid-key';
+process.env.SENDGRID_API_KEY = 'SG.test-sendgrid-key-1234567890';
 process.env.RECAPTCHA_SECRET_KEY = 'test-recaptcha-key';
 
 const request = require('supertest');

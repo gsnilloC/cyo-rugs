@@ -21,13 +21,13 @@ beforeAll(() => {
 const renderApp = (initialRoute = '/') => {
   return render(
     <MemoryRouter initialEntries={[initialRoute]}>
-      <CartProvider>
-        <App />
-      </CartProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
     </MemoryRouter>
-  );
+    );
 };
-
+    
 describe('App Component - Basic Rendering', () => {
   test('renders App component without crashing', () => {
     const { container } = renderApp();

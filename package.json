@@ -39,6 +39,12 @@
     "build": "react-scripts build",
     "buildev": "react-scripts build",
     "test": "react-scripts test",
+    "test:unit": "react-scripts test --watchAll=false",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:health": "node src/spec/health-check.js",
+    "test:all": "npm run test:unit && npm run test:e2e",
     "eject": "react-scripts eject",
     "server": "nodemon backend/server.js",
     "dev": "concurrently \"npm run server\" \"npm start\"",
@@ -66,6 +72,10 @@
     ]
   },
   "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/src/spec/e2e/"
+    ],
     "transformIgnorePatterns": [
       "node_modules/(?!(axios)/)"
     ],
@@ -89,6 +99,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@playwright/test": "^1.56.1",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.1.2",
