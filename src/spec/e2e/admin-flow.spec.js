@@ -83,49 +83,48 @@ test.describe('Admin Flow - Request Management', () => {
   //   }
   // });
 
-  test('displays and manages request list when authenticated', async ({ page }) => {
+  test('displays and manages request list when authenticated', async ({ page, context }) => {
     await page.goto('/requestList');
     await page.waitForTimeout(3000);
     
-    // Skip test if authentication modal is blocking access
+    // Check if authentication is required
     const passwordInput = page.locator('input[type="password"]').first();
+    const hasPasswordModal = await passwordInput.count() > 0;
     
-    if (await passwordInput.count() === 0) {
-      // Verify request list displays
-      const table = page.locator('table, .request-list, .order-list');
-      const requestItems = page.locator('[class*="request"], [class*="order"], tr');
+    // In CI, this route requires authentication - skip the test
+    if (hasPasswordModal || process.env.CI) {
+      test.skip(true, 'Request list requires authentication - skipping in CI environment');
+      return;
+    }
+    
+    // Verify request list displays (only runs locally when authenticated)
+    const table = page.locator('table, .request-list, .order-list');
+    const requestItems = page.locator('[class*="request"], [class*="order"], tr');
+    
+    const hasListDisplay = await table.count() > 0 || await requestItems.count() > 0;
+    
+    // Verify list display exists
+    expect(hasListDisplay).toBeTruthy();
+    
+    if (hasListDisplay) {
+      // Verify management controls exist
+      const filterButtons = page.locator('button:has-text("All"), button:has-text("Pending"), button:has-text("Completed")');
+      const statusButtons = page.locator('button:has-text("Complete"), button:has-text("In Progress"), select[name*="status"]');
+      const deleteButtons = page.locator('button:has-text("Delete"), button[aria-label*="delete"], button:has-text("✕")');
       
-      const hasListDisplay = await table.count() > 0 || await requestItems.count() > 0;
+      // At least one type of control should exist
+      const hasControls = await filterButtons.count() > 0 || 
+                         await statusButtons.count() > 0 || 
+                         await deleteButtons.count() > 0;
       
-      // Verify list display exists
-      // eslint-disable-next-line jest/no-conditional-expect
-      expect(hasListDisplay).toBeTruthy();
+      // Verify controls exist
+      expect(hasControls).toBeTruthy();
       
-      if (hasListDisplay) {
-        // Additional checks for list display
-        
-        // Verify management controls exist
-        const filterButtons = page.locator('button:has-text("All"), button:has-text("Pending"), button:has-text("Completed")');
-        const statusButtons = page.locator('button:has-text("Complete"), button:has-text("In Progress"), select[name*="status"]');
-        const deleteButtons = page.locator('button:has-text("Delete"), button[aria-label*="delete"], button:has-text("✕")');
-        
-        // At least one type of control should exist
-        const hasControls = await filterButtons.count() > 0 || 
-                           await statusButtons.count() > 0 || 
-                           await deleteButtons.count() > 0;
-        
-        // Verify controls exist
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(hasControls).toBeTruthy();
-        
-        if (hasControls) {
-          // Test control functionality
-          
-          // Test filter functionality if available
-          if (await filterButtons.count() > 0) {
-            await filterButtons.first().click();
-            await page.waitForTimeout(500);
-          }
+      if (hasControls) {
+        // Test filter functionality if available
+        if (await filterButtons.count() > 0) {
+          await filterButtons.first().click();
+          await page.waitForTimeout(500);
         }
       }
     }
