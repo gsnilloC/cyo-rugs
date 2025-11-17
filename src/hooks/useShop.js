@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import mockProducts from "../mocks/mockProducts";
 
 const ITEMS_PER_PAGE = 9;
 

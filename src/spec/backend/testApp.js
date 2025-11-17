@@ -4,7 +4,6 @@
  */
 
 const cors = require("cors");
-const path = require("path");
 const express = require("express");
 const apiRouter = require("../../../backend/routes/api");
 

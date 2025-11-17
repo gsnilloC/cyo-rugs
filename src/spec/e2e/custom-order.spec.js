@@ -59,6 +59,7 @@ test.describe('Custom Order Request Flow', () => {
     // Submit form
     const submitButton = page.locator('button[type="submit"], button:has-text("Submit"), button:has-text("Send")').first();
     
+    let hasSuccess = false;
     if (await submitButton.count() > 0) {
       await submitButton.click();
       await page.waitForTimeout(2000);
@@ -66,10 +67,10 @@ test.describe('Custom Order Request Flow', () => {
       // Verify success indication
       const successToast = page.locator('.Toastify__toast--success');
       const successMessage = page.locator('text=/success|thank you|received/i');
-      const hasSuccess = await successToast.count() > 0 || await successMessage.count() > 0;
-      
-      expect(hasSuccess).toBeTruthy();
+      hasSuccess = await successToast.count() > 0 || await successMessage.count() > 0;
     }
+    
+    expect(hasSuccess).toBeTruthy();
   });
 
   test('validates required fields and email format', async ({ page }) => {
@@ -84,6 +85,7 @@ test.describe('Custom Order Request Flow', () => {
       await page.waitForTimeout(1000);
       
       // Should stay on request page (validation prevents submission)
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(page.url()).toContain('/request');
       
       // Test invalid email format
@@ -95,6 +97,7 @@ test.describe('Custom Order Request Flow', () => {
         
         // HTML5 validation should catch this
         const hasError = await emailInput.evaluate((el) => !el.validity.valid);
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(hasError).toBeTruthy();
       }
     }

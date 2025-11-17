@@ -72,9 +72,11 @@
     ]
   },
   "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/src/spec/e2e/"
+    "testMatch": [
+      "**/__tests__/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)",
+      "!**/e2e/**",
+      "!**/node_modules/**"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!(axios)/)"

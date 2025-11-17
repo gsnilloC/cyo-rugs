@@ -1,7 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Shop from '../components/shop';
-import axios from 'axios';
 
 // Mock axios
 jest.mock('axios');
@@ -349,7 +348,7 @@ describe('Shop Component - Edge Cases', () => {
       },
     ];
     
-    const { container } = renderShop();
+    renderShop();
     // Should still render but without image
     expect(screen.getByText('Test Rug')).toBeTruthy();
   });

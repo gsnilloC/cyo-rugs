@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import styles from "../styles/galleryWall.module.css";
 import { placeholder } from "../assets/images";

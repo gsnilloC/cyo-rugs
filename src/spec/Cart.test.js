@@ -2,7 +2,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Cart from '../components/cart';
 import { CartProvider } from '../components/cartContext';
-import axios from 'axios';
 
 // Mock axios
 jest.mock('axios');

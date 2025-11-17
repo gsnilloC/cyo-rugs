@@ -97,8 +97,12 @@ test.describe('Admin Flow - Request Management', () => {
       
       const hasListDisplay = await table.count() > 0 || await requestItems.count() > 0;
       
+      // Verify list display exists
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(hasListDisplay).toBeTruthy();
+      
       if (hasListDisplay) {
-        expect(hasListDisplay).toBeTruthy();
+        // Additional checks for list display
         
         // Verify management controls exist
         const filterButtons = page.locator('button:has-text("All"), button:has-text("Pending"), button:has-text("Completed")');
@@ -110,8 +114,12 @@ test.describe('Admin Flow - Request Management', () => {
                            await statusButtons.count() > 0 || 
                            await deleteButtons.count() > 0;
         
+        // Verify controls exist
+        // eslint-disable-next-line jest/no-conditional-expect
+        expect(hasControls).toBeTruthy();
+        
         if (hasControls) {
-          expect(hasControls).toBeTruthy();
+          // Test control functionality
           
           // Test filter functionality if available
           if (await filterButtons.count() > 0) {

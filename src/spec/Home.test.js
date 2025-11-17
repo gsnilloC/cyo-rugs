@@ -136,9 +136,11 @@ describe('Home Component - Featured Collection', () => {
     await waitFor(() => {
       const images = container.querySelectorAll('.featuredRugImage');
       expect(images[0].src).toBe('https://example.com/featured1.jpg');
-      expect(images[1].src).toBe('https://example.com/featured2.jpg');
-      expect(images[2].src).toBe('https://example.com/featured3.jpg');
     });
+    
+    const images = container.querySelectorAll('.featuredRugImage');
+    expect(images[1].src).toBe('https://example.com/featured2.jpg');
+    expect(images[2].src).toBe('https://example.com/featured3.jpg');
   });
 
   test('handles empty API response', async () => {

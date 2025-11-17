@@ -1,8 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Product from '../components/product';
 import { CartProvider } from '../components/cartContext';
-import axios from 'axios';
 
 // Mock axios
 jest.mock('axios');
