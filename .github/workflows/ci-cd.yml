@@ -7,9 +7,9 @@ on:
     branches: ['**']  # Run tests on PRs to ANY branch
 
 jobs:
-  # Job 1: Build & Install - Runs first, creates artifacts for other jobs
+  # Job 1: Build - Install deps and build the app
   build:
-    name: Build & Install Dependencies
+    name: Build Application
     runs-on: ubuntu-latest
     
     steps:
@@ -39,28 +39,12 @@ jobs:
         env:
           CI: false
       
-      - name: Upload node_modules
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
-          retention-days: 1
-      
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-files
           path: build/
           retention-days: 7
-      
-      - name: Upload package files
-        uses: actions/upload-artifact@v4
-        with:
-          name: package-files
-          path: |
-            package.json
-            package-lock.json
-          retention-days: 1
 
   # Job 2: Lint - Runs in parallel after build
   lint:
@@ -76,17 +60,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
+          cache: 'npm'
       
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
       
-      - name: Download package files
-        uses: actions/download-artifact@v4
-        with:
-          name: package-files
+      - name: Delete package-lock if exists
+        run: rm -f package-lock.json
+        continue-on-error: true
+      
+      - name: Install dependencies
+        run: npm install --registry=https://registry.npmjs.org/
       
       - name: Run ESLint
         run: npx eslint src/ --ext .js,.jsx --max-warnings 100
@@ -105,17 +89,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
+          cache: 'npm'
       
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
       
-      - name: Download package files
-        uses: actions/download-artifact@v4
-        with:
-          name: package-files
+      - name: Delete package-lock if exists
+        run: rm -f package-lock.json
+        continue-on-error: true
+      
+      - name: Install dependencies
+        run: |
+          npm install --registry=https://registry.npmjs.org/
+          npm install ajv@^8.0.0 --save-dev --registry=https://registry.npmjs.org/
       
       - name: Run Unit Tests
         run: npm run test -- --watchAll=false --coverage --passWithNoTests
@@ -155,17 +141,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
+          cache: 'npm'
       
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
+      - name: Configure npm registry
+        run: npm config set registry https://registry.npmjs.org/
       
-      - name: Download package files
-        uses: actions/download-artifact@v4
-        with:
-          name: package-files
+      - name: Delete package-lock if exists
+        run: rm -f package-lock.json
+        continue-on-error: true
+      
+      - name: Install dependencies
+        run: |
+          npm install --registry=https://registry.npmjs.org/
+          npm install ajv@^8.0.0 --save-dev --registry=https://registry.npmjs.org/
       
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
